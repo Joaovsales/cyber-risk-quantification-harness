@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joaovsales.github.io/cyber-risk-quantification-harness/schemas/org-profile.v1.json",
+  "title": "Organisation profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "org_name"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "org_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "industry",
+        "size_band"
+      ],
+      "properties": {
+        "industry": {
+          "type": "string",
+          "pattern": "^(any|[a-z][a-z0-9_-]*)$"
+        },
+        "size_band": {
+          "enum": [
+            "smb",
+            "mid_market",
+            "enterprise",
+            "any"
+          ]
+        }
+      }
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "people": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "role"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "team": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contact_hint": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "systems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "owner_role"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner_role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "connector": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "logo_data_uri": {
+          "type": "string",
+          "maxLength": 204800,
+          "pattern": "^data:image/(png|jpeg|svg\\+xml);base64,[A-Za-z0-9+/=]+$"
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

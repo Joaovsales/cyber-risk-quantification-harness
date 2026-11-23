@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: lost-or-stolen-device-device-theft-annual-kensington-2025
+parameter_family: frequency.lef
+value:
+  min: 0.38
+  mode: 0.51
+  max: 0.71
+  unit: events/year
+tier: benchmark
+source:
+  id: kensington-vanson-bourne-device-security-2025
+  kind: web
+  title: Kensington and Vanson Bourne, Secure Your Device, Protect Your Data white paper (2025)
+  url: https://www.kensington.com/siteassets/solution-pages/security/2025/secure-your-device-protect-your-data_white_paper_en_us_final_1743091813.pdf
+  retrieved_at: '2026-11-10'
+  applicability_note: 1,000 senior IT decision makers in the US and EMEA, survey sponsored by a device-lock
+    vendor; any theft incident, not only those causing a breach.
+scenario_tags:
+- lost_or_stolen_device
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2023-01-01'
+  end: '2024-12-31'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 76% of respondents said their organisation was hit by device theft in the last two years. Min is
+  76%/2 (0.38); mode is the per-year probability if years are independent (1 - 0.24^0.5 = 0.51); max is
+  the Poisson rate (-ln 0.24 / 2 = 0.71). Annualisation is the analyst's, not the source's.

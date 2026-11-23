@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: ddos-annual-prevalence-uk-csbs-2026
+parameter_family: frequency.lef
+value:
+  min: 0.03
+  mode: 0.05
+  max: 0.09
+  unit: events/year
+tier: benchmark
+source:
+  id: uk-cyber-security-breaches-survey-2026
+  kind: web
+  title: UK DSIT/Ipsos, Cyber Security Breaches Survey 2025/2026 (published 2026)
+  url: https://www.gov.uk/government/statistics/cyber-security-breaches-survey-20252026/cyber-security-breaches-survey-20252026
+  retrieved_at: '2026-11-10'
+  applicability_note: UK businesses; includes attacks with no measurable impact, so it overstates loss
+    events.
+scenario_tags:
+- ddos
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2025-08-01'
+  end: '2025-12-31'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 'Share of UK businesses that experienced denial of service attacks in the prior 12 months: 3% all,
+  5% medium, 9% large. Min is the all-business share, mode the medium-business share, max the large-business
+  share.'

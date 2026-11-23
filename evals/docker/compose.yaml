@@ -1,0 +1,32 @@
+services:
+  eval:
+    build:
+      context: ../..
+      dockerfile: evals/docker/Dockerfile
+    image: rqh-live-eval
+    # bubblewrap (the eval's Bash sandbox) needs unprivileged user namespaces, which Docker's
+    # default seccomp profile and the host's AppArmor profile both block, so both are unconfined.
+    # That weakens the container's isolation from the host kernel: this is a dev-only box for
+    # running the live evals on a maintainer's machine, never a base for anything deployed.
+    security_opt:
+      - seccomp=unconfined
+      - apparmor=unconfined
+    volumes:
+      - ../..:/work
+      # Hide the host's .venv (a Windows venv, useless here): the eval reads the whole plugin folder
+      # before every run, and its ~6,000 files over the Windows mount cost about 6 minutes a run.
+      - /work/.venv
+      - claude-config:/home/node/.claude-config
+    working_dir: /work
+    # A browser login cannot finish inside the container (its callback port is not reachable from
+    # the host), so the login is a token made on the host with `claude setup-token` and kept in a
+    # file outside the repository (the repository is mounted where the eval agent can read it).
+    env_file:
+      - path: ${USERPROFILE:-${HOME:-}}/.claude-eval-token.env
+        required: false
+    stdin_open: true
+    tty: true
+
+volumes:
+  # Claude's config and session files; they survive `docker compose run --rm`.
+  claude-config:

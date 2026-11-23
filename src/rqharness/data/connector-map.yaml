@@ -1,0 +1,241 @@
+schema_version: "1"
+version: "1.1.0"
+routes:
+  - family: frequency.lef
+    system_kind: Incident case management
+    owner_role: Incident response lead
+    expected_artifact: Incident log or case export listing past events of this type with dates
+    ask: Please share the incident log for events like this scenario over the last few years, with the date of each event.
+    connectors: [ServiceNow, Jira]
+  - family: frequency.lef
+    system_kind: Security information and event management
+    owner_role: Security operations lead
+    expected_artifact: Detection and alert summary report for this event type
+    ask: Please share a summary of confirmed events of this type that your monitoring detected, by period.
+    connectors: [Slack, Confluence]
+
+  - family: frequency.tef
+    system_kind: Email security gateway
+    owner_role: Email security lead
+    expected_artifact: Gateway report of blocked and delivered malicious messages by period
+    ask: Please share the gateway report showing how often malicious messages reached or targeted your users.
+    connectors: [Microsoft 365, Google Drive]
+  - family: frequency.tef
+    system_kind: Security information and event management
+    owner_role: Security operations lead
+    expected_artifact: Threat activity dashboard export covering attempted attacks on the asset
+    ask: Please share an export of attempted attacks against this asset or service, by period.
+    connectors: [Slack, Confluence]
+
+  - family: frequency.contact
+    system_kind: Email security gateway
+    owner_role: Email security lead
+    expected_artifact: Report of inbound malicious or suspicious messages reaching users
+    ask: Please share how often a threat actor makes contact with your users or systems, as a report by period.
+    connectors: [Microsoft 365, Google Drive]
+  - family: frequency.contact
+    system_kind: Security information and event management
+    owner_role: Security operations lead
+    expected_artifact: Inbound probing and scanning summary for exposed assets
+    ask: Please share a summary of probing or scanning against your exposed assets, by period.
+    connectors: [Slack, Confluence]
+
+  - family: frequency.action
+    system_kind: Phishing simulation platform
+    owner_role: Security awareness lead
+    expected_artifact: Campaign results showing click and report rates
+    ask: Please share your latest simulation campaign results, including the share of people who acted on the lure.
+    connectors: [Google Drive, Confluence]
+  - family: frequency.action
+    system_kind: Incident case management
+    owner_role: Incident response lead
+    expected_artifact: Post-incident reviews showing how often contact turned into action
+    ask: Please share post-incident reviews that show how often an attempted attack turned into a real action by the attacker.
+    connectors: [ServiceNow, Jira]
+
+  - family: vulnerability.probability
+    system_kind: Penetration test and red team reporting
+    owner_role: Security assurance lead
+    expected_artifact: Latest penetration test or red team report with success rates
+    ask: Please share the latest penetration test or red team report that covers this scenario.
+    connectors: [Google Drive, Confluence]
+  - family: vulnerability.probability
+    system_kind: Vulnerability management
+    owner_role: Vulnerability management lead
+    expected_artifact: Exposure report of open findings on the affected systems
+    ask: Please share the exposure report of open, exploitable findings on the affected systems.
+    connectors: [Jira, GitHub]
+  - family: vulnerability.probability
+    system_kind: Phishing simulation platform
+    owner_role: Security awareness lead
+    expected_artifact: Click and credential-submission rates from recent phishing simulation campaigns
+    ask: Please share the click-to-compromise rate from the last four phishing simulation campaigns.
+    connectors: [Slack, Jira, Microsoft 365]
+    scenario_types: [credential_phishing, business_email_compromise]
+
+  - family: vulnerability.threat_capability
+    system_kind: Threat intelligence platform
+    owner_role: Threat intelligence lead
+    expected_artifact: Threat actor profile describing skills, tooling and resources
+    ask: Please share the threat actor profile for the groups most likely to attack you in this scenario.
+    connectors: [Confluence, Notion]
+
+  - family: vulnerability.resistance_strength
+    system_kind: Security control assessment
+    owner_role: Security assurance lead
+    expected_artifact: Control assessment or maturity review for the relevant controls
+    ask: Please share the latest assessment of the controls that stand between the attacker and the asset.
+    connectors: [Google Drive, Confluence]
+  - family: vulnerability.resistance_strength
+    system_kind: Vulnerability management
+    owner_role: Vulnerability management lead
+    expected_artifact: Patch and configuration compliance report
+    ask: Please share the patch and configuration compliance report for the affected systems.
+    connectors: [Jira, GitHub]
+
+  - family: primary_loss.productivity
+    system_kind: Human resources information system
+    owner_role: HR operations lead
+    expected_artifact: Headcount and payroll cost by team for the affected area
+    ask: Please share payroll cost per day for the teams that would be idle or slowed in this scenario.
+    connectors: [Microsoft 365, Google Drive]
+  - family: primary_loss.productivity
+    system_kind: Finance ERP / treasury
+    owner_role: Controller
+    expected_artifact: Revenue per day for the affected business process
+    ask: Please share the daily revenue or output of the business process this scenario would disrupt.
+    connectors: [Salesforce, Google Drive]
+
+  - family: primary_loss.response
+    system_kind: Incident case management
+    owner_role: Incident response lead
+    expected_artifact: Past incident cost summaries including internal hours and external fees
+    ask: Please share the cost summaries of past incident responses, including internal hours and outside firm fees.
+    connectors: [ServiceNow, Jira]
+  - family: primary_loss.response
+    system_kind: Finance ERP / treasury
+    owner_role: Controller
+    expected_artifact: Retainer and invoice records for incident response vendors
+    ask: Please share retainer terms and invoices from incident response, forensics and restoration vendors.
+    connectors: [Google Drive, Microsoft 365]
+
+  - family: primary_loss.replacement
+    system_kind: IT asset management
+    owner_role: IT operations lead
+    expected_artifact: Asset register with replacement cost of affected systems
+    ask: Please share the asset register showing replacement or rebuild cost of the systems this scenario could damage.
+    connectors: [ServiceNow, Jira]
+  - family: primary_loss.replacement
+    system_kind: Finance ERP / treasury
+    owner_role: Controller
+    expected_artifact: Purchase records for comparable equipment and licences
+    ask: Please share recent purchase records for equipment or licences comparable to those that would need replacing.
+    connectors: [Google Drive, Microsoft 365]
+  - family: primary_loss.replacement
+    system_kind: Finance ERP / treasury
+    owner_role: Controller
+    expected_artifact: Log of wire-fraud attempts with amounts sent and amounts recovered
+    ask: Please share wire-fraud attempts, amounts and recoveries over the last two years.
+    connectors: [Slack, Jira, Microsoft 365]
+    scenario_types: [business_email_compromise]
+
+  - family: primary_loss.fines_and_judgments
+    system_kind: Legal matter management
+    owner_role: General counsel
+    expected_artifact: Regulatory exposure memo and past settlement or penalty records
+    ask: Please share the regulatory exposure memo and any past penalties or settlements relevant to this scenario.
+    connectors: [Confluence, Google Drive]
+  - family: primary_loss.fines_and_judgments
+    system_kind: Compliance management
+    owner_role: Compliance lead
+    expected_artifact: Applicable regulation and contract penalty schedule
+    ask: Please share the list of regulations and contract clauses that would apply penalties after this event.
+    connectors: [Confluence, Notion]
+
+  - family: primary_loss.reputation
+    system_kind: CRM / revenue reporting
+    owner_role: Revenue operations lead
+    expected_artifact: Customer churn and renewal report after past public incidents
+    ask: Please share customer churn and renewal figures from periods that followed a public incident or outage.
+    connectors: [Salesforce, Google Drive]
+  - family: primary_loss.reputation
+    system_kind: Communications and brand monitoring
+    owner_role: Communications lead
+    expected_artifact: Crisis communication plan and past media impact summary
+    ask: Please share your crisis communication plan and any summary of past media or customer reaction.
+    connectors: [Slack, Notion]
+
+  - family: primary_loss.competitive_advantage
+    system_kind: Intellectual property register
+    owner_role: General counsel
+    expected_artifact: Register of trade secrets and valuation of key intellectual property
+    ask: Please share the register of trade secrets and any valuation of the intellectual property at risk.
+    connectors: [Confluence, Google Drive]
+  - family: primary_loss.competitive_advantage
+    system_kind: CRM / revenue reporting
+    owner_role: Revenue operations lead
+    expected_artifact: Pipeline and win-rate report for products tied to the exposed information
+    ask: Please share the pipeline and win-rate report for the products that rely on the information at risk.
+    connectors: [Salesforce, Google Drive]
+
+  - family: secondary_loss.slef
+    system_kind: Legal matter management
+    owner_role: General counsel
+    expected_artifact: Past matters showing follow-on claims, notices and investigations
+    ask: Please share past matters where one security event led to follow-on claims, notifications or investigations.
+    connectors: [Confluence, Google Drive]
+  - family: secondary_loss.slef
+    system_kind: Compliance management
+    owner_role: Compliance lead
+    expected_artifact: Notification obligations register by regulator and customer contract
+    ask: Please share the register of notification obligations that an event of this kind would trigger.
+    connectors: [Confluence, Notion]
+  - family: secondary_loss.slef
+    system_kind: Incident tracker
+    owner_role: Incident response lead
+    expected_artifact: Account-takeover incidents marked by whether customers or regulators were notified
+    ask: Please share the share of account-takeover incidents that needed customer or regulator notification.
+    connectors: [Slack, Jira, Microsoft 365]
+    scenario_types: [credential_phishing, business_email_compromise]
+
+  - family: secondary_loss.productivity
+    system_kind: Human resources information system
+    owner_role: HR operations lead
+    expected_artifact: Staff time spent on past breach follow-up work
+    ask: Please share how much staff time past incidents consumed after the first response was over.
+    connectors: [Microsoft 365, Google Drive]
+
+  - family: secondary_loss.response
+    system_kind: Finance ERP / treasury
+    owner_role: Controller
+    expected_artifact: Invoices for notification, call centre and credit monitoring services
+    ask: Please share invoices or quotes for customer notification, call centre support and credit monitoring.
+    connectors: [Google Drive, Microsoft 365]
+
+  - family: secondary_loss.replacement
+    system_kind: IT asset management
+    owner_role: IT operations lead
+    expected_artifact: Cost of hardening or rebuilding systems after past incidents
+    ask: Please share what hardening or rebuild work cost after past incidents, beyond the immediate recovery.
+    connectors: [ServiceNow, Jira]
+
+  - family: secondary_loss.fines_and_judgments
+    system_kind: Legal matter management
+    owner_role: General counsel
+    expected_artifact: Litigation and regulator settlement history and open claims
+    ask: Please share the history of lawsuits and regulator settlements that followed security events, including open claims.
+    connectors: [Confluence, Google Drive]
+
+  - family: secondary_loss.reputation
+    system_kind: CRM / revenue reporting
+    owner_role: Revenue operations lead
+    expected_artifact: Customer attrition and discounting after past public incidents
+    ask: Please share customer attrition and discounting data from the quarters after a public incident.
+    connectors: [Salesforce, Google Drive]
+
+  - family: secondary_loss.competitive_advantage
+    system_kind: Intellectual property register
+    owner_role: General counsel
+    expected_artifact: Assessment of long-term value lost when protected information is disclosed
+    ask: Please share any assessment of the long-term value lost when protected information becomes public.
+    connectors: [Confluence, Google Drive]

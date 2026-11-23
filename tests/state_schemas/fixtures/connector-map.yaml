@@ -1,0 +1,15 @@
+schema_version: "1"
+version: "1.0.0"
+routes:
+  - family: frequency.tef
+    system_kind: email_security
+    owner_role: security operations lead
+    expected_artifact: Count of phishing emails delivered per year
+    ask: How many phishing emails reached inboxes in the last twelve months?
+    connectors: [email-gateway, siem]
+  - family: primary_loss.response
+    system_kind: finance
+    owner_role: finance partner
+    expected_artifact: Cost of the last incident response engagement
+    ask: What did the most recent incident response engagement cost?
+    connectors: [erp]

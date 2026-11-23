@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joaovsales.github.io/cyber-risk-quantification-harness/schemas/connector-map.v1.json",
+  "title": "Connector map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "version",
+    "routes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+([-+][0-9A-Za-z.-]+)?$"
+    },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "family",
+          "system_kind",
+          "owner_role",
+          "expected_artifact",
+          "ask",
+          "connectors"
+        ],
+        "properties": {
+          "family": {
+            "type": "string",
+            "pattern": "^(frequency\\.lef|frequency\\.tef|frequency\\.contact|frequency\\.action|vulnerability\\.probability|vulnerability\\.threat_capability|vulnerability\\.resistance_strength|secondary_loss\\.slef|primary_loss\\.productivity|primary_loss\\.response|primary_loss\\.replacement|primary_loss\\.fines_and_judgments|primary_loss\\.reputation|primary_loss\\.competitive_advantage|secondary_loss\\.productivity|secondary_loss\\.response|secondary_loss\\.replacement|secondary_loss\\.fines_and_judgments|secondary_loss\\.reputation|secondary_loss\\.competitive_advantage)$"
+          },
+          "system_kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner_role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_artifact": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ask": {
+            "type": "string",
+            "minLength": 1
+          },
+          "connectors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "scenario_types": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "ransomware",
+                "business_email_compromise",
+                "credential_phishing",
+                "third_party_breach",
+                "cloud_misconfiguration",
+                "ddos",
+                "insider_data_theft",
+                "lost_or_stolen_device"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

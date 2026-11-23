@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="{{ csp }}">
+<title>{{ c.title }} / risk report</title>
+<style>
+{{ assets["report.css"]|safe }}
+html:not(.js) .js-only{display:none}
+.logo{height:1.2em;width:auto;vertical-align:-.2em;margin-right:6px}
+.omitted{font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:8px 0 0}
+{{ c.theme_css }}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div class="mast">
+    <div class="meta"><span><b>Risk report</b> / FAIR-aligned</span><span>Run {{ c.scenario_id }}</span><span>v{{ c.version }}</span><span>{{ c.date }}</span><span>Route {{ c.route_label }}</span></div>
+    {% if c.org or c.logo %}<span class="org">{{ c.logo }}{{ c.org }}</span>{% endif %}
+
+  </div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#s01"><b>01</b> Summary</a><a href="#s02"><b>02</b> Curve</a><a href="#s03"><b>03</b> Distribution</a><a href="#s04"><b>04</b> Drivers</a><a href="#s05"><b>05</b> Controls</a><a href="#s06"><b>06</b> Scenario</a><a href="#s07"><b>07</b> Provenance</a><a href="#s08"><b>08</b> Appendix</a><a href="#s09"><b>09</b> Collect</a>
+  </nav>
+
+  <div class="hero" data-section="takeaway">
+    <p class="kicker">Scenario</p>
+    <h1>{{ c.title }}</h1>
+    <div class="take">{{ c.takeaway }}</div>
+    {% if c.narrative_omitted %}<p class="omitted">Narrative omitted: this sentence is generated from the figures.</p>{% endif %}
+    <div class="fig3">
+      {% for f in c.hero %}
+      <div><span class="{{ f.cls }}">{{ f.value }}</span><span class="cap">{{ f.cap }}</span></div>
+      {% endfor %}
+    </div>
+    <div class="heroband{% if not c.yolo_note %} solo{% endif %}">
+      {% if c.yolo_note %}
+      <div class="yolo"><span class="tag">YOLO</span><p>{{ c.yolo_note }}</p></div>
+      {% endif %}
+      <div class="grade"><span class="g">{{ c.grade.letter }}</span><p><b>Data-quality grade</b>Score {{ c.grade.score }} of 1.00. {{ c.grade.note }}</p></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="sec" id="s01" data-section="summary" aria-labelledby="h01">
+  <span class="sec-no" aria-hidden="true">01</span>
+  <div class="sec-body">
+    <p class="kicker">Summary</p>
+    <h2 id="h01">{{ c.heads.summary }}</h2>
+    <div class="cards" style="--cols:{{ c.cards|length }}">
+      {% for card in c.cards %}
+      <div class="card"><span class="ix">{{ card.ix }}</span><h3>{{ card.title }}</h3><span class="v{% if card.sig %} sig{% endif %}">{{ card.value }}</span><p>{{ card.note }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="s02" data-section="lec" aria-labelledby="h02">
+  <span class="sec-no" aria-hidden="true">02</span>
+  <div class="sec-body">
+    <p class="kicker">Loss exceedance curve</p>
+    <h2 id="h02">{{ c.heads.lec }}</h2>
+    <p class="lede">Read each curve as: at this loss on the horizontal axis, how likely is a year to be worse? Lower and further left is better.</p>
+    <div class="row2">
+      <figure class="fig" style="margin:0 0 14px">
+        <header><span>Fig. 02 / Probability annual loss exceeds X</span><span>{{ c.lec_n }} years per variant</span></header>
+        <div class="scroll">{{ c.lec_svg|safe }}</div>
+      </figure>
+      <div>
+        <form class="thr-form">
+          <label for="thr-in">Annual loss threshold</label>
+          <input id="thr-in" type="text" inputmode="decimal" autocomplete="off" value="{{ c.threshold_label }}" aria-describedby="thr-help">
+          <span class="help" id="thr-help">Type an amount: 750k, 1.5M or 2000000.</span>
+        </form>
+        <p class="readout js-only" id="lec-cursor" aria-hidden="true">Move over the chart to read the curves.</p>
+        <table class="thr-table" aria-live="polite">
+          <caption class="caption">Chance annual loss exceeds <span id="thr-lbl">{{ c.threshold_label }}</span></caption>
+          <tbody>
+            {% for row in c.chances %}
+            <tr data-v="{{ loop.index0 }}"><th scope="row">{{ row.swatch|safe }}{{ row.label }}</th><td class="num strong" id="tp{{ loop.index0 }}">{{ row.value }}</td><td class="bcell" aria-hidden="true"><span class="tbar"><i id="tbar{{ loop.index0 }}" style="width:{{ row.width }}%"></i></span></td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="note">Interpolated between the curve points of each variant. Below 0.1% is shown as &lt;0.1%.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="s03" data-section="distribution" aria-labelledby="h03">
+  <span class="sec-no" aria-hidden="true">03</span>
+  <div class="sec-body">
+    <p class="kicker">Distribution of annual loss</p>
+    <h2 id="h03">{{ c.heads.distribution }}</h2>
+    <fieldset class="seggrp" id="hv-toggle"><legend>Show variant</legend>{% for h in c.hists %}<label class="seg"><input type="radio" name="hv" value="{{ h.id }}"{% if loop.first %} checked{% endif %}><span>{{ h.label }}</span></label>{% endfor %}</fieldset>
+    <figure class="fig" style="margin:0">
+      <header><span>Fig. 03 / Annual loss, {{ c.lec_n }} simulated years</span><span>Highlighted bars: worst 10% of years</span></header>
+      <div class="scroll" id="hists" aria-live="polite">
+        {% for h in c.hists %}
+        <div class="hist{% if h.hidden %} is-hidden{% endif %}" id="hist-{{ h.id }}" data-variant="{{ h.id }}">{{ h.svg|safe }}</div>
+        {% endfor %}
+      </div>
+    </figure>
+    <p class="note">Each variant has its own horizontal scale. Only the first variant is drawn without scripting; every variant is tabulated in the appendix.</p>
+  </div>
+</section>
+
+<section class="sec" id="s04" data-section="drivers" aria-labelledby="h04">
+  <span class="sec-no" aria-hidden="true">04</span>
+  <div class="sec-body">
+    <p class="kicker">What drives this</p>
+    <h2 id="h04">{{ c.heads.drivers }}</h2>
+    <p class="lede">Share of the spread in baseline annual loss attributed to each input. The shares sum to 100%. Tags show how well each input is evidenced: I internal data, S SME estimate, B benchmark, A assumption.</p>
+    <div class="tscale" aria-hidden="true"><span></span><span></span><span class="ts">{% for t in c.driver_ticks %}<span>{{ t }}</span>{% endfor %}</span><span></span></div>
+    <ol class="tlist">
+      {% for d in c.drivers %}
+      <li class="trow"><span class="rk">{{ d.rank }}</span><span class="tl"><span class="tn">{{ d.label }}</span> <span class="tier" title="{{ d.tier.label }}">{{ d.tier.letter }} &middot; {{ d.tier.label }}</span></span><span class="tk" aria-hidden="true"><span class="tb{% if d.hi %} hi{% endif %}" style="width:{{ d.width }}%"></span></span><span class="tv">{{ d.share }}</span></li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="s05" data-section="variants" aria-labelledby="h05">
+  <span class="sec-no" aria-hidden="true">05</span>
+  <div class="sec-body">
+    <p class="kicker">Controls compared</p>
+    <h2 id="h05">{{ c.heads.variants }}</h2>
+    <table class="ctrl stack">
+      <thead><tr><th scope="col">Control</th><th scope="col" class="num">Annual cost</th><th scope="col" class="num">Mean loss</th><th scope="col" class="num">Loss in a 1-in-10 year</th><th scope="col" class="num">Mean loss avoided</th><th scope="col" class="num">Return on control</th></tr></thead>
+      <tbody>
+        {% for v in c.variant_rows %}
+        <tr><th scope="row" data-label="Control">{{ v.swatch|safe }}{{ v.label }}</th><td class="num" data-label="Annual cost">{{ v.cost or "&mdash;"|safe }}</td><td class="num" data-label="Mean annual loss">{{ v.mean }}</td><td class="num" data-label="1-in-10-year loss (p90)">{{ v.p90 }}</td><td class="num" data-label="Mean loss avoided">{{ v.avoided or "&mdash;"|safe }}{% for f in v.flags if f == "LARGEST CUT" %} <span class="flag">{{ f }}</span>{% endfor %}</td><td class="num strong" data-label="Return on control">{{ v.roc or "&mdash;"|safe }}{% for f in v.flags if f == "BEST RETURN" %} <span class="flag">{{ f }}</span>{% endfor %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="note">Return on control = (mean loss avoided minus annual cost) divided by annual cost.</p>
+  </div>
+</section>
+
+<section class="sec" id="s06" data-section="scenario" aria-labelledby="h06">
+  <span class="sec-no" aria-hidden="true">06</span>
+  <div class="sec-body">
+    <p class="kicker">Scenario</p>
+    <h2 id="h06">{{ c.title }}: the one scenario modelled</h2>
+    <p class="statement">{{ c.scenario.statement }}</p>
+    <dl class="facts">
+      {% for name, text, sub in c.scenario.facts if text %}
+      <div><dt>{{ name }}</dt><dd>{{ text }}{% if sub %}<span class="sub">{{ sub }}</span>{% endif %}</dd></div>
+      {% endfor %}
+    </dl>
+    {% if c.scenario.org_note %}<p class="note">{{ c.scenario.org_note }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="sec" id="s07" data-section="provenance" aria-labelledby="h07">
+  <span class="sec-no" aria-hidden="true">07</span>
+  <div class="sec-body">
+    <p class="kicker">Provenance</p>
+    <h2 id="h07">{{ c.heads.provenance }}</h2>
+    <table class="stack">
+      <thead><tr><th scope="col">No.</th><th scope="col">Parameter</th><th scope="col" class="num">Min / mode / max</th><th scope="col">Tier</th><th scope="col">Source</th></tr></thead>
+      <tbody>
+        {% for p in c.provenance %}
+        <tr><td class="c-n" data-label="No.">{{ p.n }}</td><th scope="row" data-label="Parameter">{{ p.label }}<span class="path">{{ p.path }}</span></th><td class="num" data-label="Min / mode / max">{{ p.pert }}<span class="sub">{{ p.unit }}</span></td><td data-label="Tier"><span class="tier">{{ p.tier.letter }} &middot; {{ p.tier.label }}</span></td><td data-label="Source">{% for s in p.sources %}{% if not loop.first %}<br>{% endif %}{% if s.url %}<a href="{{ s.url }}" rel="noopener noreferrer">{{ s.title }}</a>{% else %}{{ s.title }}{% endif %}{% if s.sub %}<span class="sub">{{ s.sub }}</span>{% endif %}{% endfor %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="s08" aria-labelledby="h08">
+  <span class="sec-no" aria-hidden="true">08</span>
+  <div class="sec-body">
+    <p class="kicker">Technical appendix</p>
+    <h2 id="h08">Every figure can be reproduced from a fixed seed and {{ c.lec_n }} simulated years</h2>
+    <details class="app" data-section="appendix">
+      <summary>Method, run settings and full percentile table</summary>
+      <div class="appin">
+        <dl class="facts">
+          {% for name, value in c.appendix.facts %}
+          <div><dt>{{ name }}</dt><dd>{{ value }}</dd></div>
+          {% endfor %}
+        </dl>
+        <p class="discl">{{ c.appendix.disclosure }}</p>
+        <h3>Annual loss, all variants</h3>
+        <table>
+          <thead><tr><th scope="col">Statistic</th>{% for name in c.appendix.columns %}<th scope="col" class="num">{{ name }}</th>{% endfor %}</tr></thead>
+          <tbody>
+            {% for label, values in c.appendix.stats %}
+            <tr><th scope="row">{{ label }}</th>{% for value in values %}<td class="num">{{ value }}</td>{% endfor %}</tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section class="sec last" id="s09" data-section="collect" aria-labelledby="h09">
+  <span class="sec-no" aria-hidden="true">09</span>
+  <div class="sec-body">
+    <p class="kicker">Next steps</p>
+    <h2 id="h09">What to collect to improve the degree of accuracy</h2>
+    <p class="lede">{{ c.collect_next|length }} request{{ "s" if c.collect_next|length != 1 else "" }} would replace the weakest inputs with {{ c.collect_lede }}, ranked by how much each would sharpen the estimate. Tick each one off as it is sent.</p>
+    <ol class="checks">
+      {% for k in c.collect_next %}
+      <li class="ck" data-path="{{ k.path }}"><span class="box" aria-hidden="true"></span><div class="ck-main"><p class="ck-n">REQUEST {{ "%02d"|format(loop.index) }} &middot; <span class="tier">{{ k.tier.letter }} &middot; {{ k.tier.label }}</span></p><h3>{{ k.label }}</h3><p class="ask"><span class="lbl">The ask</span>{{ k.ask }}</p><dl class="kv"><div><dt>System of record</dt><dd>{{ k.system }}</dd></div><div><dt>Owner</dt><dd>{{ k.owner_role }}{% if k.person %}<span class="sub">{{ k.person }}</span>{% endif %}</dd></div><div><dt>Priority</dt><dd><span class="pbar" aria-hidden="true"><i style="width:{{ k.priority_width }}%"></i></span> {{ k.priority }}</dd></div><div><dt>Suggested connectors</dt><dd>{% for name in k.connectors %}<span class="chip">{{ name }}</span> {% endfor %}</dd></div></dl></div></li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer class="foot"><span>{{ c.org or "Risk report" }}</span><span>Estimate, FAIR-aligned method</span><span>{{ c.scenario_id }} v{{ c.version }}</span></footer>
+</div>
+{% set js = assets.get("report.js") %}
+{% if js %}
+{# exactly the hashed text between the tags: the CSP allows these bytes and no others #}
+<script>{{ js|safe }}</script>
+{% endif %}
+</body>
+</html>

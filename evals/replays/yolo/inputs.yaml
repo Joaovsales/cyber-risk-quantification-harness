@@ -1,0 +1,141 @@
+schema_version: '1'
+scenario_id: credential-phishing-bec
+currency: USD
+parameters:
+  analysis_period_years: 1
+  frequency:
+    model: tef_decomposed_cf_poa
+    contact:
+      label: Impersonation attempts per year
+      min: 0.12
+      mode: 0.38
+      max: 0.47
+      unit: events/year
+      provenance:
+        tier: benchmark
+        source_ids:
+        - lib-bec-contact
+    action:
+      label: Share of attempts that succeed
+      min: 0.02
+      mode: 0.06
+      max: 0.15
+      unit: probability
+      provenance:
+        tier: benchmark
+        source_ids:
+        - web-bec-action
+  primary_loss:
+    response:
+      label: Incident response per event
+      min: 8000
+      mode: 25000
+      max: 90000
+      unit: USD
+      provenance:
+        tier: agent_assumption
+        source_ids: []
+        rationale: Typical incident response engagement for a mid-market firm.
+    productivity:
+      label: Lost productivity per event
+      min: 2000
+      mode: 10000
+      max: 40000
+      unit: USD
+      provenance:
+        tier: agent_assumption
+        source_ids: []
+        rationale: A few days of finance staff time per event.
+    replacement:
+      label: Fraudulent transfer not recovered
+      min: 125613
+      mode: 129192
+      max: 137134
+      unit: USD
+      provenance:
+        tier: benchmark
+        source_ids:
+        - lib-bec-loss
+  secondary_loss:
+    slef:
+      label: Share of events with secondary effects
+      min: 0.02
+      mode: 0.08
+      max: 0.25
+      unit: events/event
+      provenance:
+        tier: agent_assumption
+        source_ids: []
+        rationale: Taken from the scenario narrative, not measured.
+    reputation:
+      label: Customer churn and reputation
+      min: 20000
+      mode: 100000
+      max: 900000
+      unit: USD
+      provenance:
+        tier: benchmark
+        source_ids:
+        - cyentia
+    fines_and_judgments:
+      label: Regulatory fines and legal
+      min: 0
+      mode: 50000
+      max: 1200000
+      unit: USD
+      provenance:
+        tier: benchmark
+        source_ids:
+        - cyentia
+sources:
+- id: lib-bec-contact
+  kind: benchmark_library
+  title: UK Cyber Security Breaches Survey 2025/2026, impersonation
+  library_entry_id: business-email-compromise-impersonation-contact-uk-csbs-2026
+  url: https://www.gov.uk/government/statistics/cyber-security-breaches-survey-20252026/cyber-security-breaches-survey-20252026
+  retrieved_at: '2026-11-10'
+- id: lib-bec-loss
+  kind: benchmark_library
+  title: FBI IC3 2024 Internet Crime Report, loss per complaint
+  library_entry_id: business-email-compromise-loss-per-complaint-fbi-ic3-2024
+  url: https://www.ic3.gov/AnnualReport/Reports
+  retrieved_at: '2026-11-10'
+- id: web-bec-action
+  kind: web
+  title: 'Researcher result: share of phishing contacts that succeed'
+  url: https://www.verizon.com/business/resources/reports/dbir/
+  retrieved_at: '2026-11-10'
+- id: cyentia
+  kind: benchmark_library
+  title: Cyentia Institute research on cyber loss
+  url: https://www.cyentia.com/research/
+  retrieved_at: '2026-11-09'
+- id: ibm-cost-of-breach
+  kind: benchmark_library
+  title: IBM Cost of a Data Breach 2025
+  url: https://www.ibm.com/reports/data-breach
+  retrieved_at: '2026-11-09'
+variants:
+- id: mfa
+  label: Phishing-resistant MFA
+  overrides:
+    frequency.action:
+      label: Share of attempts that succeed
+      min: 0.007
+      mode: 0.021
+      max: 0.0525
+      unit: probability
+      provenance:
+        tier: agent_assumption
+        source_ids: []
+        rationale: Phishing-resistant MFA is assumed to cut success by about 65 percent.
+  annual_cost:
+    label: Annual cost of phishing-resistant MFA
+    min: 100000
+    mode: 120000
+    max: 140000
+    unit: USD
+    provenance:
+      tier: agent_assumption
+      source_ids: []
+      rationale: Licence and rollout cost assumed for 800 employees.

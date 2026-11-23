@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: third-party-breach-third-party-share-verizon-2025
+parameter_family: vulnerability.probability
+value:
+  min: 0.15
+  mode: 0.3
+  max: 0.3
+  unit: probability
+tier: benchmark
+source:
+  id: verizon-dbir-2025
+  kind: web
+  title: Verizon, 2025 Data Breach Investigations Report, press release (2025 edition)
+  url: https://www.verizon.com/about/news/2025-data-breach-investigations-report
+  retrieved_at: '2026-11-10'
+  applicability_note: Share of confirmed breaches in Verizon's dataset (12,195 breaches); a weak proxy
+    for the probability that a breach in your estate comes via a supplier.
+scenario_tags:
+- third_party_breach
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2024-11-01'
+  end: '2025-10-31'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: Verizon states third-party involvement in breaches doubled to 30% (so about 15% in the prior edition,
+  derived by halving). Mode and max are 30%; min is the implied prior-year value. This is the share of
+  breaches involving a third party, not a per-organisation probability.

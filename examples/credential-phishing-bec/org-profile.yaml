@@ -1,0 +1,17 @@
+schema_version: "1"
+org_name: Northwind Analytics
+segment: {industry: software, size_band: mid_market}
+teams:
+  - {id: secops, name: Security Operations}
+  - {id: awareness, name: Security Awareness}
+people:
+  - {name: Dana Reyes, role: Email security lead, team: secops, contact_hint: "Slack #secops"}
+  - {name: Priya Nair, role: " security awareness lead ", team: awareness}
+  - {name: Sam Okafor, role: Controller}
+systems:
+  - {id: mail-gw, kind: Email security gateway, name: Northwind mail gateway, owner_role: Messaging engineer, connector: Microsoft 365}
+  - {id: phish-sim, kind: Phishing simulation platform, name: Phish drills, owner_role: Security awareness lead}
+  - {id: erp, kind: Finance ERP / treasury, name: Ledger, owner_role: Controller}
+theme:
+  accent: "#1F6FEB"
+  display_name: Northwind

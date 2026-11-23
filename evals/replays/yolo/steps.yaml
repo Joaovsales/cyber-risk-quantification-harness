@@ -1,0 +1,35 @@
+# The recorded sequence of the YOLO route, one entry per phase skill that `rqh status` names.
+# The driver checks `next_skill` before each entry, runs its ops, and goes back to `rqh status`.
+# Ops: install {from, to: run|workspace}, rqh [args] with exit (default 0).
+setup:
+  seed: 20261109
+  n: 5000
+phases:
+  - skill: scope-scenario
+    ops:
+      - install: {from: scenario.yaml, to: run}
+      - rqh: [validate, "{run}"]
+      - rqh: [run, confirm, "{run}", --route, yolo, --n, "{n}", --seed, "{seed}"]
+  - skill: collect-data
+    # inputs.yaml as the skill writes it: two shipped library entries, one recorded researcher
+    # result standing in for stubbed web search, and agent assumptions for the rest.
+    ops:
+      - install: {from: inputs.yaml, to: run}
+      - rqh: [validate, "{run}"]
+  - skill: simulate
+    ops:
+      - rqh: [finalize, "{run}"]
+  - skill: report
+    # the narrative is rejected twice, so the run still ends with a report: --omit-narrative
+    ops:
+      - install: {from: narratives/rejected-1.md, to: run, as: narrative.draft.md}
+      - rqh: [report, "{run}", --narrative, "{run_dir}/narrative.draft.md"]
+        exit: 4
+      - install: {from: narratives/rejected-2.md, to: run, as: narrative.draft.md}
+      - rqh: [report, "{run}", --narrative, "{run_dir}/narrative.draft.md"]
+        exit: 4
+      - rqh: [report, "{run}", --omit-narrative]
+accepted_report:
+  # the happy path: the same run, an accepted narrative instead of the two rejections
+  - install: {from: narratives/accepted.md, to: run, as: narrative.draft.md}
+  - rqh: [report, "{run}", --narrative, "{run_dir}/narrative.draft.md"]

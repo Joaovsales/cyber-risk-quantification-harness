@@ -1,0 +1,11 @@
+schema_version: "1"
+entry_id: mem-phish-loss
+parameter_family: primary_loss.response
+value: {min: 10000, mode: 40000, max: 150000, unit: USD}
+tier: internal_data
+source: {id: ir-retainer, kind: internal_system, title: Incident response invoices}
+scenario_tags: [credential_phishing, business_email_compromise]
+segment: {industry: retail, size_band: mid_market}
+period: {start: "2024-01-01", end: "2024-12-31"}
+captured_at: "2025-01-15"
+sensitivity: internal

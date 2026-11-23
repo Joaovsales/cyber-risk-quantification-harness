@@ -1,0 +1,64 @@
+# The recorded sequence of the Accuracy route. Each entry is checked against `rqh status`
+# (`next_skill`, and `waiting_on` when the run waits) before its ops run.
+#
+# Order through the RunState table: collecting -> pause -> awaiting_data -> resume -> collecting
+# -> finalize (v1, on the fallback tiers, open asks left open) -> reopen -> collecting ->
+# answer -> candidate -> confirm -> finalize (v2). A second finalize needs `rqh run reopen`.
+setup:
+  seed: 20261109
+  n: 5000
+phases:
+  - skill: scope-scenario
+    ops:
+      - install: {from: scenario.yaml, to: run}
+      - install: {from: org-profile.yaml, to: workspace}
+      - rqh: [validate, "{run}"]
+      - rqh: [run, confirm, "{run}", --route, accuracy, --n, "{n}", --seed, "{seed}"]
+  - skill: collect-data
+    # fallback tiers first, then one drafted request per owner; the user reports req-1 as sent
+    ops:
+      - install: {from: inputs.yaml, to: run}
+      - rqh: [validate, "{run}"]
+      # the skill's shape: role, person, ask and draft in one request file, only its path on the command line
+      - install: {from: request-primary_loss.response.yaml, to: run}
+      - rqh: [requests, add, "{run}", --parameter, primary_loss.response,
+              --request-file, "{run_dir}/request-primary_loss.response.yaml", --due, "2026-12-01"]
+      # the per-field flags stay for backward compatibility
+      - rqh: [requests, add, "{run}", --parameter, frequency.tef, --owner-role, Email security lead,
+              --ask, "Phishing emails that reached inboxes per year",
+              --draft, "Hi, could you send the count of phishing emails that reached inboxes in the last 12 months?",
+              --due, "2026-12-01"]
+      - rqh: [requests, update, "{run}", req-1, --status, sent]
+      - rqh: [run, pause, "{run}"]
+  - skill: null
+    waiting_on: [req-1, req-2]
+    # the user comes back, but has no answer yet and decides to finalize on the fallback tiers
+    ops:
+      - rqh: [run, resume, "{run}"]
+  - skill: simulate
+    ops:
+      - rqh: [finalize, "{run}"]
+  - skill: report
+    ops:
+      - install: {from: narratives/accepted.md, to: run, as: narrative.draft.md}
+      - rqh: [report, "{run}", --narrative, "{run_dir}/narrative.draft.md"]
+  - skill: null
+    # the owner answers: record it, then reopen so a second version can be written
+    ops:
+      - rqh: [run, reopen, "{run}"]
+      - rqh: [requests, update, "{run}", req-1, --status, answered, --min, "6000", --mode, "18000", --max, "60000",
+              --unit, USD, --evidence, measured]
+      - rqh: [requests, update, "{run}", req-2, --status, withdrawn]
+  - skill: collect-data
+    ops:
+      - rqh: [candidates, confirm, "{run}", cand-1]
+      - rqh: [validate, "{run}"]
+  - skill: simulate
+    ops:
+      - rqh: [finalize, "{run}"]
+  - skill: report
+    ops:
+      - rqh: [report, "{run}", --narrative, "{run_dir}/narrative.draft.md"]
+final:
+  skill: null
+  latest_version: 2

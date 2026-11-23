@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: business-email-compromise-impersonation-contact-uk-csbs-2026
+parameter_family: frequency.contact
+value:
+  min: 0.12
+  mode: 0.38
+  max: 0.47
+  unit: events/year
+tier: benchmark
+source:
+  id: uk-cyber-security-breaches-survey-2026
+  kind: web
+  title: UK DSIT/Ipsos, Cyber Security Breaches Survey 2025/2026 (published 2026)
+  url: https://www.gov.uk/government/statistics/cyber-security-breaches-survey-20252026/cyber-security-breaches-survey-20252026
+  retrieved_at: '2026-11-10'
+  applicability_note: UK businesses; impersonation includes any email or online impersonation, only a
+    subset of which is BEC, so it overstates BEC contact.
+scenario_tags:
+- business_email_compromise
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2025-08-01'
+  end: '2025-12-31'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 'Share of UK businesses reporting people impersonating the organisation or staff in the prior 12
+  months: 12% all, 38% medium, 47% large. Min is the all-business share, mode the medium-business share,
+  max the large-business share. Impersonation is a proxy for BEC contact, not BEC itself.'

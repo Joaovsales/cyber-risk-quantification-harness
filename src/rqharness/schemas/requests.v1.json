@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joaovsales.github.io/cyber-risk-quantification-harness/schemas/requests.v1.json",
+  "title": "Requests and candidates",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "requests",
+    "candidates"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "scenario_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "requests": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/request"
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/candidate"
+      }
+    }
+  },
+  "$defs": {
+    "value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "mode",
+        "max",
+        "unit"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mode": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "parameter_path",
+        "ask",
+        "target",
+        "draft_message",
+        "status",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^req-[0-9]+$"
+        },
+        "parameter_path": {
+          "type": "string",
+          "pattern": "^(frequency\\.lef|frequency\\.tef|frequency\\.contact|frequency\\.action|vulnerability\\.probability|vulnerability\\.threat_capability|vulnerability\\.resistance_strength|secondary_loss\\.slef|primary_loss\\.productivity|primary_loss\\.response|primary_loss\\.replacement|primary_loss\\.fines_and_judgments|primary_loss\\.reputation|primary_loss\\.competitive_advantage|secondary_loss\\.productivity|secondary_loss\\.response|secondary_loss\\.replacement|secondary_loss\\.fines_and_judgments|secondary_loss\\.reputation|secondary_loss\\.competitive_advantage)$"
+        },
+        "ask": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "owner_role"
+          ],
+          "properties": {
+            "owner_role": {
+              "type": "string",
+              "minLength": 1
+            },
+            "person": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "draft_message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "drafted",
+            "sent",
+            "answered",
+            "unavailable",
+            "withdrawn"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"
+        },
+        "due_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "answer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "received_at"
+          ],
+          "anyOf": [
+            {
+              "required": [
+                "value"
+              ]
+            },
+            {
+              "required": [
+                "note"
+              ]
+            }
+          ],
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/value"
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "received_at": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"
+            }
+          }
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "parameter_path",
+        "value",
+        "evidence_kind",
+        "origin",
+        "status",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^cand-[0-9]+$"
+        },
+        "parameter_path": {
+          "type": "string",
+          "pattern": "^(frequency\\.lef|frequency\\.tef|frequency\\.contact|frequency\\.action|vulnerability\\.probability|vulnerability\\.threat_capability|vulnerability\\.resistance_strength|secondary_loss\\.slef|primary_loss\\.productivity|primary_loss\\.response|primary_loss\\.replacement|primary_loss\\.fines_and_judgments|primary_loss\\.reputation|primary_loss\\.competitive_advantage|secondary_loss\\.productivity|secondary_loss\\.response|secondary_loss\\.replacement|secondary_loss\\.fines_and_judgments|secondary_loss\\.reputation|secondary_loss\\.competitive_advantage)$"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        },
+        "evidence_kind": {
+          "enum": [
+            "measured",
+            "judgement"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "pattern": "^(request:req-[0-9]+|connector:[a-z0-9][a-z0-9_-]*)$"
+        },
+        "link": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "confirmed",
+            "rejected"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "risk-quantification-harness",
+  "version": "0.1.0",
+  "description": "Turn a one-sentence cyber risk scenario into a FAIR-aligned, Monte Carlo loss estimate and a single-file HTML report, with every number computed by the rqh command line and none written by the model.",
+  "author": {
+    "name": "risk-quantification-harness contributors"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["cyber-risk", "risk-quantification", "monte-carlo", "fair-aligned", "loss-exceedance", "report"]
+}

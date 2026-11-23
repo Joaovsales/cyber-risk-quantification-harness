@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: insider-data-theft-malicious-insider-breach-cost-ibm-2025
+parameter_family: primary_loss.response
+value:
+  min: 2460000
+  mode: 4920000
+  max: 9840000
+  unit: USD
+tier: benchmark
+source:
+  id: ibm-cost-of-a-data-breach-2025
+  kind: web
+  title: IBM and Ponemon Institute, Cost of a Data Breach Report 2025 (2025 edition)
+  url: https://www.ibm.com/reports/data-breach
+  retrieved_at: '2026-11-10'
+  applicability_note: Organisations that suffered a data breach (600 in the study, 16 countries); malicious
+    insiders only, total breach cost.
+scenario_tags:
+- insider_data_theft
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2024-03-01'
+  end: '2025-02-28'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 'Mode is IBM''s reported average total cost of a breach whose initial vector was a malicious insider:
+  USD 4.92M (Figure 9 and key findings). The source gives only a mean, so min and max are an analyst widening
+  to 0.5x and 2x the mean, not source data.'

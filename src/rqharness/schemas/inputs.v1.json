@@ -1,0 +1,770 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joaovsales.github.io/cyber-risk-quantification-harness/schemas/inputs.v1.json",
+  "title": "Inputs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "currency",
+    "parameters",
+    "sources",
+    "variants"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "scenario_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frequency",
+        "primary_loss"
+      ],
+      "properties": {
+        "analysis_period_years": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "frequency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "model"
+          ],
+          "properties": {
+            "model": {
+              "enum": [
+                "lef_direct",
+                "tef_x_vulnerability",
+                "tef_decomposed_cf_poa",
+                "tef_and_vulnerability_decomposed"
+              ]
+            },
+            "lef": {
+              "$ref": "#/$defs/events_per_year"
+            },
+            "tef": {
+              "$ref": "#/$defs/events_per_year"
+            },
+            "contact": {
+              "$ref": "#/$defs/events_per_year"
+            },
+            "action": {
+              "$ref": "#/$defs/probability"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "model": {
+                    "enum": [
+                      "lef_direct"
+                    ]
+                  }
+                },
+                "required": [
+                  "model"
+                ]
+              },
+              "then": {
+                "required": [
+                  "lef"
+                ],
+                "properties": {
+                  "tef": {
+                    "not": {}
+                  },
+                  "contact": {
+                    "not": {}
+                  },
+                  "action": {
+                    "not": {}
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "model": {
+                    "enum": [
+                      "tef_x_vulnerability"
+                    ]
+                  }
+                },
+                "required": [
+                  "model"
+                ]
+              },
+              "then": {
+                "required": [
+                  "tef"
+                ],
+                "properties": {
+                  "lef": {
+                    "not": {}
+                  },
+                  "contact": {
+                    "not": {}
+                  },
+                  "action": {
+                    "not": {}
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "model": {
+                    "enum": [
+                      "tef_decomposed_cf_poa"
+                    ]
+                  }
+                },
+                "required": [
+                  "model"
+                ]
+              },
+              "then": {
+                "required": [
+                  "contact",
+                  "action"
+                ],
+                "properties": {
+                  "lef": {
+                    "not": {}
+                  },
+                  "tef": {
+                    "not": {}
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "model": {
+                    "enum": [
+                      "tef_and_vulnerability_decomposed"
+                    ]
+                  }
+                },
+                "required": [
+                  "model"
+                ]
+              },
+              "then": {
+                "required": [
+                  "contact",
+                  "action"
+                ],
+                "properties": {
+                  "lef": {
+                    "not": {}
+                  },
+                  "tef": {
+                    "not": {}
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "vulnerability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "model"
+          ],
+          "properties": {
+            "model": {
+              "enum": [
+                "direct_probability",
+                "tcap_x_resistance"
+              ]
+            },
+            "probability": {
+              "$ref": "#/$defs/probability"
+            },
+            "threat_capability": {
+              "$ref": "#/$defs/score"
+            },
+            "resistance_strength": {
+              "$ref": "#/$defs/score"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "model": {
+                    "enum": [
+                      "direct_probability"
+                    ]
+                  }
+                },
+                "required": [
+                  "model"
+                ]
+              },
+              "then": {
+                "required": [
+                  "probability"
+                ],
+                "properties": {
+                  "threat_capability": {
+                    "not": {}
+                  },
+                  "resistance_strength": {
+                    "not": {}
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "model": {
+                    "enum": [
+                      "tcap_x_resistance"
+                    ]
+                  }
+                },
+                "required": [
+                  "model"
+                ]
+              },
+              "then": {
+                "required": [
+                  "threat_capability",
+                  "resistance_strength"
+                ],
+                "properties": {
+                  "probability": {
+                    "not": {}
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "primary_loss": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "productivity": {
+              "$ref": "#/$defs/amount"
+            },
+            "response": {
+              "$ref": "#/$defs/amount"
+            },
+            "replacement": {
+              "$ref": "#/$defs/amount"
+            },
+            "fines_and_judgments": {
+              "$ref": "#/$defs/amount"
+            },
+            "reputation": {
+              "$ref": "#/$defs/amount"
+            },
+            "competitive_advantage": {
+              "$ref": "#/$defs/amount"
+            }
+          }
+        },
+        "secondary_loss": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "slef"
+          ],
+          "minProperties": 2,
+          "properties": {
+            "slef": {
+              "$ref": "#/$defs/events_per_event"
+            },
+            "productivity": {
+              "$ref": "#/$defs/amount"
+            },
+            "response": {
+              "$ref": "#/$defs/amount"
+            },
+            "replacement": {
+              "$ref": "#/$defs/amount"
+            },
+            "fines_and_judgments": {
+              "$ref": "#/$defs/amount"
+            },
+            "reputation": {
+              "$ref": "#/$defs/amount"
+            },
+            "competitive_advantage": {
+              "$ref": "#/$defs/amount"
+            }
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "frequency": {
+            "properties": {
+              "model": {
+                "enum": [
+                  "tef_x_vulnerability",
+                  "tef_and_vulnerability_decomposed"
+                ]
+              }
+            },
+            "required": [
+              "model"
+            ]
+          }
+        },
+        "required": [
+          "frequency"
+        ]
+      },
+      "then": {
+        "required": [
+          "vulnerability"
+        ]
+      },
+      "else": {
+        "properties": {
+          "vulnerability": {
+            "not": {}
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/variant"
+      }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tier",
+        "source_ids"
+      ],
+      "properties": {
+        "tier": {
+          "enum": [
+            "internal_data",
+            "sme_estimate",
+            "benchmark",
+            "agent_assumption"
+          ]
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/slug"
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "if": {
+        "properties": {
+          "tier": {
+            "const": "agent_assumption"
+          }
+        },
+        "required": [
+          "tier"
+        ]
+      },
+      "then": {
+        "required": [
+          "rationale"
+        ]
+      }
+    },
+    "events_per_year": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "mode",
+        "max",
+        "unit",
+        "provenance"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mode": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "const": "events/year"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "probability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "mode",
+        "max",
+        "unit",
+        "provenance"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "mode": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "unit": {
+          "const": "probability"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "mode",
+        "max",
+        "unit",
+        "provenance"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mode": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "const": "score"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "events_per_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "mode",
+        "max",
+        "unit",
+        "provenance"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mode": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "const": "events/event"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "amount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "mode",
+        "max",
+        "unit",
+        "provenance"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mode": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
+        "kind": {
+          "enum": [
+            "person",
+            "internal_system",
+            "web",
+            "benchmark_library",
+            "memory"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "library_entry_id": {
+          "$ref": "#/$defs/slug"
+        },
+        "owner_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retrieved_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "applicability_note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "web",
+                  "benchmark_library"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "url"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "memory"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "library_entry_id"
+            ]
+          }
+        }
+      ]
+    },
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "overrides"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug",
+          "not": {
+            "const": "baseline"
+          }
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "frequency.lef": {
+              "$ref": "#/$defs/events_per_year"
+            },
+            "frequency.tef": {
+              "$ref": "#/$defs/events_per_year"
+            },
+            "frequency.contact": {
+              "$ref": "#/$defs/events_per_year"
+            },
+            "frequency.action": {
+              "$ref": "#/$defs/probability"
+            },
+            "vulnerability.probability": {
+              "$ref": "#/$defs/probability"
+            },
+            "vulnerability.threat_capability": {
+              "$ref": "#/$defs/score"
+            },
+            "vulnerability.resistance_strength": {
+              "$ref": "#/$defs/score"
+            },
+            "secondary_loss.slef": {
+              "$ref": "#/$defs/events_per_event"
+            },
+            "primary_loss.productivity": {
+              "$ref": "#/$defs/amount"
+            },
+            "secondary_loss.productivity": {
+              "$ref": "#/$defs/amount"
+            },
+            "primary_loss.response": {
+              "$ref": "#/$defs/amount"
+            },
+            "secondary_loss.response": {
+              "$ref": "#/$defs/amount"
+            },
+            "primary_loss.replacement": {
+              "$ref": "#/$defs/amount"
+            },
+            "secondary_loss.replacement": {
+              "$ref": "#/$defs/amount"
+            },
+            "primary_loss.fines_and_judgments": {
+              "$ref": "#/$defs/amount"
+            },
+            "secondary_loss.fines_and_judgments": {
+              "$ref": "#/$defs/amount"
+            },
+            "primary_loss.reputation": {
+              "$ref": "#/$defs/amount"
+            },
+            "secondary_loss.reputation": {
+              "$ref": "#/$defs/amount"
+            },
+            "primary_loss.competitive_advantage": {
+              "$ref": "#/$defs/amount"
+            },
+            "secondary_loss.competitive_advantage": {
+              "$ref": "#/$defs/amount"
+            }
+          }
+        },
+        "annual_cost": {
+          "$ref": "#/$defs/amount"
+        }
+      }
+    }
+  }
+}

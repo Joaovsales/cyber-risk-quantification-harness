@@ -1,0 +1,16 @@
+schema_version: "1"
+org_name: Northwind Analytics
+segment: {industry: software, size_band: mid_market}
+teams:
+  - {id: secops, name: Security Operations}
+  - {id: finance, name: Finance}
+people:
+  - {name: Dana Reyes, role: security operations lead, team: secops, contact_hint: "Slack #secops"}
+  - {name: Sam Okafor, role: finance partner, team: finance}
+systems:
+  - {id: email-gateway, kind: email_security, name: Mail gateway, owner_role: security operations lead, connector: email-gateway}
+  - {id: ticketing, kind: itsm, name: Ticketing, owner_role: operations manager}
+theme:
+  logo_data_uri: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==
+  accent: "#1F6FEB"
+  display_name: Northwind

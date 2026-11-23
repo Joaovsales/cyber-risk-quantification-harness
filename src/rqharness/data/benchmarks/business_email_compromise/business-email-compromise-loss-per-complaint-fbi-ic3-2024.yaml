@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: business-email-compromise-loss-per-complaint-fbi-ic3-2024
+parameter_family: primary_loss.replacement
+value:
+  min: 125613
+  mode: 129192
+  max: 137134
+  unit: USD
+tier: benchmark
+source:
+  id: fbi-ic3-internet-crime-report-2024
+  kind: web
+  title: FBI Internet Crime Complaint Center, 2024 Internet Crime Report (2025 edition)
+  url: https://www.ic3.gov/AnnualReport/Reports
+  retrieved_at: '2026-11-10'
+  applicability_note: Complaints filed by victims (mostly US) with the FBI; losses are self-reported and
+    exclude unreported incidents.
+scenario_tags:
+- business_email_compromise
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2022-01-01'
+  end: '2024-12-31'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 'Reported BEC losses divided by BEC complaints: 2024 USD 2,770,151,146 / 21,442 = 129,192 (mode);
+  2022 = 125,613 (min); 2023 = 137,134 (max). These are means across complaints, not medians; the report
+  gives no distribution.'

@@ -1,0 +1,14 @@
+{
+  "name": "risk-quantification-harness",
+  "owner": {
+    "name": "risk-quantification-harness contributors"
+  },
+  "plugins": [
+    {
+      "name": "risk-quantification-harness",
+      "source": "./",
+      "description": "Skills that scope a cyber risk scenario, gather and cite its inputs, simulate annual loss with the rqh command line, and write a single-file HTML report.",
+      "version": "0.1.0"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+schema_version: "1"
+entry_id: phishing-click-rate-mid-market
+parameter_family: vulnerability.probability
+value: {min: 0.02, mode: 0.06, max: 0.15, unit: probability}
+tier: benchmark
+source:
+  id: example-benchmark-2025
+  kind: benchmark_library
+  title: Example industry benchmark report 2025
+  url: https://example.com/benchmarks/2025
+  retrieved_at: 2026-10-01
+scenario_tags: [credential_phishing, business_email_compromise]
+segment: {industry: any, size_band: mid_market}
+period: {start: 2025-01-01, end: 2025-12-31}
+captured_at: 2026-10-01
+stale_after_months: 18
+sensitivity: public
+note: Click-to-credential-entry share across surveyed firms.

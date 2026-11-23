@@ -1,0 +1,68 @@
+name: linkcheck
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmarks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+      - name: Install PyYAML
+        run: python -m pip install pyyaml
+      - name: Extract benchmark URLs
+        env:
+          URLS_FILE: urls.txt
+        run: |
+          python - <<'PY'
+          import os
+          import pathlib
+          import yaml
+
+          root = pathlib.Path("src/rqharness/data/benchmarks")
+          urls = {yaml.safe_load(p.read_text(encoding="utf-8"))["source"]["url"] for p in root.rglob("*.yaml")}
+          pathlib.Path(os.environ["URLS_FILE"]).write_text("\n".join(sorted(urls)) + "\n", encoding="utf-8")
+          print(f"{len(urls)} benchmark URLs")
+          PY
+      - name: Check every URL
+        env:
+          URLS_FILE: urls.txt
+        run: |
+          python - <<'PY'
+          import os
+          import sys
+          import urllib.error
+          import urllib.request
+
+          def status(url, method):
+              request = urllib.request.Request(url, method=method, headers={"User-Agent": "rqh-linkcheck/1.0"})
+              try:
+                  with urllib.request.urlopen(request, timeout=30) as response:
+                      return response.status
+              except urllib.error.HTTPError as error:
+                  return error.code
+              except (urllib.error.URLError, TimeoutError) as error:
+                  return str(error)
+
+          failed = []
+          for url in open(os.environ["URLS_FILE"], encoding="utf-8").read().split():
+              code = status(url, "HEAD")
+              if code != 200:
+                  code = status(url, "GET")
+              print(code, url)
+              if code != 200:
+                  failed.append((code, url))
+          if failed:
+              print("::error::" + str(len(failed)) + " benchmark URL(s) failed", file=sys.stderr)
+              sys.exit(1)
+          PY

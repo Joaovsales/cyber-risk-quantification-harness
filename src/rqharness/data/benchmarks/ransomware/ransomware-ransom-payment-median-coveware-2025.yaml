@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: ransomware-ransom-payment-median-coveware-2025
+parameter_family: primary_loss.response
+value:
+  min: 140000
+  mode: 270000
+  max: 400000
+  unit: USD
+tier: benchmark
+source:
+  id: coveware-quarterly-ransomware-reports
+  kind: web
+  title: Coveware, Quarterly Ransomware Reports (Q2 2025, Q3 2025, Q3 2026 editions)
+  url: https://www.coveware.com/ransomware-quarterly-reports
+  retrieved_at: '2026-11-10'
+  applicability_note: Incident-response cases handled by Coveware where a ransom was paid; median company
+    size 362 employees in Q3 2025 and 1,121 in Q3 2026.
+scenario_tags:
+- ransomware
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2025-04-01'
+  end: '2026-09-30'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 'Quarterly median ransom payments verified: Q3 2025 USD 140K, Q2 2025 USD 400K, Q3 2026 USD 400K.
+  Min and max are the lowest and highest of these; mode is their midpoint (analyst choice). Applies to
+  cases where a ransom was paid (roughly 20-25 percent of cases).'

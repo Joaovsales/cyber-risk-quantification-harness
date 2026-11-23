@@ -1,0 +1,69 @@
+schema_version: "1"
+scenario_id: credential-phishing-bec
+requests:
+  - id: req-1
+    parameter_path: frequency.tef
+    ask: How many phishing attempts reached employee inboxes last year?
+    target: {owner_role: security operations lead, person: Dana Reyes}
+    draft_message: Hi Dana, could you share the count of phishing emails delivered last year?
+    status: drafted
+    created_at: "2026-11-10T09:00:00Z"
+  - id: req-2
+    parameter_path: vulnerability.probability
+    ask: What share of phishing clicks led to credential entry?
+    target: {owner_role: security awareness lead}
+    draft_message: Hi, what share of simulated phishing clicks ended in credential entry?
+    status: sent
+    created_at: "2026-11-10T09:00:00Z"
+    due_at: 2026-11-20
+  - id: req-3
+    parameter_path: primary_loss.response
+    ask: What does one incident response engagement cost?
+    target: {owner_role: finance partner}
+    draft_message: Hi, what did the last incident response retainer call-out cost?
+    status: answered
+    created_at: "2026-11-10T09:00:00Z"
+    answer:
+      value: {min: 20000, mode: 45000, max: 90000, unit: USD}
+      note: From the 2025 retainer invoice.
+      received_at: "2026-11-11T10:00:00Z"
+  - id: req-4
+    parameter_path: primary_loss.productivity
+    ask: How many staff hours are lost per incident?
+    target: {owner_role: operations manager}
+    draft_message: Hi, how many staff hours were lost in the last incident?
+    status: unavailable
+    created_at: "2026-11-10T09:00:00Z"
+    answer:
+      note: No one tracks this.
+      received_at: "2026-11-11T10:00:00Z"
+  - id: req-5
+    parameter_path: frequency.contact
+    ask: How often is the finance team contacted by outsiders?
+    target: {owner_role: finance partner}
+    draft_message: Hi, roughly how many external contacts hit finance monthly?
+    status: withdrawn
+    created_at: "2026-11-10T09:00:00Z"
+candidates:
+  - id: cand-1
+    parameter_path: frequency.tef
+    value: {min: 40, mode: 120, max: 300, unit: events/year}
+    evidence_kind: measured
+    origin: connector:email-gateway
+    link: https://example.com/dashboards/phishing
+    status: pending
+    created_at: "2026-11-10T09:05:00Z"
+  - id: cand-2
+    parameter_path: primary_loss.response
+    value: {min: 20000, mode: 45000, max: 90000, unit: USD}
+    evidence_kind: judgement
+    origin: request:req-3
+    status: confirmed
+    created_at: "2026-11-11T10:00:00Z"
+  - id: cand-3
+    parameter_path: vulnerability.probability
+    value: {min: 0.01, mode: 0.05, max: 0.2, unit: probability}
+    evidence_kind: judgement
+    origin: request:req-2
+    status: rejected
+    created_at: "2026-11-11T10:00:00Z"

@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: cloud-misconfiguration-public-cloud-breach-cost-ibm-2025
+parameter_family: primary_loss.response
+value:
+  min: 2340000
+  mode: 4680000
+  max: 9360000
+  unit: USD
+tier: benchmark
+source:
+  id: ibm-cost-of-a-data-breach-2025
+  kind: web
+  title: IBM and Ponemon Institute, Cost of a Data Breach Report 2025 (2025 edition)
+  url: https://www.ibm.com/reports/data-breach
+  retrieved_at: '2026-11-10'
+  applicability_note: Organisations that suffered a data breach (600 in the study); breach cause is not
+    restricted to cloud misconfiguration.
+scenario_tags:
+- cloud_misconfiguration
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2024-03-01'
+  end: '2025-02-28'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 'Mode is IBM''s average cost of a breach where data was stored in public cloud: USD 4.68M (Figure
+  7; 5.17M in 2024). Mean only, so min and max are an analyst widening to 0.5x and 2x. Not specific to
+  misconfiguration as the cause.'

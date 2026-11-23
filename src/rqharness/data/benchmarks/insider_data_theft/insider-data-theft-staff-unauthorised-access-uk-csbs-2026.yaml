@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: insider-data-theft-staff-unauthorised-access-uk-csbs-2026
+parameter_family: frequency.lef
+value:
+  min: 0.01
+  mode: 0.03
+  max: 0.06
+  unit: events/year
+tier: benchmark
+source:
+  id: uk-cyber-security-breaches-survey-2026
+  kind: web
+  title: UK DSIT/Ipsos, Cyber Security Breaches Survey 2025/2026 (published 2026)
+  url: https://www.gov.uk/government/statistics/cyber-security-breaches-survey-20252026/cyber-security-breaches-survey-20252026
+  retrieved_at: '2026-11-10'
+  applicability_note: UK businesses; includes accidental access, so it overstates deliberate insider data
+    theft.
+scenario_tags:
+- insider_data_theft
+segment:
+  industry: any
+  size_band: any
+period:
+  start: '2025-08-01'
+  end: '2025-12-31'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: 'Share of UK businesses with unauthorised access by staff, even if accidental, in the prior 12 months:
+  1% all, 3% medium, 6% large. Min is the all-business share, mode the medium-business share, max the
+  large-business share.'

@@ -1,0 +1,699 @@
+{
+  "argv_missing_argument": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv",
+        "rule": "usage",
+        "message": "rqh run confirm: the following arguments are required: run, --route"
+      }
+    ],
+    "ok": false,
+    "stderr": "argv: rqh run confirm: the following arguments are required: run, --route [usage]\n"
+  },
+  "argv_no_command": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv",
+        "rule": "usage",
+        "message": "no command given"
+      }
+    ],
+    "ok": false,
+    "stderr": "<argparse help>"
+  },
+  "candidates_confirm_no_inputs": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "inputs.document",
+        "rule": "missing",
+        "message": "inputs.yaml is missing from <tmp>/.riskquant/runs/r"
+      }
+    ],
+    "ok": false,
+    "stderr": "inputs.document: inputs.yaml is missing from <tmp>/.riskquant/runs/r [missing]\n"
+  },
+  "candidates_confirm_not_found": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "id",
+        "rule": "not_found",
+        "message": "no item 'cand-9'"
+      }
+    ],
+    "ok": false,
+    "stderr": "id: no item 'cand-9' [not_found]\n"
+  },
+  "candidates_reject_illegal": {
+    "exit": 3,
+    "issues": [
+      {
+        "path": "status",
+        "rule": "illegal_transition",
+        "message": "cannot move from confirmed to rejected"
+      }
+    ],
+    "ok": false,
+    "stderr": "status: cannot move from confirmed to rejected [illegal_transition]\n"
+  },
+  "confirm_invalid_scenario": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "scenario.scenario_id",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      },
+      {
+        "path": "scenario.title",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      },
+      {
+        "path": "scenario.scenario_statement",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      },
+      {
+        "path": "scenario.scenario_type",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      },
+      {
+        "path": "scenario.threat_actor",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      },
+      {
+        "path": "scenario.asset",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      },
+      {
+        "path": "scenario.method",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      },
+      {
+        "path": "scenario.loss_event_definition",
+        "rule": "required",
+        "message": "'loss_event_definition' is a required property"
+      }
+    ],
+    "ok": false,
+    "stderr": "scenario.scenario_id: 'loss_event_definition' is a required property [required]\nscenario.title: 'loss_event_definition' is a required property [required]\nscenario.scenario_statement: 'loss_event_definition' is a required property [required]\nscenario.scenario_type: 'loss_event_definition' is a required property [required]\nscenario.threat_actor: 'loss_event_definition' is a required property [required]\nscenario.asset: 'loss_event_definition' is a required property [required]\nscenario.method: 'loss_event_definition' is a required property [required]\nscenario.loss_event_definition: 'loss_event_definition' is a required property [required]\n"
+  },
+  "confirm_n_out_of_range": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv.n",
+        "rule": "range",
+        "message": "--n must be between 1 and 10,000,000"
+      }
+    ],
+    "ok": false,
+    "stderr": "argv.n: --n must be between 1 and 10,000,000 [range]\n"
+  },
+  "confirm_seed_out_of_range": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv.seed",
+        "rule": "range",
+        "message": "--seed must be between 0 and 2**63 - 1"
+      }
+    ],
+    "ok": false,
+    "stderr": "argv.seed: --seed must be between 0 and 2**63 - 1 [range]\n"
+  },
+  "finalize_invalid_inputs": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "inputs.scenario_id",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.currency",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.parameters",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.sources",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.variants",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.scenario_id",
+        "rule": "scenario_id",
+        "message": "None does not equal scenario.scenario_id 'credential-phishing-bec'"
+      }
+    ],
+    "ok": false,
+    "stderr": "inputs.scenario_id: 'variants' is a required property [required]\ninputs.currency: 'variants' is a required property [required]\ninputs.parameters: 'variants' is a required property [required]\ninputs.sources: 'variants' is a required property [required]\ninputs.variants: 'variants' is a required property [required]\ninputs.scenario_id: None does not equal scenario.scenario_id 'credential-phishing-bec' [scenario_id]\n"
+  },
+  "finalize_invalid_profile": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "org-profile.org_name",
+        "rule": "required",
+        "message": "'org_name' is a required property"
+      }
+    ],
+    "ok": false,
+    "stderr": "org-profile.org_name: 'org_name' is a required property [required]\n"
+  },
+  "finalize_lock_held": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "run.lock",
+        "rule": "lock_held",
+        "message": "another rqh command holds the run lock; try again shortly"
+      }
+    ],
+    "ok": false,
+    "stderr": "run.lock: another rqh command holds the run lock; try again shortly [lock_held]\n"
+  },
+  "finalize_n_out_of_range": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv.n",
+        "rule": "range",
+        "message": "--n must be between 1 and 10,000,000"
+      }
+    ],
+    "ok": false,
+    "stderr": "argv.n: --n must be between 1 and 10,000,000 [range]\n"
+  },
+  "finalize_no_inputs": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "inputs.document",
+        "rule": "missing",
+        "message": "inputs.yaml is missing from <tmp>/.riskquant/runs/r"
+      }
+    ],
+    "ok": false,
+    "stderr": "inputs.document: inputs.yaml is missing from <tmp>/.riskquant/runs/r [missing]\n"
+  },
+  "finalize_scoping": {
+    "exit": 3,
+    "issues": [
+      {
+        "path": "run.status",
+        "rule": "illegal_transition",
+        "message": "cannot finalize a run that is scoping"
+      }
+    ],
+    "ok": false,
+    "stderr": "run.status: cannot finalize a run that is scoping [illegal_transition]\n"
+  },
+  "finalize_seed_out_of_range": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv.seed",
+        "rule": "range",
+        "message": "--seed must be between 0 and 2**63 - 1"
+      }
+    ],
+    "ok": false,
+    "stderr": "argv.seed: --seed must be between 0 and 2**63 - 1 [range]\n"
+  },
+  "library_add_invalid": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "entry.entry_id",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.parameter_family",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.value",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.tier",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.source",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.scenario_tags",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.segment",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.period",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.captured_at",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "entry.sensitivity",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      }
+    ],
+    "ok": false,
+    "stderr": "entry.entry_id: 'sensitivity' is a required property [required]\nentry.parameter_family: 'sensitivity' is a required property [required]\nentry.value: 'sensitivity' is a required property [required]\nentry.tier: 'sensitivity' is a required property [required]\nentry.source: 'sensitivity' is a required property [required]\nentry.scenario_tags: 'sensitivity' is a required property [required]\nentry.segment: 'sensitivity' is a required property [required]\nentry.period: 'sensitivity' is a required property [required]\nentry.captured_at: 'sensitivity' is a required property [required]\nentry.sensitivity: 'sensitivity' is a required property [required]\n"
+  },
+  "library_add_missing_file": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "entry",
+        "rule": "missing",
+        "message": "no file at <tmp>/none.yaml"
+      }
+    ],
+    "ok": false,
+    "stderr": "entry: no file at <tmp>/none.yaml [missing]\n"
+  },
+  "library_list_no_workspace": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "workspace",
+        "rule": "missing",
+        "message": "no workspace at <tmp>/.riskquant; run `rqh init`"
+      }
+    ],
+    "ok": false,
+    "stderr": "workspace: no workspace at <tmp>/.riskquant; run `rqh init` [missing]\n"
+  },
+  "library_remove_missing": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "library",
+        "rule": "missing",
+        "message": "no memory entry 'nope'"
+      }
+    ],
+    "ok": false,
+    "stderr": "library: no memory entry 'nope' [missing]\n"
+  },
+  "library_validate_invalid": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "library.bad.entry_id",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.parameter_family",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.value",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.tier",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.source",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.scenario_tags",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.segment",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.period",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.captured_at",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      },
+      {
+        "path": "library.bad.sensitivity",
+        "rule": "required",
+        "message": "'sensitivity' is a required property"
+      }
+    ],
+    "ok": false,
+    "stderr": "library.bad.entry_id: 'sensitivity' is a required property [required]\nlibrary.bad.parameter_family: 'sensitivity' is a required property [required]\nlibrary.bad.value: 'sensitivity' is a required property [required]\nlibrary.bad.tier: 'sensitivity' is a required property [required]\nlibrary.bad.source: 'sensitivity' is a required property [required]\nlibrary.bad.scenario_tags: 'sensitivity' is a required property [required]\nlibrary.bad.segment: 'sensitivity' is a required property [required]\nlibrary.bad.period: 'sensitivity' is a required property [required]\nlibrary.bad.captured_at: 'sensitivity' is a required property [required]\nlibrary.bad.sensitivity: 'sensitivity' is a required property [required]\n"
+  },
+  "pause_guard": {
+    "exit": 3,
+    "issues": [
+      {
+        "path": "run.status",
+        "rule": "pause_guard",
+        "message": "pause needs at least one request that is drafted or sent"
+      }
+    ],
+    "ok": false,
+    "stderr": "run.status: pause needs at least one request that is drafted or sent [pause_guard]\n"
+  },
+  "report_missing_narrative_file": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "<tmp>/none.md",
+        "rule": "missing",
+        "message": "<tmp>/none.md is missing; run `rqh finalize` first"
+      }
+    ],
+    "ok": false,
+    "stderr": "<tmp>/none.md: <tmp>/none.md is missing; run `rqh finalize` first [missing]\n"
+  },
+  "report_narrative_rejected": {
+    "exit": 4,
+    "issues": [
+      {
+        "path": "narrative.line.1",
+        "rule": "literal_figure",
+        "message": "literal_figure: $5m"
+      }
+    ],
+    "ok": false,
+    "stderr": "narrative.line.1: literal_figure: $5m [literal_figure]\n"
+  },
+  "report_no_version": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "v1",
+        "rule": "missing",
+        "message": "v1 is missing; run `rqh finalize` first"
+      }
+    ],
+    "ok": false,
+    "stderr": "v1: v1 is missing; run `rqh finalize` first [missing]\n"
+  },
+  "requests_add_file_outside": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv.ask-file",
+        "rule": "file",
+        "message": "--ask-file must name a file inside the run directory <tmp>/.riskquant/runs/r"
+      }
+    ],
+    "ok": false,
+    "stderr": "argv.ask-file: --ask-file must name a file inside the run directory <tmp>/.riskquant/runs/r [file]\n"
+  },
+  "requests_add_rejected": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "requests.requests.0.parameter_path",
+        "rule": "pattern",
+        "message": "'primary_loss.bogus' does not match '^(frequency\\\\.lef|frequency\\\\.tef|frequency\\\\.contact|frequency\\\\.action|vulnerability\\\\.probability|vulnerability\\\\.threat_capability|vulnerability\\\\.resistance_strength|secondary_loss\\\\.slef|primary_loss\\\\.productivity|primary_loss\\\\.response|primary_loss\\\\.replacement|primary_loss\\\\.fines_and_judgments|primary_loss\\\\.reputation|primary_loss\\\\.competitive_advantage|secondary_loss\\\\.productivity|secondary_loss\\\\.response|secondary_loss\\\\.replacement|secondary_loss\\\\.fines_and_judgments|secondary_loss\\\\.reputation|secondary_loss\\\\.competitive_advantage)$'"
+      }
+    ],
+    "ok": false,
+    "stderr": "requests.requests.0.parameter_path: 'primary_loss.bogus' does not match '^(frequency\\\\.lef|frequency\\\\.tef|frequency\\\\.contact|frequency\\\\.action|vulnerability\\\\.probability|vulnerability\\\\.threat_capability|vulnerability\\\\.resistance_strength|secondary_loss\\\\.slef|primary_loss\\\\.productivity|primary_loss\\\\.response|primary_loss\\\\.replacement|primary_loss\\\\.fines_and_judgments|primary_loss\\\\.reputation|primary_loss\\\\.competitive_advantage|secondary_loss\\\\.productivity|secondary_loss\\\\.response|secondary_loss\\\\.replacement|secondary_loss\\\\.fines_and_judgments|secondary_loss\\\\.reputation|secondary_loss\\\\.competitive_advantage)$' [pattern]\n"
+  },
+  "requests_update_answer_status": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "requests.req-1.answer",
+        "rule": "answer_status",
+        "message": "only an answered request carries an answer"
+      }
+    ],
+    "ok": false,
+    "stderr": "requests.req-1.answer: only an answered request carries an answer [answer_status]\n"
+  },
+  "requests_update_illegal": {
+    "exit": 3,
+    "issues": [
+      {
+        "path": "status",
+        "rule": "illegal_transition",
+        "message": "cannot move from drafted to answered"
+      }
+    ],
+    "ok": false,
+    "stderr": "status: cannot move from drafted to answered [illegal_transition]\n"
+  },
+  "requests_update_incomplete_value": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "value",
+        "rule": "incomplete",
+        "message": "a value needs --min, --mode, --max and --unit together"
+      }
+    ],
+    "ok": false,
+    "stderr": "value: a value needs --min, --mode, --max and --unit together [incomplete]\n"
+  },
+  "requests_update_not_found": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "id",
+        "rule": "not_found",
+        "message": "no item 'req-9'"
+      }
+    ],
+    "ok": false,
+    "stderr": "id: no item 'req-9' [not_found]\n"
+  },
+  "resume_illegal": {
+    "exit": 3,
+    "issues": [
+      {
+        "path": "run.status",
+        "rule": "illegal_transition",
+        "message": "cannot resume a run that is collecting"
+      }
+    ],
+    "ok": false,
+    "stderr": "run.status: cannot resume a run that is collecting [illegal_transition]\n"
+  },
+  "route_unknown_path": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "run.route_overrides",
+        "rule": "unknown_path",
+        "message": "'bogus.path' is not an estimate path"
+      }
+    ],
+    "ok": false,
+    "stderr": "run.route_overrides: 'bogus.path' is not an estimate path [unknown_path]\n"
+  },
+  "route_while_scoping": {
+    "exit": 3,
+    "issues": [
+      {
+        "path": "run.status",
+        "rule": "illegal_transition",
+        "message": "cannot route an estimate while the run is scoping"
+      }
+    ],
+    "ok": false,
+    "stderr": "run.status: cannot route an estimate while the run is scoping [illegal_transition]\n"
+  },
+  "search_no_key": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "env.TAVILY_API_KEY",
+        "rule": "missing",
+        "message": "TAVILY_API_KEY is not set; web search is optional"
+      }
+    ],
+    "ok": false,
+    "stderr": "env.TAVILY_API_KEY: TAVILY_API_KEY is not set; web search is optional [missing]\n"
+  },
+  "status_invalid_run_yaml": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "run.scenario_id",
+        "rule": "required",
+        "message": "'updated_at' is a required property"
+      },
+      {
+        "path": "run.route",
+        "rule": "required",
+        "message": "'updated_at' is a required property"
+      },
+      {
+        "path": "run.n",
+        "rule": "required",
+        "message": "'updated_at' is a required property"
+      },
+      {
+        "path": "run.seed",
+        "rule": "required",
+        "message": "'updated_at' is a required property"
+      },
+      {
+        "path": "run.status",
+        "rule": "required",
+        "message": "'updated_at' is a required property"
+      },
+      {
+        "path": "run.created_at",
+        "rule": "required",
+        "message": "'updated_at' is a required property"
+      },
+      {
+        "path": "run.updated_at",
+        "rule": "required",
+        "message": "'updated_at' is a required property"
+      }
+    ],
+    "ok": false,
+    "stderr": "run.scenario_id: 'updated_at' is a required property [required]\nrun.route: 'updated_at' is a required property [required]\nrun.n: 'updated_at' is a required property [required]\nrun.seed: 'updated_at' is a required property [required]\nrun.status: 'updated_at' is a required property [required]\nrun.created_at: 'updated_at' is a required property [required]\nrun.updated_at: 'updated_at' is a required property [required]\n"
+  },
+  "status_missing_run": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "run",
+        "rule": "missing",
+        "message": "no run named 'nope' in <tmp>/.riskquant"
+      }
+    ],
+    "ok": false,
+    "stderr": "run: no run named 'nope' in <tmp>/.riskquant [missing]\n"
+  },
+  "status_no_workspace": {
+    "exit": 5,
+    "issues": [
+      {
+        "path": "workspace",
+        "rule": "missing",
+        "message": "no workspace at <tmp>/.riskquant; run `rqh init`"
+      }
+    ],
+    "ok": false,
+    "stderr": "workspace: no workspace at <tmp>/.riskquant; run `rqh init` [missing]\n"
+  },
+  "status_outside_workspace": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "run",
+        "rule": "outside_workspace",
+        "message": "<tmp>/copy is not a run directory in <tmp>/.riskquant/runs; move it there, or set RQH_WORKSPACE to the workspace that holds it"
+      }
+    ],
+    "ok": false,
+    "stderr": "run: <tmp>/copy is not a run directory in <tmp>/.riskquant/runs; move it there, or set RQH_WORKSPACE to the workspace that holds it [outside_workspace]\n"
+  },
+  "validate_invalid_memory_entry": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "inputs.sources.0.library_entry_id",
+        "rule": "library_entry_invalid",
+        "message": "the workspace library holds 'ransomware-recovery-cost-sophos-2025' in 'override.yaml', which is not a valid entry; `rqh library validate` lists its issues"
+      }
+    ],
+    "ok": false,
+    "stderr": "inputs.sources.0.library_entry_id: the workspace library holds 'ransomware-recovery-cost-sophos-2025' in 'override.yaml', which is not a valid entry; `rqh library validate` lists its issues [library_entry_invalid]\n"
+  },
+  "validate_invalid_run": {
+    "exit": 1,
+    "issues": [
+      {
+        "path": "inputs.scenario_id",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.currency",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.parameters",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.sources",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.variants",
+        "rule": "required",
+        "message": "'variants' is a required property"
+      },
+      {
+        "path": "inputs.scenario_id",
+        "rule": "scenario_id",
+        "message": "None does not equal scenario.scenario_id 'credential-phishing-bec'"
+      }
+    ],
+    "ok": false,
+    "stderr": "inputs.scenario_id: 'variants' is a required property [required]\ninputs.currency: 'variants' is a required property [required]\ninputs.parameters: 'variants' is a required property [required]\ninputs.sources: 'variants' is a required property [required]\ninputs.variants: 'variants' is a required property [required]\ninputs.scenario_id: None does not equal scenario.scenario_id 'credential-phishing-bec' [scenario_id]\n"
+  },
+  "validate_unknown_kind": {
+    "exit": 2,
+    "issues": [
+      {
+        "path": "argv",
+        "rule": "usage",
+        "message": "cannot tell the document kind of doc.yaml; pass --kind (one of connector-map, inputs, library-entry, org-profile, requests, run, scenario)"
+      }
+    ],
+    "ok": false,
+    "stderr": "argv: cannot tell the document kind of doc.yaml; pass --kind (one of connector-map, inputs, library-entry, org-profile, requests, run, scenario) [usage]\n"
+  }
+}

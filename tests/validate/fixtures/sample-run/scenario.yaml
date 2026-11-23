@@ -1,0 +1,34 @@
+schema_version: "1"
+scenario_id: credential-phishing-bec
+title: Credential phishing leads to business email compromise
+scenario_statement: >-
+  An organised cybercrime group phishes credentials from Northwind Analytics finance and
+  executive staff, takes over their Microsoft 365 mailboxes, and uses them to redirect
+  payments or exfiltrate customer data.
+scenario_type: business_email_compromise
+segment:
+  industry: software
+  size_band: mid_market
+threat_actor:
+  category: organised_cybercrime
+  description: A financially motivated group running credential phishing campaigns at volume.
+  intent: Redirect payments or sell access to customer data.
+asset:
+  description: Microsoft 365 finance and executive mailboxes at Northwind Analytics (800 employees, B2B SaaS).
+  location_context: Cloud-hosted Microsoft 365 tenant.
+  sensitivity_or_volume_notes: Payment instructions and customer contract data pass through these mailboxes.
+method:
+  description: Credential phishing, MFA fatigue prompts, and hidden mailbox rules to conceal the takeover.
+effects:
+  - cia_dimension: confidentiality
+    description: Customer data in mailboxes is read or exfiltrated.
+  - cia_dimension: integrity
+    description: A payment instruction is sent or altered from a trusted mailbox.
+loss_event_definition: >-
+  A compromised mailbox is used to send or alter a payment instruction or to exfiltrate customer data.
+out_of_scope:
+  - Ransomware deployment after mailbox access.
+  - Compromise of non-finance, non-executive mailboxes.
+controls_context: Mail gateway filtering and SMS-based MFA are in place today.
+assumptions:
+  - The analysis period is one year.

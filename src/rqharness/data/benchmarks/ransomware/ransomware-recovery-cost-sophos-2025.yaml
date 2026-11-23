@@ -1,0 +1,31 @@
+schema_version: '1'
+entry_id: ransomware-recovery-cost-sophos-2025
+parameter_family: primary_loss.response
+value:
+  min: 765000
+  mode: 1530000
+  max: 2730000
+  unit: USD
+tier: benchmark
+source:
+  id: sophos-state-of-ransomware-2025
+  kind: web
+  title: Sophos, The State of Ransomware 2025 (2025 edition)
+  url: https://www.sophos.com/en-us/blog/the-state-of-ransomware-2025
+  retrieved_at: '2026-11-10'
+  applicability_note: Organisations of 100 to 5,000 employees in 17 countries that were hit by ransomware;
+    mean not median, so heavy-tailed.
+scenario_tags:
+- ransomware
+segment:
+  industry: any
+  size_band: mid_market
+period:
+  start: '2024-01-01'
+  end: '2024-12-31'
+captured_at: '2026-11-10'
+stale_after_months: 18
+sensitivity: public
+note: Mode is the 2025 mean recovery cost excluding any ransom (USD 1.53M); max is the 2024 mean (USD
+  2.73M) quoted in the same report; min is an analyst assumption of half the 2025 mean. Ransom itself
+  is excluded.

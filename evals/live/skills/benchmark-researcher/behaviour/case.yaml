@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: skill-benchmark-researcher-behaviour
+context:
+  scaffold_script: scaffold.sh

@@ -1,0 +1,4 @@
+# LF everywhere: pinned design hashes and reproducible artifacts must not change per platform
+* text=auto eol=lf
+# Session bookkeeping stays out of `git archive` exports
+tasks/ export-ignore

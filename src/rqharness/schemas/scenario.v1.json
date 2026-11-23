@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joaovsales.github.io/cyber-risk-quantification-harness/schemas/scenario.v1.json",
+  "title": "Scenario",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "title",
+    "scenario_statement",
+    "scenario_type",
+    "threat_actor",
+    "asset",
+    "method",
+    "loss_event_definition"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "scenario_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenario_statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenario_type": {
+      "enum": [
+        "ransomware",
+        "business_email_compromise",
+        "credential_phishing",
+        "third_party_breach",
+        "cloud_misconfiguration",
+        "ddos",
+        "insider_data_theft",
+        "lost_or_stolen_device",
+        "other"
+      ]
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "industry": {
+          "type": "string",
+          "pattern": "^(any|[a-z][a-z0-9_]*)$"
+        },
+        "size_band": {
+          "enum": [
+            "smb",
+            "mid_market",
+            "enterprise",
+            "any"
+          ]
+        }
+      }
+    },
+    "threat_actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "category",
+        "description"
+      ],
+      "properties": {
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intent": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "location_context": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sensitivity_or_volume_notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cia_dimension",
+          "description"
+        ],
+        "properties": {
+          "cia_dimension": {
+            "enum": [
+              "confidentiality",
+              "integrity",
+              "availability"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "loss_event_definition": {
+      "type": "string",
+      "minLength": 1
+    },
+    "out_of_scope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "controls_context": {
+      "type": "string",
+      "minLength": 1
+    },
+    "threat_narrative": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

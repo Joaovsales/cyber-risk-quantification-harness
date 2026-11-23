@@ -1,0 +1,3915 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Credential phishing leads to business email compromise: risk report, Editorial Split concept</title>
+<style>
+:root{
+  --bg:#f5f3ec; --bg-2:#ece9df; --surface:#fffdf8; --surface-2:#f9f6ee;
+  --ink:#14172a; --ink-2:#363b55; --muted:#585d76;
+  --line:rgb(20 23 42 / .12); --line-2:rgb(20 23 42 / .24);
+  --accent:#4631d0; --accent-ink:#ffffff; --accent-soft:rgb(70 49 208 / .09); --accent-line:rgb(70 49 208 / .35);
+  --v-base:#171a2c; --v-mfa:#4631d0; --v-sbx:#b45f00;
+  --grade:#9a5b00; --grade-soft:rgb(180 95 0 / .12);
+  --warn-bg:rgb(180 95 0 / .10); --warn-line:rgb(180 95 0 / .45);
+  --shell:rgb(20 23 42 / .045); --ring:rgb(20 23 42 / .09); --hi:rgb(255 255 255 / .75);
+  --nav-bg:rgb(245 243 236 / .78);
+  --sh1:0 1px 2px rgb(20 23 60 / .06), 0 6px 16px -6px rgb(20 23 60 / .10);
+  --sh2:0 1px 2px rgb(20 23 60 / .05), 0 12px 28px -10px rgb(20 23 60 / .16), 0 30px 60px -30px rgb(20 23 60 / .18);
+  --mesh1:rgb(70 49 208 / .16); --mesh2:rgb(180 95 0 / .12);
+  --sans:ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono:ui-monospace, "SF Mono", Consolas, "Liberation Mono", monospace;
+  --ease:cubic-bezier(.32,.72,0,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0c0e1d; --bg-2:#12152a; --surface:#171a30; --surface-2:#1c2039;
+    --ink:#eceefb; --ink-2:#c5c9e2; --muted:#a2a7c6;
+    --line:rgb(236 238 251 / .13); --line-2:rgb(236 238 251 / .28);
+    --accent:#a79bff; --accent-ink:#0c0e1d; --accent-soft:rgb(167 155 255 / .13); --accent-line:rgb(167 155 255 / .45);
+    --v-base:#e6e8f6; --v-mfa:#a79bff; --v-sbx:#f0b04f;
+    --grade:#f0b04f; --grade-soft:rgb(240 176 79 / .14);
+    --warn-bg:rgb(240 176 79 / .10); --warn-line:rgb(240 176 79 / .5);
+    --shell:rgb(236 238 251 / .05); --ring:rgb(236 238 251 / .10); --hi:rgb(255 255 255 / .07);
+    --nav-bg:rgb(12 14 29 / .78);
+    --sh1:0 1px 2px rgb(0 0 0 / .4), 0 6px 16px -6px rgb(0 0 0 / .5);
+    --sh2:0 1px 2px rgb(0 0 0 / .4), 0 14px 30px -10px rgb(0 0 0 / .6), 0 30px 60px -30px rgb(0 0 0 / .6);
+    --mesh1:rgb(167 155 255 / .17); --mesh2:rgb(240 176 79 / .10);
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;
+  font-variant-numeric:tabular-nums lining-nums;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.num{font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum" 1,"lnum" 1}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+code{font-family:var(--mono);font-size:.78em;color:var(--muted);word-break:break-all}
+small{color:var(--muted);font-size:.82em}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+
+/* top bar */
+.top{padding:18px 0 6px}
+.top .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.mark{font-weight:650;letter-spacing:.01em;display:flex;gap:10px;align-items:center}
+.mark i{width:22px;height:22px;border-radius:7px;background:linear-gradient(140deg,var(--accent),var(--v-sbx));display:inline-block;box-shadow:var(--sh1)}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;letter-spacing:.02em;border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2)}
+.pill.sample::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--v-sbx)}
+
+/* sticky navigator */
+.snav{position:sticky;top:0;z-index:50;background:var(--nav-bg);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid var(--line)}
+.snav ul{list-style:none;margin:0;padding:9px 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.snav ul::-webkit-scrollbar{display:none}
+.snav a{display:block;white-space:nowrap;text-decoration:none;color:var(--ink-2);font-size:.86rem;font-weight:500;padding:6px 14px;border-radius:999px;border:1px solid transparent;transition:background .5s var(--ease),color .5s var(--ease),border-color .5s var(--ease)}
+.snav a:hover{background:var(--accent-soft);color:var(--ink)}
+.snav a[aria-current="true"]{background:var(--accent);color:var(--accent-ink);font-weight:650}
+
+/* hero */
+.hero{position:relative;padding:clamp(40px,7vw,96px) 0 clamp(48px,7vw,96px);isolation:isolate}
+.hero::before{content:"";position:absolute;inset:-10% -10% 0;z-index:-1;
+  background:radial-gradient(48% 55% at 18% 25%,var(--mesh1),transparent 70%),radial-gradient(40% 50% at 88% 8%,var(--mesh2),transparent 70%)}
+.hero-grid{display:grid;gap:clamp(28px,5vw,64px);grid-template-columns:minmax(0,1fr)}
+.eyebrow{display:inline-block;border-radius:999px;padding:4px 12px;font-size:.7rem;text-transform:uppercase;letter-spacing:.18em;font-weight:650;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-line)}
+.kicker{margin:18px 0 14px;font-size:1rem;color:var(--ink-2);font-weight:550}
+h1{margin:0;font-weight:300;font-size:clamp(2rem,1.1rem + 3.9vw,4.1rem);line-height:1.08;letter-spacing:-.03em;text-wrap:balance}
+h1 em{font-style:normal;font-weight:560;color:var(--accent);white-space:nowrap}
+.hero-side{display:grid;gap:14px;align-content:start}
+.grade{display:flex;gap:18px;align-items:center}
+.ring{flex:none;width:96px;height:96px;position:relative}
+.ring svg{width:96px;height:96px;transform:rotate(-90deg)}
+.ring .trk{stroke:var(--line-2);fill:none}
+.ring .val{stroke:var(--grade);fill:none;stroke-linecap:round}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:2rem;font-weight:700;color:var(--grade)}
+.grade h2{margin:0;font-size:1rem;font-weight:650}
+.grade p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.grade .score{font-size:1.5rem;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+.yolo{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:16px;background:var(--warn-bg);border:1px solid var(--warn-line);border-left-width:5px}
+.yolo b{flex:none;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--warn-line);border-radius:999px;padding:3px 9px;color:var(--ink);background:var(--surface)}
+.yolo p{margin:0;font-weight:560;color:var(--ink)}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin:0}
+.meta div{min-width:0}
+.meta dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.meta dd{margin:2px 0 0;font-weight:560;overflow-wrap:anywhere}
+.meta .wide{grid-column:1 / -1}
+
+/* surfaces: nested "double bezel" */
+.shell{background:var(--shell);border:1px solid var(--ring);border-radius:28px;padding:6px;transition:transform .7s var(--ease)}
+.core{background:var(--surface);border-radius:22px;padding:clamp(18px,2.6vw,28px);box-shadow:inset 0 1px 0 var(--hi),var(--sh1);transition:box-shadow .7s var(--ease)}
+.shell:hover .core{box-shadow:inset 0 1px 0 var(--hi),var(--sh2)}
+@media (hover:hover){ .shell.lift:hover{transform:translateY(-3px)} }
+
+/* section split */
+.split{padding:clamp(56px,9vw,128px) 0;border-top:1px solid var(--line)}
+.split-grid{display:grid;gap:clamp(24px,4vw,56px);grid-template-columns:minmax(0,1fr)}
+.msg h2{margin:16px 0 14px;font-weight:350;font-size:clamp(1.7rem,1.1rem + 2.2vw,2.9rem);line-height:1.1;letter-spacing:-.028em;text-wrap:balance}
+.msg .lede{margin:0;color:var(--ink-2);font-size:1.04rem;max-width:34ch}
+.msg .lede + .lede{margin-top:12px}
+@media (min-width:960px){
+  .hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:end}
+  .split-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+  .msg{position:sticky;top:96px;align-self:start}
+}
+
+/* summary cards */
+.cards{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.cards .feature{grid-column:1 / -1}
+.c-label{margin:0;font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:650}
+.c-fig{margin:10px 0 6px;font-size:clamp(2.1rem,1.4rem + 2.4vw,3.2rem);line-height:1;font-weight:350;letter-spacing:-.035em}
+.feature .c-fig{font-size:clamp(3rem,2rem + 4vw,5rem);color:var(--accent)}
+.c-foot{margin:0;color:var(--muted);font-size:.9rem}
+@media (max-width:420px){.cards{grid-template-columns:minmax(0,1fr)}}
+
+/* charts */
+.chart{display:block;width:100%;height:auto;overflow:visible}
+.chart:focus-visible{outline-offset:6px}
+.chartscroll{overflow-x:auto;overflow-y:hidden;margin:0 -4px;padding:0 4px;-webkit-overflow-scrolling:touch}
+.ax{fill:var(--muted);font-size:12px;font-family:var(--sans);font-variant-numeric:tabular-nums}
+.ax-t{fill:var(--ink-2);font-size:12.5px;font-weight:600;font-family:var(--sans)}
+.ax-b{fill:var(--ink);font-size:12.5px;font-weight:650;font-family:var(--sans);font-variant-numeric:tabular-nums}
+.halo{paint-order:stroke;stroke:var(--surface);stroke-width:5px;stroke-linejoin:round}
+.grid{stroke:var(--line);stroke-width:1}
+.ln{stroke-linecap:round;stroke-linejoin:round}
+path.ln,line.ln{fill:none}
+.v-base.ln{stroke:var(--v-base);stroke-width:3.2}
+.v-mfa.ln{stroke:var(--v-mfa);stroke-width:3;stroke-dasharray:11 6;stroke-linecap:butt}
+.v-sbx.ln{stroke:var(--v-sbx);stroke-width:3.4;stroke-dasharray:.5 6.5}
+.mk{stroke:var(--surface);stroke-width:2}
+.mk.v-base{fill:var(--v-base)} .mk.v-mfa{fill:var(--v-mfa)} .mk.v-sbx{fill:var(--v-sbx)}
+.thr{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 4}
+.hov{stroke:var(--ink-2);stroke-width:1}
+.bar{fill-opacity:.85;transition:fill-opacity .3s var(--ease)}
+.bar:hover{fill-opacity:1}
+.bar.v-base{fill:var(--v-base)} .bar.v-mfa{fill:var(--v-mfa)} .bar.v-sbx{fill:var(--v-sbx)}
+.mline{stroke:var(--ink);stroke-width:2}
+.mline.dashed{stroke-dasharray:6 4}
+.sw{vertical-align:middle;flex:none}
+.sw .ln{stroke-width:3}
+.sw .v-sbx.ln{stroke-width:3.4}
+
+.legend{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.88rem;font-weight:550}
+.legend li{display:flex;align-items:center;gap:8px}
+.readout{margin:12px 0 0;min-height:2.9em;font-size:.9rem;color:var(--ink-2);padding:10px 14px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+.hint{margin:10px 0 0;color:var(--muted);font-size:.84rem}
+.only-narrow{display:none}
+@media (max-width:640px){.chartscroll .chart{min-width:540px}.only-narrow{display:block}}
+
+.thr-form{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.thr-form label{display:block;font-weight:650;margin-bottom:8px}
+.input-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.input-row input{font:inherit;font-variant-numeric:tabular-nums;width:11em;max-width:100%;padding:10px 16px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink)}
+.input-row input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.input-row .chips{display:flex;gap:6px;flex-wrap:wrap}
+.qchip{font:inherit;font-size:.84rem;font-weight:600;border-radius:999px;padding:7px 13px;border:1px solid var(--line-2);background:transparent;color:var(--ink-2);cursor:pointer;transition:background .4s var(--ease)}
+.qchip:hover{background:var(--accent-soft)}
+.thr-msg{margin:8px 0 0;font-size:.85rem;color:var(--grade);min-height:1.3em}
+.thr-res{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.thr-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 14px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+.thr-name{font-weight:550}
+.thr-val{font-size:1.35rem;font-weight:600;letter-spacing:-.02em}
+.thr-cap{margin:12px 0 0;font-weight:600}
+
+/* segmented toggle */
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;padding:5px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);width:fit-content;max-width:100%}
+.seg-b{font:inherit;font-size:.86rem;font-weight:600;display:flex;gap:8px;align-items:center;border:0;border-radius:999px;padding:8px 14px;background:transparent;color:var(--ink-2);cursor:pointer;transition:background .5s var(--ease),color .5s var(--ease),box-shadow .5s var(--ease)}
+.seg-b[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:var(--sh1)}
+.seg-b[aria-pressed="true"] .sw .ln{stroke:currentColor}
+.hfig{margin:0}
+.hfig + .hfig{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.js .hfig + .hfig{margin-top:0;padding-top:0;border-top:0}
+.hfig figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;margin-bottom:6px;font-weight:600}
+.hv-name{display:flex;gap:8px;align-items:center}
+.hv-stat{color:var(--muted);font-weight:500;font-size:.9rem}
+.hfig[hidden]{display:none}
+.no-js .js-only{display:none!important}
+
+/* tornado */
+.torn{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.t-lab{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;justify-content:space-between;margin-bottom:7px}
+.t-name{font-weight:560}
+.t-track{position:relative;height:28px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);display:flex;align-items:center}
+.t-bar{display:block;height:100%;border-radius:999px;min-width:4px;transform-origin:left center;transition:transform 1.1s var(--ease)}
+.js .t-bar{transform:scaleX(0)}
+.js .in .t-bar,.js .t-bar.in{transform:scaleX(1)}
+.t-val{position:absolute;right:12px;font-weight:650;font-size:.88rem}
+.chip{display:inline-flex;gap:6px;align-items:center;font-size:.76rem;font-weight:650;padding:3px 10px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink);white-space:nowrap}
+.t-bar.tier-int{background:var(--accent)}
+.t-bar.tier-ben{background:repeating-linear-gradient(135deg,var(--accent) 0 6px,transparent 6px 10px);outline:1.5px solid var(--accent);outline-offset:-1.5px}
+.t-bar.tier-sme{background:radial-gradient(circle,var(--accent) 1.6px,transparent 2px) 0 0/8px 8px;outline:1.5px solid var(--accent);outline-offset:-1.5px}
+.t-bar.tier-asm{background:transparent;outline:2px dashed var(--accent);outline-offset:-2px}
+.tier-key{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+
+/* control rows */
+.vrows{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.v-head{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.v-head h3{margin:0;font-size:1.15rem;font-weight:600;letter-spacing:-.01em}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px 20px;margin:0}
+.metrics dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:650}
+.metrics dd{margin:3px 0 0;font-size:1.35rem;font-weight:450;letter-spacing:-.02em}
+.metrics .roc dd{color:var(--accent);font-weight:650}
+.resid{margin-top:16px;height:8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.resid-bar{display:block;height:100%;border-radius:999px;transform-origin:left;transition:transform 1.1s var(--ease)}
+.resid-bar.v-base{background:var(--v-base)} .resid-bar.v-mfa{background:var(--v-mfa)} .resid-bar.v-sbx{background:var(--v-sbx)}
+.js .resid-bar{transform:scaleX(0)} .js .in .resid-bar{transform:scaleX(1)}
+.resid-cap{margin:8px 0 0;font-size:.84rem;color:var(--muted)}
+.fine{margin:14px 0 0;font-size:.86rem;color:var(--muted)}
+
+/* scenario */
+.statement{margin:0 0 18px;font-size:clamp(1.25rem,1rem + 1vw,1.7rem);font-weight:350;line-height:1.3;letter-spacing:-.015em}
+.sc-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:0}
+.sc-grid .shell .core{height:100%}
+.sc-grid dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700}
+.sc-grid dd{margin:6px 0 0;font-weight:500}
+.sc-grid .shell{margin:0}
+
+/* tables */
+.tw{overflow-x:auto;min-width:0;max-width:100%;contain:inline-size}
+table{border-collapse:collapse;width:100%}
+.rt th,.rt td{padding:14px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.rt thead th{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:650;border-bottom:1px solid var(--line-2)}
+.rt tbody th{font-weight:600}
+.rt code{display:block;margin-top:3px}
+.rt small{display:block;margin-top:3px}
+.rt tr:last-child th,.rt tr:last-child td{border-bottom:0}
+@media (max-width:760px){
+  .rt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .rt,.rt tbody,.rt tr,.rt th,.rt td{display:block;width:100%}
+  .rt tr{padding:12px 0;border-bottom:1px solid var(--line-2)}
+  .rt th,.rt td{border:0;padding:4px 0}
+  .rt td::before{content:attr(data-label);display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:650}
+}
+.pt{font-size:.88rem;min-width:760px}
+.pt caption{text-align:left;font-weight:650;padding:0 0 10px}
+.pt th,.pt td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.pt th:first-child,.pt thead th:first-child{text-align:left}
+.pt thead th{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+details.app{border-radius:28px;background:var(--shell);border:1px solid var(--ring);padding:6px}
+details.app>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;border-radius:22px;background:var(--surface);box-shadow:inset 0 1px 0 var(--hi),var(--sh1);font-weight:650}
+details.app>summary::-webkit-details-marker{display:none}
+details.app>summary::after{content:"+";display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:1.3rem;line-height:1;transition:transform .6s var(--ease)}
+details.app[open]>summary::after{transform:rotate(45deg)}
+.app-body{padding:22px 22px 18px;display:grid;gap:22px}
+.app-body h3{margin:0 0 10px;font-size:1rem}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px 22px;margin:0}
+.kv dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:650}
+.kv dd{margin:3px 0 0;font-family:var(--mono);font-size:.9rem;overflow-wrap:anywhere}
+.disclose{margin:0;padding:14px 16px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+
+/* collect */
+.asks{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.ask-top{display:flex;gap:16px;align-items:flex-start}
+.ask-n{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:1.15rem}
+.ask h3{margin:0;font-size:1.2rem;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.ask-meta{margin:3px 0 0}
+.ask-q{margin:16px 0}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:16px;background:var(--accent-soft);border:1px solid var(--accent-line);font-weight:560;cursor:pointer}
+.chk input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
+.ask-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px 20px;margin:0}
+.ask-grid dt,.ask-conn .dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:650}
+.ask-grid dd{margin:4px 0 0;font-weight:520}
+.ask-conn{margin-top:16px}
+.ask-conn ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.conn{padding:4px 12px;border-radius:999px;border:1px solid var(--line-2);font-size:.84rem;font-weight:560;background:var(--surface-2)}
+
+/* motion */
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.js .reveal.in{opacity:1;transform:none}
+.js .reveal.d1{transition-delay:.12s}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.001ms!important;transition-delay:0s!important;animation:none!important}
+  .js .reveal{opacity:1;transform:none}
+  .js .t-bar,.js .resid-bar{transform:none}
+}
+
+/* print */
+@page{margin:14mm}
+@media print{
+  :root{--bg:#fff;--bg-2:#fff;--surface:#fff;--surface-2:#f4f4f4;--ink:#000;--ink-2:#222;--muted:#444;
+    --line:rgb(0 0 0 / .2);--line-2:rgb(0 0 0 / .4);--accent:#2a1c8f;--accent-ink:#fff;--accent-soft:#eceaf8;--accent-line:#8d83cf;
+    --v-base:#000;--v-mfa:#2a1c8f;--v-sbx:#7a4300;--grade:#6b3d00;--warn-bg:#f3f3f3;--warn-line:#555;
+    --shell:#fff;--ring:#bbb;--hi:transparent;--sh1:none;--sh2:none;--mesh1:transparent;--mesh2:transparent;color-scheme:light}
+  html,body{background:#fff!important}
+  body{font-size:11pt}
+  .snav,.js-only,.seg,.thr-form,.qchip,.only-narrow,.top .pill.sample+*{display:none!important}
+  .hero::before{display:none}
+  .hero,.split{padding:14pt 0}
+  .hero-grid,.split-grid{grid-template-columns:1fr!important}
+  .msg{position:static}
+  .reveal,.js .reveal{opacity:1!important;transform:none!important}
+  .js .t-bar,.js .resid-bar{transform:none!important}
+  .shell,.core{box-shadow:none!important;break-inside:avoid;page-break-inside:avoid}
+  .split{break-before:auto}
+  tr,.t-row,.vrow,.ask{break-inside:avoid;page-break-inside:avoid}
+  .chartscroll{overflow:visible}
+  .chartscroll .chart{min-width:0!important}
+  .hfig[hidden]{display:block!important}
+  .hfig{break-inside:avoid}
+  details.app>summary::after{display:none}
+  details.app>*:not(summary){display:block!important}
+  details.app::details-content{content-visibility:visible;display:block}
+  .pt{min-width:0;font-size:8.5pt}
+  .tw{overflow:visible}
+  a{color:#000}
+  .rt thead{position:static;width:auto;height:auto;clip:auto;overflow:visible}
+  .rt,.rt tbody,.rt tr,.rt th,.rt td{display:revert;width:auto}
+  .rt td::before{display:none}
+  .rt th,.rt td{padding:6px 8px;border-bottom:1px solid #bbb}
+  .bar{fill-opacity:1}
+}
+</style>
+<script>document.documentElement.className='js';</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <span class="mark"><i aria-hidden="true"></i>Risk report</span>
+  <span class="pill sample">Sample data: fictional company</span>
+</div></header>
+<nav class="snav" aria-label="Report sections"><div class="wrap"><ul><li><a href="#summary">Summary</a></li><li><a href="#curve">Loss curve</a></li><li><a href="#distribution">Distribution</a></li><li><a href="#drivers">Drivers</a></li><li><a href="#controls">Controls</a></li><li><a href="#scenario">Scenario</a></li><li><a href="#provenance">Sources</a></li><li><a href="#appendix">Appendix</a></li><li><a href="#collect">Collect next</a></li></ul></div></nav>
+
+<main>
+<section class="hero" id="top" aria-labelledby="h-hero"><div class="wrap hero-grid">
+  <div class="reveal">
+    <span class="eyebrow">FAIR-aligned estimate</span>
+    <p class="kicker">Credential phishing leads to business email compromise</p>
+    <h1 id="h-hero">Credential phishing costs Northwind an estimated <em class="num">$2.1M</em> a year; phishing-resistant MFA would cut that by <em>about two-thirds</em> for <em class="num">$120k</em> a year.</h1>
+  </div>
+  <div class="hero-side reveal d1">
+    <div class="shell"><div class="core grade">
+      <div class="ring"><svg viewBox="0 0 96 96" aria-hidden="true" focusable="false"><circle cx="48" cy="48" r="38" stroke-width="9" class="trk"/><circle cx="48" cy="48" r="38" stroke-width="9" class="val" stroke-dasharray="151.5 238.8"/></svg><b data-fig="grade">C</b></div>
+      <div><h2>Data-quality grade C</h2><p class="score num"><span data-fig="score">63</span> <small>of 100</small></p><p>Reflects the quality of the inputs behind this estimate.</p></div>
+    </div></div>
+    <div class="yolo" role="note"><b>YOLO</b><p>Benchmark-based estimate. Not yet validated against Northwind&rsquo;s own data.</p></div>
+    <dl class="meta">
+      <div class="wide"><dt>Organisation</dt><dd>Northwind Analytics <small>(fictional sample company, 800 employees, B2B SaaS)</small></dd></div>
+      <div><dt>Run</dt><dd class="num">credential-phishing-bec &middot; v1</dd></div>
+      <div><dt>Date</dt><dd class="num">9 Nov 2026</dd></div>
+      <div><dt>Route</dt><dd>YOLO</dd></div>
+      <div><dt>Simulated years</dt><dd class="num">50,000</dd></div>
+    </dl>
+  </div>
+</div></section>
+
+<section class="split" id="summary" aria-labelledby="h-summary"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">01 &middot; Summary</span>
+    <h2 id="h-summary">A typical year costs $2.09M; one year in ten costs $3.83M or more</h2>
+    <p class="lede">Estimates from 50,000 simulated years under current controls, then compared with two upgrades.</p></div>
+  <div class="ev reveal d1"><div class="cards"><div class="shell feature"><div class="core"><p class="c-label">Baseline expected annual loss</p><p class="c-fig num" data-fig="ale_mean">$2.09M</p><p class="c-foot">Mean across 50,000 simulated years, current controls.</p></div></div>
+<div class="shell "><div class="core"><p class="c-label">1-in-10-year loss (p90)</p><p class="c-fig num" data-fig="p90">$3.83M</p><p class="c-foot">One simulated year in ten costs this much or more.</p></div></div>
+<div class="shell "><div class="core"><p class="c-label">Chance annual loss exceeds $1M</p><p class="c-fig num" data-fig="p_gt_1m">80%</p><p class="c-foot">Under current controls.</p></div></div>
+<div class="shell "><div class="core"><p class="c-label">Risk reduction, best variant</p><p class="c-fig num" data-fig="best_reduction">79%</p><p class="c-foot">MFA + mail sandboxing: $1.65M a year less expected loss.</p></div></div>
+<div class="shell "><div class="core"><p class="c-label">Return on control, MFA</p><p class="c-fig num" data-fig="mfa_roc">10.3×</p><p class="c-foot">Phishing-resistant MFA at $120k a year.</p></div></div></div></div>
+</div></section>
+
+<section class="split" id="curve" aria-labelledby="h-curve"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">02 &middot; Loss curve</span>
+    <h2 id="h-curve">Today, about four years in five cost Northwind more than $1M</h2>
+    <p class="lede">With phishing-resistant MFA that falls to 26%; with MFA plus mail sandboxing, 11%.</p>
+    <p class="lede">Type your own threshold to read the odds for any amount.</p></div>
+  <div class="ev reveal d1"><div class="shell"><div class="core">
+    <ul class="legend" aria-label="Chart key"><li><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-base"/></svg>Current controls</li><li><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-mfa"/></svg>Phishing-resistant MFA</li><li><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-sbx"/></svg>MFA + mail sandboxing</li></ul>
+    <div class="chartscroll"><svg id="lec-svg" class="chart" viewBox="0 0 640 380" role="img" tabindex="0" aria-labelledby="lec-t lec-d">
+<title id="lec-t">Loss exceedance curve for three control options</title>
+<desc id="lec-d">Chance that annual loss exceeds each amount, on a log scale from $30k to $10M. At $1M the chance is 80% with current controls, 26% with phishing-resistant MFA and 11% with MFA plus mail sandboxing. Use the amount field below the chart to read other values.</desc>
+<line x1="58" x2="626" y1="330.0" y2="330.0" class="grid"/>
+<text x="50" y="334.0" text-anchor="end" class="ax">0%</text>
+<line x1="58" x2="626" y1="266.8" y2="266.8" class="grid"/>
+<text x="50" y="270.8" text-anchor="end" class="ax">20%</text>
+<line x1="58" x2="626" y1="203.6" y2="203.6" class="grid"/>
+<text x="50" y="207.6" text-anchor="end" class="ax">40%</text>
+<line x1="58" x2="626" y1="140.4" y2="140.4" class="grid"/>
+<text x="50" y="144.4" text-anchor="end" class="ax">60%</text>
+<line x1="58" x2="626" y1="77.2" y2="77.2" class="grid"/>
+<text x="50" y="81.2" text-anchor="end" class="ax">80%</text>
+<line x1="58" x2="626" y1="14.0" y2="14.0" class="grid"/>
+<text x="50" y="18.0" text-anchor="end" class="ax">100%</text>
+<line x1="58.0" x2="58.0" y1="14" y2="330" class="grid"/>
+<text x="58.0" y="348" text-anchor="middle" class="ax">$30k</text>
+<line x1="175.7" x2="175.7" y1="14" y2="330" class="grid"/>
+<text x="175.7" y="348" text-anchor="middle" class="ax">$100k</text>
+<line x1="283.1" x2="283.1" y1="14" y2="330" class="grid"/>
+<text x="283.1" y="348" text-anchor="middle" class="ax">$300k</text>
+<line x1="400.9" x2="400.9" y1="14" y2="330" class="grid"/>
+<text x="400.9" y="348" text-anchor="middle" class="ax">$1M</text>
+<line x1="508.3" x2="508.3" y1="14" y2="330" class="grid"/>
+<text x="508.3" y="348" text-anchor="middle" class="ax">$3M</text>
+<line x1="626.0" x2="626.0" y1="14" y2="330" class="grid"/>
+<text x="626.0" y="348" text-anchor="middle" class="ax">$10M</text>
+<text x="342" y="372" text-anchor="middle" class="ax-t">Annual loss (log scale)</text>
+<text transform="translate(14 172) rotate(-90)" text-anchor="middle" class="ax-t">Chance of exceeding</text>
+<path d="M58.0,14.4 L191.6,15.6 L239.1,17.2 L262.7,18.8 L279.6,20.4 L291.1,21.9 L301.0,23.5 L308.8,25.1 L315.6,26.7 L321.4,28.3 L327.0,29.9 L332.4,31.5 L336.9,33.0 L341.0,34.6 L344.5,36.2 L348.1,37.8 L351.0,39.4 L354.4,41.0 L357.1,42.6 L359.8,44.1 L362.5,45.7 L364.9,47.3 L367.1,48.9 L369.7,50.5 L372.1,52.1 L374.5,53.7 L376.7,55.3 L378.4,56.8 L380.3,58.4 L382.2,60.0 L383.8,61.6 L385.5,63.2 L387.3,64.8 L388.8,66.4 L390.5,67.9 L392.4,69.5 L393.9,71.1 L395.6,72.7 L397.1,74.3 L398.7,75.9 L400.3,77.5 L401.7,79.0 L403.0,80.6 L404.4,82.2 L405.8,83.8 L407.2,85.4 L408.5,87.0 L409.8,88.6 L411.1,90.1 L412.4,91.7 L413.6,93.3 L414.9,94.9 L416.2,96.5 L417.3,98.1 L418.4,99.7 L419.5,101.3 L420.7,102.8 L421.9,104.4 L422.9,106.0 L424.0,107.6 L425.0,109.2 L426.0,110.8 L427.1,112.4 L428.2,113.9 L429.2,115.5 L430.2,117.1 L431.2,118.7 L432.2,120.3 L433.2,121.9 L434.2,123.5 L435.1,125.0 L436.2,126.6 L437.2,128.2 L438.0,129.8 L438.9,131.4 L439.9,133.0 L440.8,134.6 L441.6,136.2 L442.5,137.7 L443.5,139.3 L444.4,140.9 L445.3,142.5 L446.2,144.1 L447.1,145.7 L448.1,147.3 L449.0,148.8 L449.8,150.4 L450.7,152.0 L451.5,153.6 L452.3,155.2 L453.2,156.8 L454.1,158.4 L454.9,159.9 L455.6,161.5 L456.5,163.1 L457.3,164.7 L458.1,166.3 L458.9,167.9 L459.6,169.5 L460.5,171.1 L461.2,172.6 L462.0,174.2 L462.9,175.8 L463.7,177.4 L464.4,179.0 L465.2,180.6 L465.9,182.2 L466.7,183.7 L467.5,185.3 L468.3,186.9 L469.0,188.5 L469.8,190.1 L470.5,191.7 L471.3,193.3 L472.2,194.8 L472.9,196.4 L473.7,198.0 L474.5,199.6 L475.2,201.2 L476.1,202.8 L476.9,204.4 L477.5,206.0 L478.3,207.5 L479.1,209.1 L479.8,210.7 L480.6,212.3 L481.6,213.9 L482.3,215.5 L483.2,217.1 L484.0,218.6 L484.8,220.2 L485.6,221.8 L486.3,223.4 L487.1,225.0 L487.9,226.6 L488.8,228.2 L489.6,229.7 L490.4,231.3 L491.2,232.9 L492.0,234.5 L492.8,236.1 L493.7,237.7 L494.5,239.3 L495.2,240.9 L496.1,242.4 L497.0,244.0 L497.8,245.6 L498.6,247.2 L499.6,248.8 L500.4,250.4 L501.4,252.0 L502.3,253.5 L503.1,255.1 L504.0,256.7 L504.8,258.3 L505.7,259.9 L506.6,261.5 L507.6,263.1 L508.5,264.6 L509.5,266.2 L510.4,267.8 L511.3,269.4 L512.3,271.0 L513.3,272.6 L514.4,274.2 L515.5,275.7 L516.5,277.3 L517.5,278.9 L518.5,280.5 L519.6,282.1 L520.7,283.7 L521.8,285.3 L522.9,286.9 L524.2,288.4 L525.3,290.0 L526.4,291.6 L527.8,293.2 L529.1,294.8 L530.5,296.4 L531.9,298.0 L533.2,299.5 L534.7,301.1 L536.1,302.7 L537.5,304.3 L539.1,305.9 L540.6,307.5 L542.2,309.1 L543.9,310.6 L545.9,312.2 L548.1,313.8 L550.5,315.4 L552.9,317.0 L555.6,318.6 L558.6,320.2 L561.4,321.8 L565.1,323.3 L569.7,324.9 L575.9,326.5 L584.7,328.1 L603.9,329.7" class="ln v-base" fill="none"/>
+<path d="M58.0,27.7 L80.8,28.3 L110.0,29.9 L126.9,31.5 L139.1,33.0 L148.1,34.6 L156.1,36.2 L163.7,37.8 L170.9,39.4 L177.3,41.0 L183.0,42.6 L188.6,44.1 L193.8,45.7 L198.8,47.3 L203.5,48.9 L207.9,50.5 L211.6,52.1 L215.8,53.7 L219.5,55.3 L222.9,56.8 L226.2,58.4 L229.6,60.0 L232.6,61.6 L235.7,63.2 L238.9,64.8 L241.6,66.4 L244.6,67.9 L247.1,69.5 L249.7,71.1 L252.5,72.7 L255.1,74.3 L257.3,75.9 L259.5,77.5 L261.8,79.0 L264.1,80.6 L266.4,82.2 L268.7,83.8 L270.8,85.4 L272.8,87.0 L274.7,88.6 L276.7,90.1 L278.7,91.7 L280.6,93.3 L282.6,94.9 L284.3,96.5 L286.2,98.1 L287.7,99.7 L289.3,101.3 L290.9,102.8 L292.6,104.4 L294.1,106.0 L295.6,107.6 L297.0,109.2 L298.5,110.8 L300.0,112.4 L301.4,113.9 L302.7,115.5 L304.2,117.1 L305.6,118.7 L307.1,120.3 L308.5,121.9 L309.9,123.5 L311.2,125.0 L312.5,126.6 L314.0,128.2 L315.3,129.8 L316.8,131.4 L318.1,133.0 L319.5,134.6 L320.8,136.2 L322.1,137.7 L323.4,139.3 L324.6,140.9 L325.8,142.5 L327.0,144.1 L328.1,145.7 L329.4,147.3 L330.6,148.8 L331.8,150.4 L332.9,152.0 L334.2,153.6 L335.4,155.2 L336.6,156.8 L337.8,158.4 L339.1,159.9 L340.1,161.5 L341.3,163.1 L342.4,164.7 L343.5,166.3 L344.7,167.9 L345.9,169.5 L347.1,171.1 L348.3,172.6 L349.3,174.2 L350.5,175.8 L351.8,177.4 L352.9,179.0 L354.1,180.6 L355.3,182.2 L356.4,183.7 L357.4,185.3 L358.5,186.9 L359.6,188.5 L360.7,190.1 L361.8,191.7 L362.9,193.3 L364.1,194.8 L365.3,196.4 L366.3,198.0 L367.3,199.6 L368.4,201.2 L369.5,202.8 L370.6,204.4 L371.7,206.0 L373.0,207.5 L374.0,209.1 L375.1,210.7 L376.2,212.3 L377.2,213.9 L378.4,215.5 L379.5,217.1 L380.6,218.6 L381.7,220.2 L382.7,221.8 L383.9,223.4 L385.1,225.0 L386.0,226.6 L387.1,228.2 L388.2,229.7 L389.3,231.3 L390.4,232.9 L391.5,234.5 L392.6,236.1 L393.8,237.7 L394.9,239.3 L395.9,240.9 L397.2,242.4 L398.2,244.0 L399.4,245.6 L400.5,247.2 L401.7,248.8 L402.8,250.4 L404.0,252.0 L405.2,253.5 L406.3,255.1 L407.4,256.7 L408.7,258.3 L409.8,259.9 L410.8,261.5 L411.9,263.1 L413.1,264.6 L414.2,266.2 L415.5,267.8 L416.8,269.4 L417.8,271.0 L419.0,272.6 L420.4,274.2 L421.8,275.7 L423.2,277.3 L424.5,278.9 L425.8,280.5 L427.3,282.1 L428.8,283.7 L430.2,285.3 L431.7,286.9 L433.2,288.4 L434.6,290.0 L436.1,291.6 L437.6,293.2 L439.2,294.8 L440.8,296.4 L442.4,298.0 L444.0,299.5 L445.9,301.1 L447.8,302.7 L449.6,304.3 L451.6,305.9 L453.6,307.5 L455.7,309.1 L457.9,310.6 L460.2,312.2 L462.6,313.8 L465.2,315.4 L467.9,317.0 L471.0,318.6 L474.3,320.2 L478.4,321.8 L483.2,323.3 L488.1,324.9 L494.8,326.5 L505.2,328.1 L530.4,329.7" class="ln v-mfa" fill="none"/>
+<path d="M58.0,52.7 L77.2,53.7 L96.6,55.3 L108.9,56.8 L117.4,58.4 L124.2,60.0 L130.2,61.6 L135.9,63.2 L140.7,64.8 L145.4,66.4 L149.6,67.9 L153.8,69.5 L157.7,71.1 L161.5,72.7 L164.7,74.3 L168.3,75.9 L171.6,77.5 L175.0,79.0 L177.9,80.6 L181.0,82.2 L184.0,83.8 L187.0,85.4 L190.0,87.0 L192.8,88.6 L195.5,90.1 L198.2,91.7 L200.6,93.3 L203.3,94.9 L205.7,96.5 L208.2,98.1 L210.5,99.7 L213.2,101.3 L215.6,102.8 L217.7,104.4 L220.0,106.0 L222.0,107.6 L224.0,109.2 L226.1,110.8 L228.2,112.4 L230.1,113.9 L232.0,115.5 L234.0,117.1 L235.8,118.7 L237.7,120.3 L239.5,121.9 L241.4,123.5 L242.9,125.0 L244.5,126.6 L246.2,128.2 L247.8,129.8 L249.6,131.4 L251.1,133.0 L252.8,134.6 L254.3,136.2 L255.9,137.7 L257.3,139.3 L258.8,140.9 L260.2,142.5 L261.6,144.1 L263.2,145.7 L264.6,147.3 L266.0,148.8 L267.4,150.4 L268.7,152.0 L270.3,153.6 L271.7,155.2 L273.0,156.8 L274.5,158.4 L275.9,159.9 L277.4,161.5 L278.7,163.1 L280.1,164.7 L281.4,166.3 L282.8,167.9 L284.1,169.5 L285.4,171.1 L286.8,172.6 L288.2,174.2 L289.5,175.8 L290.9,177.4 L292.3,179.0 L293.7,180.6 L295.1,182.2 L296.5,183.7 L298.0,185.3 L299.4,186.9 L300.7,188.5 L302.0,190.1 L303.5,191.7 L304.8,193.3 L306.1,194.8 L307.5,196.4 L308.7,198.0 L310.0,199.6 L311.3,201.2 L312.6,202.8 L313.8,204.4 L315.0,206.0 L316.5,207.5 L317.9,209.1 L319.3,210.7 L320.6,212.3 L322.0,213.9 L323.4,215.5 L324.9,217.1 L326.1,218.6 L327.5,220.2 L328.7,221.8 L330.1,223.4 L331.4,225.0 L332.8,226.6 L334.0,228.2 L335.4,229.7 L336.7,231.3 L338.0,232.9 L339.4,234.5 L340.9,236.1 L342.2,237.7 L343.6,239.3 L345.1,240.9 L346.7,242.4 L348.0,244.0 L349.5,245.6 L350.8,247.2 L352.1,248.8 L353.5,250.4 L354.8,252.0 L356.3,253.5 L357.8,255.1 L359.0,256.7 L360.2,258.3 L361.8,259.9 L363.3,261.5 L364.9,263.1 L366.3,264.6 L367.8,266.2 L369.3,267.8 L370.8,269.4 L372.5,271.0 L374.0,272.6 L375.7,274.2 L377.3,275.7 L379.0,277.3 L380.6,278.9 L382.5,280.5 L384.3,282.1 L385.9,283.7 L387.5,285.3 L389.5,286.9 L391.2,288.4 L393.0,290.0 L394.8,291.6 L396.5,293.2 L398.4,294.8 L400.4,296.4 L402.4,298.0 L404.6,299.5 L406.6,301.1 L408.8,302.7 L411.1,304.3 L413.1,305.9 L415.3,307.5 L417.7,309.1 L420.3,310.6 L422.7,312.2 L426.0,313.8 L429.0,315.4 L432.1,317.0 L436.2,318.6 L440.0,320.2 L444.2,321.8 L449.2,323.3 L455.1,324.9 L462.9,326.5 L473.3,328.1 L501.9,329.7" class="ln v-sbx" fill="none"/>
+<g id="lec-marker"><line id="mk-line" x1="400.9" x2="400.9" y1="14" y2="330" class="thr"/>
+<text id="mk-label" x="406.9" y="26" class="ax-b">$1.00M</text>
+<g id="mk-baseline" transform="translate(400.9 78.1)"><circle r="5.5" class="mk v-base"/></g>
+<g id="mk-mfa" transform="translate(400.9 247.6)"><rect x="-5.5" y="-5.5" width="11.0" height="11.0" class="mk v-mfa"/></g>
+<g id="mk-mfa_sandbox" transform="translate(400.9 296.7)"><rect x="-5.5" y="-5.5" width="11.0" height="11.0" transform="rotate(45)" class="mk v-sbx"/></g>
+</g>
+<g id="lec-hover" hidden><line id="hv-line" x1="0" x2="0" y1="14" y2="330" class="hov"/>
+<g id="hv-baseline" transform="translate(0 0)"><circle r="4.5" class="mk v-base"/></g>
+<g id="hv-mfa" transform="translate(0 0)"><rect x="-4.5" y="-4.5" width="9.0" height="9.0" class="mk v-mfa"/></g>
+<g id="hv-mfa_sandbox" transform="translate(0 0)"><rect x="-4.5" y="-4.5" width="9.0" height="9.0" transform="rotate(45)" class="mk v-sbx"/></g>
+</g>
+<rect id="lec-hit" x="58" y="14" width="568" height="316" fill="transparent"/>
+</svg></div>
+    <p class="hint only-narrow">Scroll the chart sideways to see all of it.</p>
+    <p class="readout js-only" id="lec-readout" aria-live="off">Hover the curve, or focus it and use the arrow keys, to read the chance of exceeding any amount.</p>
+    <div class="thr-form">
+      <div class="js-only"><label for="thr-input">Check an amount</label>
+      <div class="input-row"><input id="thr-input" type="text" inputmode="decimal" autocomplete="off" value="1M" aria-describedby="thr-msg">
+        <span class="chips"><button type="button" class="qchip" data-amt="500k">$500k</button><button type="button" class="qchip" data-amt="1M">$1M</button><button type="button" class="qchip" data-amt="2M">$2M</button><button type="button" class="qchip" data-amt="5M">$5M</button></span></div>
+      <p class="thr-msg" id="thr-msg" role="status"></p></div>
+      <p class="thr-cap" id="thr-cap">Chance annual loss exceeds $1.00M</p>
+      <ul class="thr-res" aria-live="polite"><li class="thr-item" id="thr-baseline"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-base"/></svg><span class="thr-name">Current controls</span><span class="thr-val num">80%</span></li>
+<li class="thr-item" id="thr-mfa"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-mfa"/></svg><span class="thr-name">Phishing-resistant MFA</span><span class="thr-val num">26%</span></li>
+<li class="thr-item" id="thr-mfa_sandbox"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-sbx"/></svg><span class="thr-name">MFA + mail sandboxing</span><span class="thr-val num">11%</span></li></ul>
+    </div>
+  </div></div></div>
+</div></section>
+
+<section class="split" id="distribution" aria-labelledby="h-dist"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">03 &middot; Distribution</span>
+    <h2 id="h-dist">Most years land near $1.85M, but a bad year tops $3.83M</h2>
+    <p class="lede">A few severe events pull the average above the middle year. Switch variants to watch the whole distribution move left.</p></div>
+  <div class="ev reveal d1"><div class="shell"><div class="core">
+    <div class="seg js-only" role="group" aria-label="Choose a control option"><button type="button" class="seg-b" data-v="baseline" aria-pressed="true"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-base"/></svg>Current controls</button><button type="button" class="seg-b" data-v="mfa" aria-pressed="false"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-mfa"/></svg>Phishing-resistant MFA</button><button type="button" class="seg-b" data-v="mfa_sandbox" aria-pressed="false"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-sbx"/></svg>MFA + mail sandboxing</button></div>
+    <figure class="hfig" data-v="baseline"><figcaption><span class="hv-name"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-base"/></svg> Current controls</span><span class="hv-stat num">Mean $2.09M &middot; 1-in-10 year $3.83M</span></figcaption><div class="chartscroll"><svg class="chart hist-svg" viewBox="0 0 640 300" role="img" aria-labelledby="h-baseline-t h-baseline-d">
+<title id="h-baseline-t">Distribution of annual loss: Current controls</title>
+<desc id="h-baseline-d">Histogram of simulated annual loss. Mean $2.09M, 1-in-10-year loss $3.83M. Same horizontal scale for every variant.</desc>
+<line x1="52" x2="626" y1="254.0" y2="254.0" class="grid"/>
+<text x="44" y="258.0" text-anchor="end" class="ax">0%</text>
+<line x1="52" x2="626" y1="211.2" y2="211.2" class="grid"/>
+<text x="44" y="215.2" text-anchor="end" class="ax">1%</text>
+<line x1="52" x2="626" y1="168.4" y2="168.4" class="grid"/>
+<text x="44" y="172.4" text-anchor="end" class="ax">2%</text>
+<line x1="52" x2="626" y1="125.6" y2="125.6" class="grid"/>
+<text x="44" y="129.6" text-anchor="end" class="ax">3%</text>
+<line x1="52" x2="626" y1="82.8" y2="82.8" class="grid"/>
+<text x="44" y="86.8" text-anchor="end" class="ax">4%</text>
+<line x1="52" x2="626" y1="40.0" y2="40.0" class="grid"/>
+<text x="44" y="44.0" text-anchor="end" class="ax">5%</text>
+<text x="52.0" y="272" text-anchor="middle" class="ax">$0</text>
+<text x="137.7" y="272" text-anchor="middle" class="ax">$1M</text>
+<text x="223.4" y="272" text-anchor="middle" class="ax">$2M</text>
+<text x="309.1" y="272" text-anchor="middle" class="ax">$3M</text>
+<text x="394.8" y="272" text-anchor="middle" class="ax">$4M</text>
+<text x="480.5" y="272" text-anchor="middle" class="ax">$5M</text>
+<text x="566.3" y="272" text-anchor="middle" class="ax">$6M</text>
+<text x="339" y="294" text-anchor="middle" class="ax-t">Annual loss</text>
+<text transform="translate(12 147) rotate(-90)" text-anchor="middle" class="ax-t">Share of simulated years</text>
+<rect class="bar v-base" x="52.0" y="234.1" width="8.6" height="19.9" rx="1.5" data-lo="0" data-hi="111617" data-s="0.00466"><title>$0 to $112k: 0.5% of simulated years</title></rect>
+<rect class="bar v-base" x="61.6" y="218.1" width="8.6" height="35.9" rx="1.5" data-lo="111617" data-hi="223234" data-s="0.00838"><title>$112k to $223k: 0.8% of simulated years</title></rect>
+<rect class="bar v-base" x="71.1" y="197.2" width="8.6" height="56.8" rx="1.5" data-lo="223234" data-hi="334850" data-s="0.01328"><title>$223k to $335k: 1.3% of simulated years</title></rect>
+<rect class="bar v-base" x="80.7" y="170.6" width="8.6" height="83.4" rx="1.5" data-lo="334850" data-hi="446467" data-s="0.01948"><title>$335k to $446k: 1.9% of simulated years</title></rect>
+<rect class="bar v-base" x="90.3" y="153.9" width="8.6" height="100.1" rx="1.5" data-lo="446467" data-hi="558084" data-s="0.02338"><title>$446k to $558k: 2.3% of simulated years</title></rect>
+<rect class="bar v-base" x="99.8" y="126.8" width="8.6" height="127.2" rx="1.5" data-lo="558084" data-hi="669701" data-s="0.02972"><title>$558k to $670k: 3.0% of simulated years</title></rect>
+<rect class="bar v-base" x="109.4" y="117.4" width="8.6" height="136.6" rx="1.5" data-lo="669701" data-hi="781317" data-s="0.03192"><title>$670k to $781k: 3.2% of simulated years</title></rect>
+<rect class="bar v-base" x="119.0" y="92.3" width="8.6" height="161.7" rx="1.5" data-lo="781317" data-hi="892934" data-s="0.03778"><title>$781k to $893k: 3.8% of simulated years</title></rect>
+<rect class="bar v-base" x="128.5" y="101.0" width="8.6" height="153.0" rx="1.5" data-lo="892934" data-hi="1004551" data-s="0.03574"><title>$893k to $1.00M: 3.6% of simulated years</title></rect>
+<rect class="bar v-base" x="138.1" y="88.8" width="8.6" height="165.2" rx="1.5" data-lo="1004551" data-hi="1116168" data-s="0.03860"><title>$1.00M to $1.12M: 3.9% of simulated years</title></rect>
+<rect class="bar v-base" x="147.7" y="88.0" width="8.6" height="166.0" rx="1.5" data-lo="1116168" data-hi="1227785" data-s="0.03878"><title>$1.12M to $1.23M: 3.9% of simulated years</title></rect>
+<rect class="bar v-base" x="157.2" y="79.8" width="8.6" height="174.2" rx="1.5" data-lo="1227785" data-hi="1339401" data-s="0.04070"><title>$1.23M to $1.34M: 4.1% of simulated years</title></rect>
+<rect class="bar v-base" x="166.8" y="85.1" width="8.6" height="168.9" rx="1.5" data-lo="1339401" data-hi="1451018" data-s="0.03946"><title>$1.34M to $1.45M: 3.9% of simulated years</title></rect>
+<rect class="bar v-base" x="176.4" y="81.2" width="8.6" height="172.8" rx="1.5" data-lo="1451018" data-hi="1562635" data-s="0.04038"><title>$1.45M to $1.56M: 4.0% of simulated years</title></rect>
+<rect class="bar v-base" x="185.9" y="91.7" width="8.6" height="162.3" rx="1.5" data-lo="1562635" data-hi="1674252" data-s="0.03792"><title>$1.56M to $1.67M: 3.8% of simulated years</title></rect>
+<rect class="bar v-base" x="195.5" y="89.2" width="8.6" height="164.8" rx="1.5" data-lo="1674252" data-hi="1785868" data-s="0.03850"><title>$1.67M to $1.79M: 3.9% of simulated years</title></rect>
+<rect class="bar v-base" x="205.1" y="95.6" width="8.6" height="158.4" rx="1.5" data-lo="1785868" data-hi="1897485" data-s="0.03702"><title>$1.79M to $1.90M: 3.7% of simulated years</title></rect>
+<rect class="bar v-base" x="214.6" y="96.2" width="8.6" height="157.8" rx="1.5" data-lo="1897485" data-hi="2009102" data-s="0.03686"><title>$1.90M to $2.01M: 3.7% of simulated years</title></rect>
+<rect class="bar v-base" x="224.2" y="108.2" width="8.6" height="145.8" rx="1.5" data-lo="2009102" data-hi="2120719" data-s="0.03406"><title>$2.01M to $2.12M: 3.4% of simulated years</title></rect>
+<rect class="bar v-base" x="233.8" y="112.2" width="8.6" height="141.8" rx="1.5" data-lo="2120719" data-hi="2232336" data-s="0.03312"><title>$2.12M to $2.23M: 3.3% of simulated years</title></rect>
+<rect class="bar v-base" x="243.3" y="130.6" width="8.6" height="123.4" rx="1.5" data-lo="2232336" data-hi="2343952" data-s="0.02884"><title>$2.23M to $2.34M: 2.9% of simulated years</title></rect>
+<rect class="bar v-base" x="252.9" y="131.4" width="8.6" height="122.6" rx="1.5" data-lo="2343952" data-hi="2455569" data-s="0.02864"><title>$2.34M to $2.46M: 2.9% of simulated years</title></rect>
+<rect class="bar v-base" x="262.5" y="139.4" width="8.6" height="114.6" rx="1.5" data-lo="2455569" data-hi="2567186" data-s="0.02678"><title>$2.46M to $2.57M: 2.7% of simulated years</title></rect>
+<rect class="bar v-base" x="272.0" y="144.7" width="8.6" height="109.3" rx="1.5" data-lo="2567186" data-hi="2678803" data-s="0.02554"><title>$2.57M to $2.68M: 2.6% of simulated years</title></rect>
+<rect class="bar v-base" x="281.6" y="157.7" width="8.6" height="96.3" rx="1.5" data-lo="2678803" data-hi="2790420" data-s="0.02250"><title>$2.68M to $2.79M: 2.2% of simulated years</title></rect>
+<rect class="bar v-base" x="291.2" y="159.2" width="8.6" height="94.8" rx="1.5" data-lo="2790420" data-hi="2902036" data-s="0.02216"><title>$2.79M to $2.90M: 2.2% of simulated years</title></rect>
+<rect class="bar v-base" x="300.7" y="167.5" width="8.6" height="86.5" rx="1.5" data-lo="2902036" data-hi="3013653" data-s="0.02020"><title>$2.90M to $3.01M: 2.0% of simulated years</title></rect>
+<rect class="bar v-base" x="310.3" y="174.7" width="8.6" height="79.3" rx="1.5" data-lo="3013653" data-hi="3125270" data-s="0.01852"><title>$3.01M to $3.13M: 1.9% of simulated years</title></rect>
+<rect class="bar v-base" x="319.9" y="183.8" width="8.6" height="70.2" rx="1.5" data-lo="3125270" data-hi="3236887" data-s="0.01640"><title>$3.13M to $3.24M: 1.6% of simulated years</title></rect>
+<rect class="bar v-base" x="329.4" y="182.7" width="8.6" height="71.3" rx="1.5" data-lo="3236887" data-hi="3348503" data-s="0.01666"><title>$3.24M to $3.35M: 1.7% of simulated years</title></rect>
+<rect class="bar v-base" x="339.0" y="192.5" width="8.6" height="61.5" rx="1.5" data-lo="3348503" data-hi="3460120" data-s="0.01438"><title>$3.35M to $3.46M: 1.4% of simulated years</title></rect>
+<rect class="bar v-base" x="348.6" y="196.6" width="8.6" height="57.4" rx="1.5" data-lo="3460120" data-hi="3571737" data-s="0.01340"><title>$3.46M to $3.57M: 1.3% of simulated years</title></rect>
+<rect class="bar v-base" x="358.1" y="203.2" width="8.6" height="50.8" rx="1.5" data-lo="3571737" data-hi="3683354" data-s="0.01188"><title>$3.57M to $3.68M: 1.2% of simulated years</title></rect>
+<rect class="bar v-base" x="367.7" y="207.7" width="8.6" height="46.3" rx="1.5" data-lo="3683354" data-hi="3794971" data-s="0.01082"><title>$3.68M to $3.79M: 1.1% of simulated years</title></rect>
+<rect class="bar v-base" x="377.3" y="211.7" width="8.6" height="42.3" rx="1.5" data-lo="3794971" data-hi="3906587" data-s="0.00988"><title>$3.79M to $3.91M: 1.0% of simulated years</title></rect>
+<rect class="bar v-base" x="386.8" y="212.2" width="8.6" height="41.8" rx="1.5" data-lo="3906587" data-hi="4018204" data-s="0.00976"><title>$3.91M to $4.02M: 1.0% of simulated years</title></rect>
+<rect class="bar v-base" x="396.4" y="215.1" width="8.6" height="38.9" rx="1.5" data-lo="4018204" data-hi="4129821" data-s="0.00908"><title>$4.02M to $4.13M: 0.9% of simulated years</title></rect>
+<rect class="bar v-base" x="406.0" y="217.5" width="8.6" height="36.5" rx="1.5" data-lo="4129821" data-hi="4241438" data-s="0.00852"><title>$4.13M to $4.24M: 0.9% of simulated years</title></rect>
+<rect class="bar v-base" x="415.5" y="223.4" width="8.6" height="30.6" rx="1.5" data-lo="4241438" data-hi="4353054" data-s="0.00714"><title>$4.24M to $4.35M: 0.7% of simulated years</title></rect>
+<rect class="bar v-base" x="425.1" y="229.9" width="8.6" height="24.1" rx="1.5" data-lo="4353054" data-hi="4464671" data-s="0.00562"><title>$4.35M to $4.46M: 0.6% of simulated years</title></rect>
+<rect class="bar v-base" x="434.7" y="231.9" width="8.6" height="22.1" rx="1.5" data-lo="4464671" data-hi="4576288" data-s="0.00516"><title>$4.46M to $4.58M: 0.5% of simulated years</title></rect>
+<rect class="bar v-base" x="444.2" y="231.8" width="8.6" height="22.2" rx="1.5" data-lo="4576288" data-hi="4687905" data-s="0.00518"><title>$4.58M to $4.69M: 0.5% of simulated years</title></rect>
+<rect class="bar v-base" x="453.8" y="233.5" width="8.6" height="20.5" rx="1.5" data-lo="4687905" data-hi="4799522" data-s="0.00478"><title>$4.69M to $4.80M: 0.5% of simulated years</title></rect>
+<rect class="bar v-base" x="463.4" y="237.7" width="8.6" height="16.3" rx="1.5" data-lo="4799522" data-hi="4911138" data-s="0.00380"><title>$4.80M to $4.91M: 0.4% of simulated years</title></rect>
+<rect class="bar v-base" x="472.9" y="237.8" width="8.6" height="16.2" rx="1.5" data-lo="4911138" data-hi="5022755" data-s="0.00378"><title>$4.91M to $5.02M: 0.4% of simulated years</title></rect>
+<rect class="bar v-base" x="482.5" y="237.8" width="8.6" height="16.2" rx="1.5" data-lo="5022755" data-hi="5134372" data-s="0.00378"><title>$5.02M to $5.13M: 0.4% of simulated years</title></rect>
+<rect class="bar v-base" x="492.1" y="241.2" width="8.6" height="12.8" rx="1.5" data-lo="5134372" data-hi="5245989" data-s="0.00300"><title>$5.13M to $5.25M: 0.3% of simulated years</title></rect>
+<rect class="bar v-base" x="501.6" y="241.7" width="8.6" height="12.3" rx="1.5" data-lo="5245989" data-hi="5357605" data-s="0.00288"><title>$5.25M to $5.36M: 0.3% of simulated years</title></rect>
+<rect class="bar v-base" x="511.2" y="243.9" width="8.6" height="10.1" rx="1.5" data-lo="5357605" data-hi="5469222" data-s="0.00236"><title>$5.36M to $5.47M: 0.2% of simulated years</title></rect>
+<rect class="bar v-base" x="520.8" y="244.9" width="8.6" height="9.1" rx="1.5" data-lo="5469222" data-hi="5580839" data-s="0.00212"><title>$5.47M to $5.58M: 0.2% of simulated years</title></rect>
+<rect class="bar v-base" x="530.3" y="246.3" width="8.6" height="7.7" rx="1.5" data-lo="5580839" data-hi="5692456" data-s="0.00180"><title>$5.58M to $5.69M: 0.2% of simulated years</title></rect>
+<rect class="bar v-base" x="539.9" y="246.4" width="8.6" height="7.6" rx="1.5" data-lo="5692456" data-hi="5804073" data-s="0.00178"><title>$5.69M to $5.80M: 0.2% of simulated years</title></rect>
+<rect class="bar v-base" x="549.5" y="248.6" width="8.6" height="5.4" rx="1.5" data-lo="5804073" data-hi="5915689" data-s="0.00126"><title>$5.80M to $5.92M: 0.1% of simulated years</title></rect>
+<rect class="bar v-base" x="559.0" y="248.8" width="8.6" height="5.2" rx="1.5" data-lo="5915689" data-hi="6027306" data-s="0.00122"><title>$5.92M to $6.03M: 0.1% of simulated years</title></rect>
+<rect class="bar v-base" x="568.6" y="249.1" width="8.6" height="4.9" rx="1.5" data-lo="6027306" data-hi="6138923" data-s="0.00114"><title>$6.03M to $6.14M: 0.1% of simulated years</title></rect>
+<rect class="bar v-base" x="578.2" y="248.6" width="8.6" height="5.4" rx="1.5" data-lo="6138923" data-hi="6250540" data-s="0.00126"><title>$6.14M to $6.25M: 0.1% of simulated years</title></rect>
+<rect class="bar v-base" x="587.7" y="250.1" width="8.6" height="3.9" rx="1.5" data-lo="6250540" data-hi="6362156" data-s="0.00092"><title>$6.25M to $6.36M: 0.1% of simulated years</title></rect>
+<rect class="bar v-base" x="597.3" y="251.3" width="8.6" height="2.7" rx="1.5" data-lo="6362156" data-hi="6473773" data-s="0.00062"><title>$6.36M to $6.47M: 0.1% of simulated years</title></rect>
+<rect class="bar v-base" x="606.9" y="250.0" width="8.6" height="4.0" rx="1.5" data-lo="6473773" data-hi="6585390" data-s="0.00094"><title>$6.47M to $6.59M: 0.1% of simulated years</title></rect>
+<rect class="bar v-base" x="616.4" y="250.7" width="8.6" height="3.3" rx="1.5" data-lo="6585390" data-hi="6697007" data-s="0.00076"><title>$6.59M to $6.70M: 0.1% of simulated years</title></rect>
+<line x1="231.0" x2="231.0" y1="34" y2="254" class="mline"/>
+<text x="237.0" y="14" class="ax-b halo">Mean $2.09M</text>
+<line x1="380.4" x2="380.4" y1="34" y2="254" class="mline dashed"/>
+<text x="386.4" y="30" class="ax-b halo">1-in-10 year $3.83M</text>
+</svg></div></figure>
+<figure class="hfig" data-v="mfa"><figcaption><span class="hv-name"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-mfa"/></svg> Phishing-resistant MFA</span><span class="hv-stat num">Mean $729k &middot; 1-in-10 year $1.54M</span></figcaption><div class="chartscroll"><svg class="chart hist-svg" viewBox="0 0 640 300" role="img" aria-labelledby="h-mfa-t h-mfa-d">
+<title id="h-mfa-t">Distribution of annual loss: Phishing-resistant MFA</title>
+<desc id="h-mfa-d">Histogram of simulated annual loss. Mean $729k, 1-in-10-year loss $1.54M. Same horizontal scale for every variant.</desc>
+<line x1="52" x2="626" y1="254.0" y2="254.0" class="grid"/>
+<text x="44" y="258.0" text-anchor="end" class="ax">0%</text>
+<line x1="52" x2="626" y1="182.7" y2="182.7" class="grid"/>
+<text x="44" y="186.7" text-anchor="end" class="ax">2%</text>
+<line x1="52" x2="626" y1="111.3" y2="111.3" class="grid"/>
+<text x="44" y="115.3" text-anchor="end" class="ax">4%</text>
+<line x1="52" x2="626" y1="40.0" y2="40.0" class="grid"/>
+<text x="44" y="44.0" text-anchor="end" class="ax">6%</text>
+<text x="52.0" y="272" text-anchor="middle" class="ax">$0</text>
+<text x="137.7" y="272" text-anchor="middle" class="ax">$1M</text>
+<text x="223.4" y="272" text-anchor="middle" class="ax">$2M</text>
+<text x="309.1" y="272" text-anchor="middle" class="ax">$3M</text>
+<text x="394.8" y="272" text-anchor="middle" class="ax">$4M</text>
+<text x="480.5" y="272" text-anchor="middle" class="ax">$5M</text>
+<text x="566.3" y="272" text-anchor="middle" class="ax">$6M</text>
+<text x="339" y="294" text-anchor="middle" class="ax-t">Annual loss</text>
+<text transform="translate(12 147) rotate(-90)" text-anchor="middle" class="ax-t">Share of simulated years</text>
+<rect class="bar v-mfa" x="52.0" y="76.4" width="3.3" height="177.6" rx="1.5" data-lo="0" data-hi="50087" data-s="0.04980"><title>$0 to $50k: 5.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="56.3" y="131.4" width="3.3" height="122.6" rx="1.5" data-lo="50087" data-hi="100173" data-s="0.03436"><title>$50k to $100k: 3.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="60.6" y="107.4" width="3.3" height="146.6" rx="1.5" data-lo="100173" data-hi="150260" data-s="0.04110"><title>$100k to $150k: 4.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="64.9" y="97.2" width="3.3" height="156.8" rx="1.5" data-lo="150260" data-hi="200346" data-s="0.04396"><title>$150k to $200k: 4.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="69.2" y="95.1" width="3.3" height="158.9" rx="1.5" data-lo="200346" data-hi="250433" data-s="0.04454"><title>$200k to $250k: 4.5% of simulated years</title></rect>
+<rect class="bar v-mfa" x="73.5" y="95.5" width="3.3" height="158.5" rx="1.5" data-lo="250433" data-hi="300519" data-s="0.04444"><title>$250k to $301k: 4.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="77.8" y="83.4" width="3.3" height="170.6" rx="1.5" data-lo="300519" data-hi="350606" data-s="0.04782"><title>$301k to $351k: 4.8% of simulated years</title></rect>
+<rect class="bar v-mfa" x="82.1" y="88.6" width="3.3" height="165.4" rx="1.5" data-lo="350606" data-hi="400692" data-s="0.04636"><title>$351k to $401k: 4.6% of simulated years</title></rect>
+<rect class="bar v-mfa" x="86.3" y="103.3" width="3.3" height="150.7" rx="1.5" data-lo="400692" data-hi="450779" data-s="0.04226"><title>$401k to $451k: 4.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="90.6" y="97.9" width="3.3" height="156.1" rx="1.5" data-lo="450779" data-hi="500865" data-s="0.04378"><title>$451k to $501k: 4.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="94.9" y="114.4" width="3.3" height="139.6" rx="1.5" data-lo="500865" data-hi="550952" data-s="0.03914"><title>$501k to $551k: 3.9% of simulated years</title></rect>
+<rect class="bar v-mfa" x="99.2" y="122.4" width="3.3" height="131.6" rx="1.5" data-lo="550952" data-hi="601038" data-s="0.03690"><title>$551k to $601k: 3.7% of simulated years</title></rect>
+<rect class="bar v-mfa" x="103.5" y="131.4" width="3.3" height="122.6" rx="1.5" data-lo="601038" data-hi="651125" data-s="0.03436"><title>$601k to $651k: 3.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="107.8" y="137.5" width="3.3" height="116.5" rx="1.5" data-lo="651125" data-hi="701211" data-s="0.03266"><title>$651k to $701k: 3.3% of simulated years</title></rect>
+<rect class="bar v-mfa" x="112.1" y="144.5" width="3.3" height="109.5" rx="1.5" data-lo="701211" data-hi="751298" data-s="0.03070"><title>$701k to $751k: 3.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="116.4" y="151.4" width="3.3" height="102.6" rx="1.5" data-lo="751298" data-hi="801384" data-s="0.02876"><title>$751k to $801k: 2.9% of simulated years</title></rect>
+<rect class="bar v-mfa" x="120.7" y="156.6" width="3.3" height="97.4" rx="1.5" data-lo="801384" data-hi="851471" data-s="0.02730"><title>$801k to $851k: 2.7% of simulated years</title></rect>
+<rect class="bar v-mfa" x="125.0" y="162.6" width="3.3" height="91.4" rx="1.5" data-lo="851471" data-hi="901558" data-s="0.02562"><title>$851k to $902k: 2.6% of simulated years</title></rect>
+<rect class="bar v-mfa" x="129.3" y="167.3" width="3.3" height="86.7" rx="1.5" data-lo="901558" data-hi="951644" data-s="0.02430"><title>$902k to $952k: 2.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="133.6" y="175.5" width="3.3" height="78.5" rx="1.5" data-lo="951644" data-hi="1001731" data-s="0.02200"><title>$952k to $1.00M: 2.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="137.9" y="181.0" width="3.3" height="73.0" rx="1.5" data-lo="1001731" data-hi="1051817" data-s="0.02046"><title>$1.00M to $1.05M: 2.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="142.2" y="181.7" width="3.3" height="72.3" rx="1.5" data-lo="1051817" data-hi="1101904" data-s="0.02026"><title>$1.05M to $1.10M: 2.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="146.4" y="184.0" width="3.3" height="70.0" rx="1.5" data-lo="1101904" data-hi="1151990" data-s="0.01964"><title>$1.10M to $1.15M: 2.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="150.7" y="193.2" width="3.3" height="60.8" rx="1.5" data-lo="1151990" data-hi="1202077" data-s="0.01706"><title>$1.15M to $1.20M: 1.7% of simulated years</title></rect>
+<rect class="bar v-mfa" x="155.0" y="203.6" width="3.3" height="50.4" rx="1.5" data-lo="1202077" data-hi="1252163" data-s="0.01412"><title>$1.20M to $1.25M: 1.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="159.3" y="201.2" width="3.3" height="52.8" rx="1.5" data-lo="1252163" data-hi="1302250" data-s="0.01480"><title>$1.25M to $1.30M: 1.5% of simulated years</title></rect>
+<rect class="bar v-mfa" x="163.6" y="208.9" width="3.3" height="45.1" rx="1.5" data-lo="1302250" data-hi="1352336" data-s="0.01264"><title>$1.30M to $1.35M: 1.3% of simulated years</title></rect>
+<rect class="bar v-mfa" x="167.9" y="211.7" width="3.3" height="42.3" rx="1.5" data-lo="1352336" data-hi="1402423" data-s="0.01186"><title>$1.35M to $1.40M: 1.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="172.2" y="212.2" width="3.3" height="41.8" rx="1.5" data-lo="1402423" data-hi="1452509" data-s="0.01172"><title>$1.40M to $1.45M: 1.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="176.5" y="216.7" width="3.3" height="37.3" rx="1.5" data-lo="1452509" data-hi="1502596" data-s="0.01046"><title>$1.45M to $1.50M: 1.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="180.8" y="218.6" width="3.3" height="35.4" rx="1.5" data-lo="1502596" data-hi="1552682" data-s="0.00992"><title>$1.50M to $1.55M: 1.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="185.1" y="224.3" width="3.3" height="29.7" rx="1.5" data-lo="1552682" data-hi="1602769" data-s="0.00834"><title>$1.55M to $1.60M: 0.8% of simulated years</title></rect>
+<rect class="bar v-mfa" x="189.4" y="225.0" width="3.3" height="29.0" rx="1.5" data-lo="1602769" data-hi="1652855" data-s="0.00814"><title>$1.60M to $1.65M: 0.8% of simulated years</title></rect>
+<rect class="bar v-mfa" x="193.7" y="227.6" width="3.3" height="26.4" rx="1.5" data-lo="1652855" data-hi="1702942" data-s="0.00740"><title>$1.65M to $1.70M: 0.7% of simulated years</title></rect>
+<rect class="bar v-mfa" x="198.0" y="229.5" width="3.3" height="24.5" rx="1.5" data-lo="1702942" data-hi="1753028" data-s="0.00686"><title>$1.70M to $1.75M: 0.7% of simulated years</title></rect>
+<rect class="bar v-mfa" x="202.3" y="232.0" width="3.3" height="22.0" rx="1.5" data-lo="1753028" data-hi="1803115" data-s="0.00616"><title>$1.75M to $1.80M: 0.6% of simulated years</title></rect>
+<rect class="bar v-mfa" x="206.5" y="233.9" width="3.3" height="20.1" rx="1.5" data-lo="1803115" data-hi="1853202" data-s="0.00564"><title>$1.80M to $1.85M: 0.6% of simulated years</title></rect>
+<rect class="bar v-mfa" x="210.8" y="234.9" width="3.3" height="19.1" rx="1.5" data-lo="1853202" data-hi="1903288" data-s="0.00536"><title>$1.85M to $1.90M: 0.5% of simulated years</title></rect>
+<rect class="bar v-mfa" x="215.1" y="237.0" width="3.3" height="17.0" rx="1.5" data-lo="1903288" data-hi="1953375" data-s="0.00478"><title>$1.90M to $1.95M: 0.5% of simulated years</title></rect>
+<rect class="bar v-mfa" x="219.4" y="237.7" width="3.3" height="16.3" rx="1.5" data-lo="1953375" data-hi="2003461" data-s="0.00458"><title>$1.95M to $2.00M: 0.5% of simulated years</title></rect>
+<rect class="bar v-mfa" x="223.7" y="240.0" width="3.3" height="14.0" rx="1.5" data-lo="2003461" data-hi="2053548" data-s="0.00392"><title>$2.00M to $2.05M: 0.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="228.0" y="241.4" width="3.3" height="12.6" rx="1.5" data-lo="2053548" data-hi="2103634" data-s="0.00354"><title>$2.05M to $2.10M: 0.4% of simulated years</title></rect>
+<rect class="bar v-mfa" x="232.3" y="242.9" width="3.3" height="11.1" rx="1.5" data-lo="2103634" data-hi="2153721" data-s="0.00310"><title>$2.10M to $2.15M: 0.3% of simulated years</title></rect>
+<rect class="bar v-mfa" x="236.6" y="244.2" width="3.3" height="9.8" rx="1.5" data-lo="2153721" data-hi="2203807" data-s="0.00274"><title>$2.15M to $2.20M: 0.3% of simulated years</title></rect>
+<rect class="bar v-mfa" x="240.9" y="245.3" width="3.3" height="8.7" rx="1.5" data-lo="2203807" data-hi="2253894" data-s="0.00244"><title>$2.20M to $2.25M: 0.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="245.2" y="246.4" width="3.3" height="7.6" rx="1.5" data-lo="2253894" data-hi="2303980" data-s="0.00214"><title>$2.25M to $2.30M: 0.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="249.5" y="246.4" width="3.3" height="7.6" rx="1.5" data-lo="2303980" data-hi="2354067" data-s="0.00214"><title>$2.30M to $2.35M: 0.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="253.8" y="246.2" width="3.3" height="7.8" rx="1.5" data-lo="2354067" data-hi="2404153" data-s="0.00220"><title>$2.35M to $2.40M: 0.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="258.1" y="247.1" width="3.3" height="6.9" rx="1.5" data-lo="2404153" data-hi="2454240" data-s="0.00194"><title>$2.40M to $2.45M: 0.2% of simulated years</title></rect>
+<rect class="bar v-mfa" x="262.4" y="248.9" width="3.3" height="5.1" rx="1.5" data-lo="2454240" data-hi="2504326" data-s="0.00144"><title>$2.45M to $2.50M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="266.6" y="249.1" width="3.3" height="4.9" rx="1.5" data-lo="2504326" data-hi="2554413" data-s="0.00136"><title>$2.50M to $2.55M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="270.9" y="249.4" width="3.3" height="4.6" rx="1.5" data-lo="2554413" data-hi="2604499" data-s="0.00130"><title>$2.55M to $2.60M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="275.2" y="250.4" width="3.3" height="3.6" rx="1.5" data-lo="2604499" data-hi="2654586" data-s="0.00100"><title>$2.60M to $2.65M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="279.5" y="249.9" width="3.3" height="4.1" rx="1.5" data-lo="2654586" data-hi="2704673" data-s="0.00114"><title>$2.65M to $2.70M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="283.8" y="250.3" width="3.3" height="3.7" rx="1.5" data-lo="2704673" data-hi="2754759" data-s="0.00104"><title>$2.70M to $2.75M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="288.1" y="251.0" width="3.3" height="3.0" rx="1.5" data-lo="2754759" data-hi="2804846" data-s="0.00084"><title>$2.75M to $2.80M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="292.4" y="250.9" width="3.3" height="3.1" rx="1.5" data-lo="2804846" data-hi="2854932" data-s="0.00086"><title>$2.80M to $2.85M: 0.1% of simulated years</title></rect>
+<rect class="bar v-mfa" x="296.7" y="252.4" width="3.3" height="1.6" rx="1.5" data-lo="2854932" data-hi="2905019" data-s="0.00044"><title>$2.85M to $2.91M: 0.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="301.0" y="252.6" width="3.3" height="1.4" rx="1.5" data-lo="2905019" data-hi="2955105" data-s="0.00040"><title>$2.91M to $2.96M: 0.0% of simulated years</title></rect>
+<rect class="bar v-mfa" x="305.3" y="251.6" width="3.3" height="2.4" rx="1.5" data-lo="2955105" data-hi="3005192" data-s="0.00066"><title>$2.96M to $3.01M: 0.1% of simulated years</title></rect>
+<line x1="114.5" x2="114.5" y1="34" y2="254" class="mline"/>
+<text x="120.5" y="14" class="ax-b halo">Mean $729k</text>
+<line x1="183.7" x2="183.7" y1="34" y2="254" class="mline dashed"/>
+<text x="189.7" y="30" class="ax-b halo">1-in-10 year $1.54M</text>
+</svg></div></figure>
+<figure class="hfig" data-v="mfa_sandbox"><figcaption><span class="hv-name"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-sbx"/></svg> MFA + mail sandboxing</span><span class="hv-stat num">Mean $437k &middot; 1-in-10 year $1.02M</span></figcaption><div class="chartscroll"><svg class="chart hist-svg" viewBox="0 0 640 300" role="img" aria-labelledby="h-mfa_sandbox-t h-mfa_sandbox-d">
+<title id="h-mfa_sandbox-t">Distribution of annual loss: MFA + mail sandboxing</title>
+<desc id="h-mfa_sandbox-d">Histogram of simulated annual loss. Mean $437k, 1-in-10-year loss $1.02M. Same horizontal scale for every variant.</desc>
+<line x1="52" x2="626" y1="254.0" y2="254.0" class="grid"/>
+<text x="44" y="258.0" text-anchor="end" class="ax">0%</text>
+<line x1="52" x2="626" y1="182.7" y2="182.7" class="grid"/>
+<text x="44" y="186.7" text-anchor="end" class="ax">5%</text>
+<line x1="52" x2="626" y1="111.3" y2="111.3" class="grid"/>
+<text x="44" y="115.3" text-anchor="end" class="ax">10%</text>
+<line x1="52" x2="626" y1="40.0" y2="40.0" class="grid"/>
+<text x="44" y="44.0" text-anchor="end" class="ax">15%</text>
+<text x="52.0" y="272" text-anchor="middle" class="ax">$0</text>
+<text x="137.7" y="272" text-anchor="middle" class="ax">$1M</text>
+<text x="223.4" y="272" text-anchor="middle" class="ax">$2M</text>
+<text x="309.1" y="272" text-anchor="middle" class="ax">$3M</text>
+<text x="394.8" y="272" text-anchor="middle" class="ax">$4M</text>
+<text x="480.5" y="272" text-anchor="middle" class="ax">$5M</text>
+<text x="566.3" y="272" text-anchor="middle" class="ax">$6M</text>
+<text x="339" y="294" text-anchor="middle" class="ax-t">Annual loss</text>
+<text transform="translate(12 147) rotate(-90)" text-anchor="middle" class="ax-t">Share of simulated years</text>
+<rect class="bar v-sbx" x="52.0" y="75.1" width="2.1" height="178.9" rx="1.5" data-lo="0" data-hi="36116" data-s="0.12542"><title>$0 to $36k: 12.5% of simulated years</title></rect>
+<rect class="bar v-sbx" x="55.1" y="199.1" width="2.1" height="54.9" rx="1.5" data-lo="36116" data-hi="72233" data-s="0.03850"><title>$36k to $72k: 3.9% of simulated years</title></rect>
+<rect class="bar v-sbx" x="58.2" y="173.9" width="2.1" height="80.1" rx="1.5" data-lo="72233" data-hi="108349" data-s="0.05614"><title>$72k to $108k: 5.6% of simulated years</title></rect>
+<rect class="bar v-sbx" x="61.3" y="177.9" width="2.1" height="76.1" rx="1.5" data-lo="108349" data-hi="144465" data-s="0.05332"><title>$108k to $144k: 5.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="64.4" y="180.1" width="2.1" height="73.9" rx="1.5" data-lo="144465" data-hi="180582" data-s="0.05178"><title>$144k to $181k: 5.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="67.5" y="180.0" width="2.1" height="74.0" rx="1.5" data-lo="180582" data-hi="216698" data-s="0.05186"><title>$181k to $217k: 5.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="70.6" y="180.8" width="2.1" height="73.2" rx="1.5" data-lo="216698" data-hi="252814" data-s="0.05130"><title>$217k to $253k: 5.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="73.7" y="187.8" width="2.1" height="66.2" rx="1.5" data-lo="252814" data-hi="288931" data-s="0.04642"><title>$253k to $289k: 4.6% of simulated years</title></rect>
+<rect class="bar v-sbx" x="76.8" y="193.1" width="2.1" height="60.9" rx="1.5" data-lo="288931" data-hi="325047" data-s="0.04268"><title>$289k to $325k: 4.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="79.9" y="201.4" width="2.1" height="52.6" rx="1.5" data-lo="325047" data-hi="361163" data-s="0.03686"><title>$325k to $361k: 3.7% of simulated years</title></rect>
+<rect class="bar v-sbx" x="83.0" y="203.3" width="2.1" height="50.7" rx="1.5" data-lo="361163" data-hi="397280" data-s="0.03554"><title>$361k to $397k: 3.6% of simulated years</title></rect>
+<rect class="bar v-sbx" x="86.1" y="208.3" width="2.1" height="45.7" rx="1.5" data-lo="397280" data-hi="433396" data-s="0.03200"><title>$397k to $433k: 3.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="89.1" y="212.4" width="2.1" height="41.6" rx="1.5" data-lo="433396" data-hi="469513" data-s="0.02914"><title>$433k to $470k: 2.9% of simulated years</title></rect>
+<rect class="bar v-sbx" x="92.2" y="215.0" width="2.1" height="39.0" rx="1.5" data-lo="469513" data-hi="505629" data-s="0.02736"><title>$470k to $506k: 2.7% of simulated years</title></rect>
+<rect class="bar v-sbx" x="95.3" y="218.7" width="2.1" height="35.3" rx="1.5" data-lo="505629" data-hi="541745" data-s="0.02476"><title>$506k to $542k: 2.5% of simulated years</title></rect>
+<rect class="bar v-sbx" x="98.4" y="223.0" width="2.1" height="31.0" rx="1.5" data-lo="541745" data-hi="577862" data-s="0.02176"><title>$542k to $578k: 2.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="101.5" y="222.6" width="2.1" height="31.4" rx="1.5" data-lo="577862" data-hi="613978" data-s="0.02198"><title>$578k to $614k: 2.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="104.6" y="225.3" width="2.1" height="28.7" rx="1.5" data-lo="613978" data-hi="650094" data-s="0.02010"><title>$614k to $650k: 2.0% of simulated years</title></rect>
+<rect class="bar v-sbx" x="107.7" y="227.7" width="2.1" height="26.3" rx="1.5" data-lo="650094" data-hi="686211" data-s="0.01842"><title>$650k to $686k: 1.8% of simulated years</title></rect>
+<rect class="bar v-sbx" x="110.8" y="229.5" width="2.1" height="24.5" rx="1.5" data-lo="686211" data-hi="722327" data-s="0.01718"><title>$686k to $722k: 1.7% of simulated years</title></rect>
+<rect class="bar v-sbx" x="113.9" y="232.4" width="2.1" height="21.6" rx="1.5" data-lo="722327" data-hi="758443" data-s="0.01514"><title>$722k to $758k: 1.5% of simulated years</title></rect>
+<rect class="bar v-sbx" x="117.0" y="234.8" width="2.1" height="19.2" rx="1.5" data-lo="758443" data-hi="794560" data-s="0.01348"><title>$758k to $795k: 1.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="120.1" y="235.8" width="2.1" height="18.2" rx="1.5" data-lo="794560" data-hi="830676" data-s="0.01278"><title>$795k to $831k: 1.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="123.2" y="235.9" width="2.1" height="18.1" rx="1.5" data-lo="830676" data-hi="866792" data-s="0.01272"><title>$831k to $867k: 1.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="126.3" y="238.8" width="2.1" height="15.2" rx="1.5" data-lo="866792" data-hi="902909" data-s="0.01064"><title>$867k to $903k: 1.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="129.4" y="238.3" width="2.1" height="15.7" rx="1.5" data-lo="902909" data-hi="939025" data-s="0.01100"><title>$903k to $939k: 1.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="132.5" y="239.4" width="2.1" height="14.6" rx="1.5" data-lo="939025" data-hi="975141" data-s="0.01024"><title>$939k to $975k: 1.0% of simulated years</title></rect>
+<rect class="bar v-sbx" x="135.6" y="241.3" width="2.1" height="12.7" rx="1.5" data-lo="975141" data-hi="1011258" data-s="0.00890"><title>$975k to $1.01M: 0.9% of simulated years</title></rect>
+<rect class="bar v-sbx" x="138.7" y="242.2" width="2.1" height="11.8" rx="1.5" data-lo="1011258" data-hi="1047374" data-s="0.00830"><title>$1.01M to $1.05M: 0.8% of simulated years</title></rect>
+<rect class="bar v-sbx" x="141.8" y="243.2" width="2.1" height="10.8" rx="1.5" data-lo="1047374" data-hi="1083490" data-s="0.00756"><title>$1.05M to $1.08M: 0.8% of simulated years</title></rect>
+<rect class="bar v-sbx" x="144.9" y="243.4" width="2.1" height="10.6" rx="1.5" data-lo="1083490" data-hi="1119607" data-s="0.00746"><title>$1.08M to $1.12M: 0.7% of simulated years</title></rect>
+<rect class="bar v-sbx" x="148.0" y="243.4" width="2.1" height="10.6" rx="1.5" data-lo="1119607" data-hi="1155723" data-s="0.00740"><title>$1.12M to $1.16M: 0.7% of simulated years</title></rect>
+<rect class="bar v-sbx" x="151.1" y="245.4" width="2.1" height="8.6" rx="1.5" data-lo="1155723" data-hi="1191839" data-s="0.00600"><title>$1.16M to $1.19M: 0.6% of simulated years</title></rect>
+<rect class="bar v-sbx" x="154.2" y="245.8" width="2.1" height="8.2" rx="1.5" data-lo="1191839" data-hi="1227956" data-s="0.00574"><title>$1.19M to $1.23M: 0.6% of simulated years</title></rect>
+<rect class="bar v-sbx" x="157.2" y="246.0" width="2.1" height="8.0" rx="1.5" data-lo="1227956" data-hi="1264072" data-s="0.00564"><title>$1.23M to $1.26M: 0.6% of simulated years</title></rect>
+<rect class="bar v-sbx" x="160.3" y="248.0" width="2.1" height="6.0" rx="1.5" data-lo="1264072" data-hi="1300188" data-s="0.00422"><title>$1.26M to $1.30M: 0.4% of simulated years</title></rect>
+<rect class="bar v-sbx" x="163.4" y="247.6" width="2.1" height="6.4" rx="1.5" data-lo="1300188" data-hi="1336305" data-s="0.00448"><title>$1.30M to $1.34M: 0.4% of simulated years</title></rect>
+<rect class="bar v-sbx" x="166.5" y="248.2" width="2.1" height="5.8" rx="1.5" data-lo="1336305" data-hi="1372421" data-s="0.00406"><title>$1.34M to $1.37M: 0.4% of simulated years</title></rect>
+<rect class="bar v-sbx" x="169.6" y="249.1" width="2.1" height="4.9" rx="1.5" data-lo="1372421" data-hi="1408538" data-s="0.00340"><title>$1.37M to $1.41M: 0.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="172.7" y="249.6" width="2.1" height="4.4" rx="1.5" data-lo="1408538" data-hi="1444654" data-s="0.00306"><title>$1.41M to $1.44M: 0.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="175.8" y="249.5" width="2.1" height="4.5" rx="1.5" data-lo="1444654" data-hi="1480770" data-s="0.00316"><title>$1.44M to $1.48M: 0.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="178.9" y="250.0" width="2.1" height="4.0" rx="1.5" data-lo="1480770" data-hi="1516887" data-s="0.00278"><title>$1.48M to $1.52M: 0.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="182.0" y="249.9" width="2.1" height="4.1" rx="1.5" data-lo="1516887" data-hi="1553003" data-s="0.00288"><title>$1.52M to $1.55M: 0.3% of simulated years</title></rect>
+<rect class="bar v-sbx" x="185.1" y="250.4" width="2.1" height="3.6" rx="1.5" data-lo="1553003" data-hi="1589119" data-s="0.00250"><title>$1.55M to $1.59M: 0.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="188.2" y="250.9" width="2.1" height="3.1" rx="1.5" data-lo="1589119" data-hi="1625236" data-s="0.00218"><title>$1.59M to $1.63M: 0.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="191.3" y="251.2" width="2.1" height="2.8" rx="1.5" data-lo="1625236" data-hi="1661352" data-s="0.00194"><title>$1.63M to $1.66M: 0.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="194.4" y="251.4" width="2.1" height="2.6" rx="1.5" data-lo="1661352" data-hi="1697468" data-s="0.00180"><title>$1.66M to $1.70M: 0.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="197.5" y="251.6" width="2.1" height="2.4" rx="1.5" data-lo="1697468" data-hi="1733585" data-s="0.00170"><title>$1.70M to $1.73M: 0.2% of simulated years</title></rect>
+<rect class="bar v-sbx" x="200.6" y="252.0" width="2.1" height="2.0" rx="1.5" data-lo="1733585" data-hi="1769701" data-s="0.00140"><title>$1.73M to $1.77M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="203.7" y="252.2" width="2.1" height="1.8" rx="1.5" data-lo="1769701" data-hi="1805817" data-s="0.00128"><title>$1.77M to $1.81M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="206.8" y="252.1" width="2.1" height="1.9" rx="1.5" data-lo="1805817" data-hi="1841934" data-s="0.00136"><title>$1.81M to $1.84M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="209.9" y="252.4" width="2.1" height="1.6" rx="1.5" data-lo="1841934" data-hi="1878050" data-s="0.00110"><title>$1.84M to $1.88M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="213.0" y="252.3" width="2.1" height="1.7" rx="1.5" data-lo="1878050" data-hi="1914166" data-s="0.00116"><title>$1.88M to $1.91M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="216.1" y="252.6" width="2.1" height="1.4" rx="1.5" data-lo="1914166" data-hi="1950283" data-s="0.00100"><title>$1.91M to $1.95M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="219.2" y="252.8" width="2.1" height="1.2" rx="1.5" data-lo="1950283" data-hi="1986399" data-s="0.00086"><title>$1.95M to $1.99M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="222.3" y="252.7" width="2.1" height="1.3" rx="1.5" data-lo="1986399" data-hi="2022515" data-s="0.00088"><title>$1.99M to $2.02M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="225.3" y="253.2" width="2.1" height="0.8" rx="1.5" data-lo="2022515" data-hi="2058632" data-s="0.00058"><title>$2.02M to $2.06M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="228.4" y="253.1" width="2.1" height="0.9" rx="1.5" data-lo="2058632" data-hi="2094748" data-s="0.00064"><title>$2.06M to $2.09M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="231.5" y="253.1" width="2.1" height="0.9" rx="1.5" data-lo="2094748" data-hi="2130864" data-s="0.00064"><title>$2.09M to $2.13M: 0.1% of simulated years</title></rect>
+<rect class="bar v-sbx" x="234.6" y="253.4" width="2.1" height="0.6" rx="1.5" data-lo="2130864" data-hi="2166981" data-s="0.00042"><title>$2.13M to $2.17M: 0.0% of simulated years</title></rect>
+<line x1="89.4" x2="89.4" y1="34" y2="254" class="mline"/>
+<text x="95.4" y="14" class="ax-b halo">Mean $437k</text>
+<line x1="139.6" x2="139.6" y1="34" y2="254" class="mline dashed"/>
+<text x="145.6" y="30" class="ax-b halo">1-in-10 year $1.02M</text>
+</svg></div></figure>
+    <p class="readout js-only" id="hist-readout">Hover a bar to read its range. Solid line: mean. Dashed line: 1-in-10-year loss. All variants share one horizontal scale.</p>
+    <p class="hint only-narrow">Scroll the chart sideways to see all of it.</p>
+  </div></div></div>
+</div></section>
+
+<section class="split" id="drivers" aria-labelledby="h-drivers"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">04 &middot; Drivers</span>
+    <h2 id="h-drivers">Phishing volume and success rate drive 89% of the uncertainty</h2>
+    <p class="lede">Firming up these two inputs would sharpen the estimate more than anything else. Each bar names where its input comes from.</p></div>
+  <div class="ev reveal d1"><div class="shell"><div class="core">
+    <ol class="torn"><li class="t-row"><div class="t-lab"><span class="t-name">Share of contacts that become a compromised account</span><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></div><div class="t-track" role="img" aria-label="Share of contacts that become a compromised account: 45% of the uncertainty, tier Benchmark"><span class="t-bar tier-ben" style="width:90.12%"></span><span class="t-val num">45%</span></div></li>
+<li class="t-row"><div class="t-lab"><span class="t-name">Phishing emails reaching inboxes per year</span><span class="chip tier-int"><span aria-hidden="true">●</span> Internal data</span></div><div class="t-track" role="img" aria-label="Phishing emails reaching inboxes per year: 44% of the uncertainty, tier Internal data"><span class="t-bar tier-int" style="width:87.19%"></span><span class="t-val num">44%</span></div></li>
+<li class="t-row"><div class="t-lab"><span class="t-name">Fraudulent transfer not recovered</span><span class="chip tier-asm"><span aria-hidden="true">▲</span> Assumption</span></div><div class="t-track" role="img" aria-label="Fraudulent transfer not recovered: 5.5% of the uncertainty, tier Assumption"><span class="t-bar tier-asm" style="width:11.00%"></span><span class="t-val num">5.5%</span></div></li>
+<li class="t-row"><div class="t-lab"><span class="t-name">Share of events with secondary effects</span><span class="chip tier-asm"><span aria-hidden="true">▲</span> Assumption</span></div><div class="t-track" role="img" aria-label="Share of events with secondary effects: 4.1% of the uncertainty, tier Assumption"><span class="t-bar tier-asm" style="width:8.12%"></span><span class="t-val num">4.1%</span></div></li>
+<li class="t-row"><div class="t-lab"><span class="t-name">Regulatory fines and legal</span><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></div><div class="t-track" role="img" aria-label="Regulatory fines and legal: 0.8% of the uncertainty, tier Benchmark"><span class="t-bar tier-ben" style="width:1.57%"></span><span class="t-val num">0.8%</span></div></li>
+<li class="t-row"><div class="t-lab"><span class="t-name">Incident response per event</span><span class="chip tier-sme"><span aria-hidden="true">◆</span> SME estimate</span></div><div class="t-track" role="img" aria-label="Incident response per event: 0.5% of the uncertainty, tier SME estimate"><span class="t-bar tier-sme" style="width:1.04%"></span><span class="t-val num">0.5%</span></div></li>
+<li class="t-row"><div class="t-lab"><span class="t-name">Customer churn and reputation</span><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></div><div class="t-track" role="img" aria-label="Customer churn and reputation: 0.4% of the uncertainty, tier Benchmark"><span class="t-bar tier-ben" style="width:0.85%"></span><span class="t-val num">0.4%</span></div></li>
+<li class="t-row"><div class="t-lab"><span class="t-name">Lost productivity per event</span><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></div><div class="t-track" role="img" aria-label="Lost productivity per event: <0.1% of the uncertainty, tier Benchmark"><span class="t-bar tier-ben" style="width:0.10%"></span><span class="t-val num"><0.1%</span></div></li></ol>
+    <p class="fine">Bars show each input&rsquo;s share of the uncertainty in expected annual loss. Fill pattern and label both show the evidence tier.</p>
+  </div></div></div>
+</div></section>
+
+<section class="split" id="controls" aria-labelledby="h-controls"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">05 &middot; Controls</span>
+    <h2 id="h-controls">Phishing-resistant MFA pays for itself ten times over</h2>
+    <p class="lede">Adding mail sandboxing avoids more loss ($1.65M against $1.36M a year), but each dollar returns less: 6.9&times; against 10.3&times;.</p></div>
+  <div class="ev reveal d1"><ul class="vrows"><li class="shell vrow"><div class="core"><div class="v-head"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-base"/></svg><h3>Current controls</h3></div><dl class="metrics"><div><dt>Mean annual loss</dt><dd class="num">$2.09M</dd></div><div><dt>1-in-10-year loss</dt><dd class="num">$3.83M</dd></div><div><dt>Loss avoided</dt><dd class="num">Reference</dd></div><div><dt>Annual cost</dt><dd class="num">n/a</dd></div><div><dt>Return on control</dt><dd class="num">n/a</dd></div></dl><div class="resid" role="img" aria-label="Expected loss is 100% of the baseline"><span class="resid-bar v-base" style="width:100.0%"></span></div><p class="resid-cap">Expected loss as a share of today’s: <span class="num">100%</span></p></div></li>
+<li class="shell vrow"><div class="core"><div class="v-head"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-mfa"/></svg><h3>Phishing-resistant MFA</h3></div><dl class="metrics"><div><dt>Mean annual loss</dt><dd class="num">$729k</dd></div><div><dt>1-in-10-year loss</dt><dd class="num">$1.54M</dd></div><div><dt>Loss avoided</dt><dd class="num">$1.36M <small>(65%)</small></dd></div><div><dt>Annual cost</dt><dd class="num">$120k</dd></div><div class="roc"><dt>Return on control</dt><dd class="num">10.3×</dd></div></dl><div class="resid" role="img" aria-label="Expected loss is 35% of the baseline"><span class="resid-bar v-mfa" style="width:34.9%"></span></div><p class="resid-cap">Expected loss as a share of today’s: <span class="num">35%</span></p></div></li>
+<li class="shell vrow"><div class="core"><div class="v-head"><svg class="sw" viewBox="0 0 44 14" width="44" height="14" aria-hidden="true" focusable="false"><line x1="2" y1="7" x2="42" y2="7" class="ln v-sbx"/></svg><h3>MFA + mail sandboxing</h3></div><dl class="metrics"><div><dt>Mean annual loss</dt><dd class="num">$437k</dd></div><div><dt>1-in-10-year loss</dt><dd class="num">$1.02M</dd></div><div><dt>Loss avoided</dt><dd class="num">$1.65M <small>(79%)</small></dd></div><div><dt>Annual cost</dt><dd class="num">$210k</dd></div><div class="roc"><dt>Return on control</dt><dd class="num">6.9×</dd></div></dl><div class="resid" role="img" aria-label="Expected loss is 21% of the baseline"><span class="resid-bar v-sbx" style="width:20.9%"></span></div><p class="resid-cap">Expected loss as a share of today’s: <span class="num">21%</span></p></div></li></ul>
+    <p class="fine">Return on control = (loss avoided &minus; annual cost) &divide; annual cost. Loss avoided is the drop in mean annual loss.</p></div>
+</div></section>
+
+<section class="split" id="scenario" aria-labelledby="h-scenario"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">06 &middot; Scenario</span>
+    <h2 id="h-scenario">A phished finance mailbox quietly redirects payments</h2>
+    <p class="lede">Who, what, how and what goes wrong, as scoped for this run.</p></div>
+  <div class="ev reveal d1">
+    <p class="statement">An external criminal group phishes employee credentials, takes over a finance mailbox and redirects outgoing payments.</p>
+    <dl class="sc-grid">
+      <div class="shell"><div class="core"><dt>Threat actor</dt><dd>Organised cybercrime (external, financially motivated)</dd></div></div>
+      <div class="shell"><div class="core"><dt>Asset</dt><dd>Microsoft 365 mailboxes of finance and executive staff</dd></div></div>
+      <div class="shell"><div class="core"><dt>Method</dt><dd>Credential phishing, MFA fatigue, mailbox rules that hide replies</dd></div></div>
+      <div class="shell"><div class="core"><dt>Loss event</dt><dd>A compromised mailbox is used to send or alter a payment instruction, or to exfiltrate customer data</dd></div></div>
+    </dl></div>
+</div></section>
+
+<section class="split" id="provenance" aria-labelledby="h-prov"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">07 &middot; Sources</span>
+    <h2 id="h-prov">Only one of eight inputs rests on Northwind&rsquo;s own data</h2>
+    <p class="lede">Every input, its range and where it came from. Benchmark and assumption inputs are the first candidates for replacement.</p></div>
+  <div class="ev reveal d1"><div class="shell"><div class="core"><div class="tw">
+    <table class="rt"><caption class="vh">Provenance of every input</caption><thead><tr><th scope="col">Input</th><th scope="col">Estimate (min / mode / max)</th><th scope="col">Evidence tier</th><th scope="col">Source</th></tr></thead>
+    <tbody><tr><th scope="row" data-label="Input">Phishing emails reaching inboxes per year<code>frequency.contact_annual_events</code></th><td data-label="Estimate (min / mode / max)" class="num">150 / 400 / 900<small>events per year</small></td><td data-label="Evidence tier"><span class="chip tier-int"><span aria-hidden="true">●</span> Internal data</span></td><td data-label="Source">Mail gateway report, last 12 months<small>Internal system &middot; owner: Email security lead</small></td></tr>
+<tr><th scope="row" data-label="Input">Share of contacts that become a compromised account<code>vulnerability.probability</code></th><td data-label="Estimate (min / mode / max)" class="num">1% / 2.5% / 6%<small>probability</small></td><td data-label="Evidence tier"><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></td><td data-label="Source"><a href="https://www.verizon.com/business/resources/reports/dbir/" rel="noopener noreferrer" target="_blank">Verizon DBIR 2025, social engineering</a><small>Benchmark library</small></td></tr>
+<tr><th scope="row" data-label="Input">Incident response per event<code>primary_loss.response</code></th><td data-label="Estimate (min / mode / max)" class="num">$8k / $25k / $90k<small>per event, USD</small></td><td data-label="Evidence tier"><span class="chip tier-sme"><span aria-hidden="true">◆</span> SME estimate</span></td><td data-label="Source">IR lead estimate<small>Named expert &middot; owner: Incident response lead</small></td></tr>
+<tr><th scope="row" data-label="Input">Lost productivity per event<code>primary_loss.productivity</code></th><td data-label="Estimate (min / mode / max)" class="num">$2k / $10k / $40k<small>per event, USD</small></td><td data-label="Evidence tier"><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></td><td data-label="Source"><a href="https://www.ibm.com/reports/data-breach" rel="noopener noreferrer" target="_blank">IBM Cost of a Data Breach 2025</a><small>Benchmark library</small></td></tr>
+<tr><th scope="row" data-label="Input">Fraudulent transfer not recovered<code>primary_loss.replacement</code></th><td data-label="Estimate (min / mode / max)" class="num">$0 / $15k / $400k<small>per event, USD</small></td><td data-label="Evidence tier"><span class="chip tier-asm"><span aria-hidden="true">▲</span> Assumption</span></td><td data-label="Source">Assumption: wire limits cap a single loss<small>Analyst assumption</small></td></tr>
+<tr><th scope="row" data-label="Input">Share of events with secondary effects<code>secondary_loss.slef</code></th><td data-label="Estimate (min / mode / max)" class="num">2% / 8% / 25%<small>probability</small></td><td data-label="Evidence tier"><span class="chip tier-asm"><span aria-hidden="true">▲</span> Assumption</span></td><td data-label="Source">Assumption from the scenario narrative<small>Analyst assumption</small></td></tr>
+<tr><th scope="row" data-label="Input">Customer churn and reputation<code>secondary_loss.reputation</code></th><td data-label="Estimate (min / mode / max)" class="num">$20k / $100k / $900k<small>per event, USD</small></td><td data-label="Evidence tier"><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></td><td data-label="Source"><a href="https://www.cyentia.com/research/" rel="noopener noreferrer" target="_blank">Cyentia IRIS 2025</a><small>Benchmark library</small></td></tr>
+<tr><th scope="row" data-label="Input">Regulatory fines and legal<code>secondary_loss.fines_and_judgments</code></th><td data-label="Estimate (min / mode / max)" class="num">$0 / $50k / $1.20M<small>per event, USD</small></td><td data-label="Evidence tier"><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></td><td data-label="Source"><a href="https://www.cyentia.com/research/" rel="noopener noreferrer" target="_blank">Cyentia IRIS 2025</a><small>Benchmark library</small></td></tr></tbody></table></div></div></div></div>
+</div></section>
+
+<section class="split" id="appendix" aria-labelledby="h-app"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">08 &middot; Appendix</span>
+    <h2 id="h-app">Everything needed to reproduce this run is in the appendix</h2>
+    <p class="lede">Seed, versions, method and the full percentile tables. Collapsed to keep the page short.</p></div>
+  <div class="ev reveal d1">
+    <details class="app"><summary>Technical appendix</summary>
+      <div class="app-body">
+        <dl class="kv">
+          <div><dt>Simulated years (n)</dt><dd>50,000</dd></div>
+          <div><dt>Seed</dt><dd>20261109</dd></div>
+          <div><dt>Package version</dt><dd>0.1.0</dd></div>
+          <div><dt>NumPy version</dt><dd>2.3.3</dd></div>
+          <div><dt>Inputs hash (SHA-256)</dt><dd>3f9a1c0e...b27d</dd></div>
+          <div><dt>PERT method</dt><dd>Beta-PERT, gamma = 4</dd></div>
+          <div><dt>Generated (UTC)</dt><dd>2026-11-09T15:00:00Z</dd></div>
+          <div><dt>Run id</dt><dd>credential-phishing-bec</dd></div>
+        </dl>
+        <div><h3>Methodology</h3><p class="disclose">Loss magnitudes use Beta-PERT distributions (gamma = 4) elicited per FAIR-aligned loss form.</p></div>
+        <div class="tw"><table class="pt"><caption>Annual loss by variant: mean, percentiles and exceedance probabilities</caption><thead><tr><th scope="col">Variant</th><th scope="col">Mean</th><th scope="col">p10</th><th scope="col">p25</th><th scope="col">p50</th><th scope="col">p75</th><th scope="col">p90</th><th scope="col">p95</th><th scope="col">p99</th><th scope="col">P(&gt;$0)</th><th scope="col">P(&gt;$1M)</th><th scope="col">P(&gt;$5M)</th></tr></thead><tbody><tr><th scope="row">Current controls</th><td class="num">$2.09M</td><td class="num">$674k</td><td class="num">$1.14M</td><td class="num">$1.85M</td><td class="num">$2.78M</td><td class="num">$3.83M</td><td class="num">$4.53M</td><td class="num">$6.09M</td><td class="num">100%</td><td class="num">80%</td><td class="num">3.2%</td></tr><tr><th scope="row">Phishing-resistant MFA</th><td class="num">$729k</td><td class="num">$120k</td><td class="num">$291k</td><td class="num">$581k</td><td class="num">$1.03M</td><td class="num">$1.54M</td><td class="num">$1.89M</td><td class="num">$2.67M</td><td class="num">96%</td><td class="num">26%</td><td class="num"><0.1%</td></tr><tr><th scope="row">MFA + mail sandboxing</th><td class="num">$437k</td><td class="num">$0</td><td class="num">$128k</td><td class="num">$309k</td><td class="num">$619k</td><td class="num">$1.02M</td><td class="num">$1.30M</td><td class="num">$1.91M</td><td class="num">88%</td><td class="num">11%</td><td class="num">0%</td></tr></tbody></table></div>
+      </div>
+    </details></div>
+</div></section>
+
+<section class="split" id="collect" aria-labelledby="h-collect"><div class="wrap split-grid">
+  <div class="msg reveal"><span class="eyebrow">09 &middot; Next steps</span>
+    <h2 id="h-collect">What to collect to improve the degree of accuracy</h2>
+    <p class="lede">Three requests, in priority order. Each names the system of record, the owner and the exact ask. Tick them off as they land.</p></div>
+  <div class="ev reveal d1"><ol class="asks"><li class="shell ask"><div class="core"><div class="ask-top"><span class="ask-n num" aria-hidden="true">1</span><div><h3>Share of contacts that become a compromised account</h3><p class="ask-meta"><code>vulnerability.probability</code></p></div></div><p class="ask-q"><label class="chk"><input type="checkbox"> <span><span class="vh">Done: </span>Click-to-compromise rate from the last four simulation campaigns</span></label></p><dl class="ask-grid"><div><dt>Current tier</dt><dd><span class="chip tier-ben"><span aria-hidden="true">■</span> Benchmark</span></dd></div><div><dt>Priority</dt><dd class="num">1 of 3 <small>(score 0.27)</small></dd></div><div><dt>System of record</dt><dd>Phishing simulation platform</dd></div><div><dt>Owner</dt><dd>Security awareness lead</dd></div></dl><div class="ask-conn"><span class="dt">Suggested connectors</span><ul><li class="conn">Slack</li><li class="conn">Jira</li><li class="conn">Microsoft 365</li></ul></div></div></li>
+<li class="shell ask"><div class="core"><div class="ask-top"><span class="ask-n num" aria-hidden="true">2</span><div><h3>Fraudulent transfer not recovered</h3><p class="ask-meta"><code>primary_loss.replacement</code></p></div></div><p class="ask-q"><label class="chk"><input type="checkbox"> <span><span class="vh">Done: </span>Wire-fraud attempts, amounts and recoveries over 24 months</span></label></p><dl class="ask-grid"><div><dt>Current tier</dt><dd><span class="chip tier-asm"><span aria-hidden="true">▲</span> Assumption</span></dd></div><div><dt>Priority</dt><dd class="num">2 of 3 <small>(score 0.05)</small></dd></div><div><dt>System of record</dt><dd>Finance ERP / treasury</dd></div><div><dt>Owner</dt><dd>Controller</dd></div></dl><div class="ask-conn"><span class="dt">Suggested connectors</span><ul><li class="conn">Slack</li><li class="conn">Jira</li><li class="conn">Microsoft 365</li></ul></div></div></li>
+<li class="shell ask"><div class="core"><div class="ask-top"><span class="ask-n num" aria-hidden="true">3</span><div><h3>Share of events with secondary effects</h3><p class="ask-meta"><code>secondary_loss.slef</code></p></div></div><p class="ask-q"><label class="chk"><input type="checkbox"> <span><span class="vh">Done: </span>Share of account-takeover incidents that needed customer or regulator notification</span></label></p><dl class="ask-grid"><div><dt>Current tier</dt><dd><span class="chip tier-asm"><span aria-hidden="true">▲</span> Assumption</span></dd></div><div><dt>Priority</dt><dd class="num">3 of 3 <small>(score 0.04)</small></dd></div><div><dt>System of record</dt><dd>Incident tracker</dd></div><div><dt>Owner</dt><dd>Incident response lead</dd></div></dl><div class="ask-conn"><span class="dt">Suggested connectors</span><ul><li class="conn">Slack</li><li class="conn">Jira</li><li class="conn">Microsoft 365</li></ul></div></div></li></ol></div>
+</div></section>
+</main>
+
+<script type="application/json" id="rq-data">{
+ "meta": {
+  "n": 50000,
+  "seed": 20261109,
+  "currency": "USD",
+  "analysis_period_years": 1.0,
+  "note": "SAMPLE DATA for design concepts only: toy simulation of a fictional company"
+ },
+ "parameters": [
+  {
+   "path": "frequency.contact_annual_events",
+   "label": "Phishing emails reaching inboxes per year",
+   "pert": [
+    150,
+    400,
+    900
+   ],
+   "tier": "internal_data",
+   "contribution": 0.43597106365036004,
+   "source": {
+    "title": "Mail gateway report, last 12 months",
+    "kind": "internal_system",
+    "owner_role": "Email security lead",
+    "url": null
+   }
+  },
+  {
+   "path": "vulnerability.probability",
+   "label": "Share of contacts that become a compromised account",
+   "pert": [
+    0.01,
+    0.025,
+    0.06
+   ],
+   "tier": "benchmark",
+   "contribution": 0.45061013383262116,
+   "source": {
+    "title": "Verizon DBIR 2025, social engineering",
+    "kind": "benchmark_library",
+    "owner_role": null,
+    "url": "https:\/\/www.verizon.com/business/resources/reports/dbir/"
+   }
+  },
+  {
+   "path": "primary_loss.response",
+   "label": "Incident response per event",
+   "pert": [
+    8000,
+    25000,
+    90000
+   ],
+   "tier": "sme_estimate",
+   "contribution": 0.005184432473685692,
+   "source": {
+    "title": "IR lead estimate",
+    "kind": "person",
+    "owner_role": "Incident response lead",
+    "url": null
+   }
+  },
+  {
+   "path": "primary_loss.productivity",
+   "label": "Lost productivity per event",
+   "pert": [
+    2000,
+    10000,
+    40000
+   ],
+   "tier": "benchmark",
+   "contribution": 0.0005147911743021877,
+   "source": {
+    "title": "IBM Cost of a Data Breach 2025",
+    "kind": "benchmark_library",
+    "owner_role": null,
+    "url": "https:\/\/www.ibm.com/reports/data-breach"
+   }
+  },
+  {
+   "path": "primary_loss.replacement",
+   "label": "Fraudulent transfer not recovered",
+   "pert": [
+    0,
+    15000,
+    400000
+   ],
+   "tier": "agent_assumption",
+   "contribution": 0.05499560856665565,
+   "source": {
+    "title": "Assumption: wire limits cap a single loss",
+    "kind": "agent",
+    "owner_role": null,
+    "url": null
+   }
+  },
+  {
+   "path": "secondary_loss.slef",
+   "label": "Share of events with secondary effects",
+   "pert": [
+    0.02,
+    0.08,
+    0.25
+   ],
+   "tier": "agent_assumption",
+   "contribution": 0.040618125518253716,
+   "source": {
+    "title": "Assumption from the scenario narrative",
+    "kind": "agent",
+    "owner_role": null,
+    "url": null
+   }
+  },
+  {
+   "path": "secondary_loss.reputation",
+   "label": "Customer churn and reputation",
+   "pert": [
+    20000,
+    100000,
+    900000
+   ],
+   "tier": "benchmark",
+   "contribution": 0.004273647915173569,
+   "source": {
+    "title": "Cyentia IRIS 2025",
+    "kind": "benchmark_library",
+    "owner_role": null,
+    "url": "https:\/\/www.cyentia.com/research/"
+   }
+  },
+  {
+   "path": "secondary_loss.fines_and_judgments",
+   "label": "Regulatory fines and legal",
+   "pert": [
+    0,
+    50000,
+    1200000
+   ],
+   "tier": "benchmark",
+   "contribution": 0.007832196868947911,
+   "source": {
+    "title": "Cyentia IRIS 2025",
+    "kind": "benchmark_library",
+    "owner_role": null,
+    "url": "https:\/\/www.cyentia.com/research/"
+   }
+  }
+ ],
+ "variants": [
+  {
+   "id": "baseline",
+   "label": "Current controls",
+   "annual_cost": null,
+   "annual_loss": {
+    "mean": 2088110.3140712802,
+    "median": 1848583.3169410005,
+    "p10": 674161.6620665592,
+    "p25": 1136306.4551944395,
+    "p50": 1848583.3169410005,
+    "p75": 2778314.549906661,
+    "p90": 3831919.968632022,
+    "p95": 4533177.776801599,
+    "p99": 6094962.082968444,
+    "p_gt_0": 0.99862,
+    "p_gt_1m": 0.79712,
+    "p_gt_5m": 0.03178
+   },
+   "lef": {
+    "mean": 12.463115160898322,
+    "median": 11.457196097594354,
+    "p90": 20.36337451657022
+   },
+   "event_count": {
+    "mean": 12.43266,
+    "median": 11.0,
+    "p90": 21.0
+   },
+   "lec": [
+    [
+     0.0,
+     0.99862
+    ],
+    [
+     117689.95,
+     0.99496
+    ],
+    [
+     191262.21,
+     0.98994
+    ],
+    [
+     243332.81,
+     0.98492
+    ],
+    [
+     289199.28,
+     0.9799
+    ],
+    [
+     325582.39,
+     0.97488
+    ],
+    [
+     360064.32,
+     0.96986
+    ],
+    [
+     389832.11,
+     0.96484
+    ],
+    [
+     418143.88,
+     0.95982
+    ],
+    [
+     443537.54,
+     0.9548
+    ],
+    [
+     470033.21,
+     0.94978
+    ],
+    [
+     496603.43,
+     0.94476
+    ],
+    [
+     520119.3,
+     0.93974
+    ],
+    [
+     541892.76,
+     0.93472
+    ],
+    [
+     562022.67,
+     0.9297
+    ],
+    [
+     582894.01,
+     0.92468
+    ],
+    [
+     600704.39,
+     0.91966
+    ],
+    [
+     621474.2,
+     0.91464
+    ],
+    [
+     639497.07,
+     0.90962
+    ],
+    [
+     657335.69,
+     0.9046
+    ],
+    [
+     675256.28,
+     0.89958
+    ],
+    [
+     692167.66,
+     0.89456
+    ],
+    [
+     708100.07,
+     0.88954
+    ],
+    [
+     726793.76,
+     0.88452
+    ],
+    [
+     745316.89,
+     0.8795
+    ],
+    [
+     763817.36,
+     0.87448
+    ],
+    [
+     780814.99,
+     0.86946
+    ],
+    [
+     794857.17,
+     0.86444
+    ],
+    [
+     810551.57,
+     0.85942
+    ],
+    [
+     825838.01,
+     0.8544
+    ],
+    [
+     839640.56,
+     0.84938
+    ],
+    [
+     855028.07,
+     0.84436
+    ],
+    [
+     870761.68,
+     0.83934
+    ],
+    [
+     884260.84,
+     0.83432
+    ],
+    [
+     899111.96,
+     0.8293
+    ],
+    [
+     917146.94,
+     0.82428
+    ],
+    [
+     931757.44,
+     0.81926
+    ],
+    [
+     947700.81,
+     0.81424
+    ],
+    [
+     962618.12,
+     0.80922
+    ],
+    [
+     978613.79,
+     0.8042
+    ],
+    [
+     994387.05,
+     0.79918
+    ],
+    [
+     1008402.04,
+     0.79416
+    ],
+    [
+     1022333.99,
+     0.78914
+    ],
+    [
+     1037244.56,
+     0.78412
+    ],
+    [
+     1052154.06,
+     0.7791
+    ],
+    [
+     1067309.96,
+     0.77408
+    ],
+    [
+     1081440.16,
+     0.76906
+    ],
+    [
+     1095185.06,
+     0.76404
+    ],
+    [
+     1110835.84,
+     0.75902
+    ],
+    [
+     1125516.54,
+     0.754
+    ],
+    [
+     1139255.68,
+     0.74898
+    ],
+    [
+     1154460.53,
+     0.74396
+    ],
+    [
+     1169613.09,
+     0.73894
+    ],
+    [
+     1183060.81,
+     0.73392
+    ],
+    [
+     1196878.02,
+     0.7289
+    ],
+    [
+     1210069.03,
+     0.72388
+    ],
+    [
+     1225384.34,
+     0.71886
+    ],
+    [
+     1240023.9,
+     0.71384
+    ],
+    [
+     1253255.3,
+     0.70882
+    ],
+    [
+     1266403.99,
+     0.7038
+    ],
+    [
+     1280528.32,
+     0.69878
+    ],
+    [
+     1293815.81,
+     0.69376
+    ],
+    [
+     1308485.16,
+     0.68874
+    ],
+    [
+     1322858.06,
+     0.68372
+    ],
+    [
+     1336411.91,
+     0.6787
+    ],
+    [
+     1349774.19,
+     0.67368
+    ],
+    [
+     1363571.14,
+     0.66866
+    ],
+    [
+     1377829.34,
+     0.66364
+    ],
+    [
+     1391579.46,
+     0.65862
+    ],
+    [
+     1405883.66,
+     0.6536
+    ],
+    [
+     1419556.99,
+     0.64858
+    ],
+    [
+     1435391.49,
+     0.64356
+    ],
+    [
+     1449865.16,
+     0.63854
+    ],
+    [
+     1462703.47,
+     0.63352
+    ],
+    [
+     1475914.44,
+     0.6285
+    ],
+    [
+     1490407.38,
+     0.62348
+    ],
+    [
+     1504009.62,
+     0.61846
+    ],
+    [
+     1517128.09,
+     0.61344
+    ],
+    [
+     1531483.85,
+     0.60842
+    ],
+    [
+     1546036.18,
+     0.6034
+    ],
+    [
+     1560633.65,
+     0.59838
+    ],
+    [
+     1575876.93,
+     0.59336
+    ],
+    [
+     1589803.28,
+     0.58834
+    ],
+    [
+     1604799.27,
+     0.58332
+    ],
+    [
+     1620711.78,
+     0.5783
+    ],
+    [
+     1636155.86,
+     0.57328
+    ],
+    [
+     1650384.6,
+     0.56826
+    ],
+    [
+     1665364.71,
+     0.56324
+    ],
+    [
+     1678123.98,
+     0.55822
+    ],
+    [
+     1693002.79,
+     0.5532
+    ],
+    [
+     1707804.83,
+     0.54818
+    ],
+    [
+     1722873.21,
+     0.54316
+    ],
+    [
+     1737999.51,
+     0.53814
+    ],
+    [
+     1750981.07,
+     0.53312
+    ],
+    [
+     1766015.62,
+     0.5281
+    ],
+    [
+     1780732.23,
+     0.52308
+    ],
+    [
+     1795644.31,
+     0.51806
+    ],
+    [
+     1809680.75,
+     0.51304
+    ],
+    [
+     1824026.68,
+     0.50802
+    ],
+    [
+     1839634.57,
+     0.503
+    ],
+    [
+     1854045.1,
+     0.49798
+    ],
+    [
+     1869483.12,
+     0.49296
+    ],
+    [
+     1885691.84,
+     0.48794
+    ],
+    [
+     1900787.35,
+     0.48292
+    ],
+    [
+     1916172.08,
+     0.4779
+    ],
+    [
+     1930000.44,
+     0.47288
+    ],
+    [
+     1945544.58,
+     0.46786
+    ],
+    [
+     1960895.48,
+     0.46284
+    ],
+    [
+     1976313.0,
+     0.45782
+    ],
+    [
+     1992280.99,
+     0.4528
+    ],
+    [
+     2008220.23,
+     0.44778
+    ],
+    [
+     2023415.87,
+     0.44276
+    ],
+    [
+     2038409.58,
+     0.43774
+    ],
+    [
+     2055635.45,
+     0.43272
+    ],
+    [
+     2073587.87,
+     0.4277
+    ],
+    [
+     2089674.04,
+     0.42268
+    ],
+    [
+     2106938.39,
+     0.41766
+    ],
+    [
+     2123051.52,
+     0.41264
+    ],
+    [
+     2139661.15,
+     0.40762
+    ],
+    [
+     2157853.85,
+     0.4026
+    ],
+    [
+     2175367.36,
+     0.39758
+    ],
+    [
+     2190441.24,
+     0.39256
+    ],
+    [
+     2207905.49,
+     0.38754
+    ],
+    [
+     2225421.78,
+     0.38252
+    ],
+    [
+     2241874.39,
+     0.3775
+    ],
+    [
+     2261508.0,
+     0.37248
+    ],
+    [
+     2282972.15,
+     0.36746
+    ],
+    [
+     2301004.38,
+     0.36244
+    ],
+    [
+     2320342.24,
+     0.35742
+    ],
+    [
+     2339254.76,
+     0.3524
+    ],
+    [
+     2360248.92,
+     0.34738
+    ],
+    [
+     2378382.02,
+     0.34236
+    ],
+    [
+     2396941.62,
+     0.33734
+    ],
+    [
+     2416441.49,
+     0.33232
+    ],
+    [
+     2436666.68,
+     0.3273
+    ],
+    [
+     2458115.55,
+     0.32228
+    ],
+    [
+     2478208.95,
+     0.31726
+    ],
+    [
+     2497582.89,
+     0.31224
+    ],
+    [
+     2518536.14,
+     0.30722
+    ],
+    [
+     2540175.9,
+     0.3022
+    ],
+    [
+     2561466.49,
+     0.29718
+    ],
+    [
+     2584267.69,
+     0.29216
+    ],
+    [
+     2604619.43,
+     0.28714
+    ],
+    [
+     2625697.27,
+     0.28212
+    ],
+    [
+     2647593.68,
+     0.2771
+    ],
+    [
+     2672274.44,
+     0.27208
+    ],
+    [
+     2694298.61,
+     0.26706
+    ],
+    [
+     2717633.32,
+     0.26204
+    ],
+    [
+     2745208.84,
+     0.25702
+    ],
+    [
+     2768545.12,
+     0.252
+    ],
+    [
+     2794889.21,
+     0.24698
+    ],
+    [
+     2822337.97,
+     0.24196
+    ],
+    [
+     2845527.07,
+     0.23694
+    ],
+    [
+     2871000.65,
+     0.23192
+    ],
+    [
+     2895650.61,
+     0.2269
+    ],
+    [
+     2922707.1,
+     0.22188
+    ],
+    [
+     2949588.65,
+     0.21686
+    ],
+    [
+     2979047.37,
+     0.21184
+    ],
+    [
+     3005423.09,
+     0.20682
+    ],
+    [
+     3037754.49,
+     0.2018
+    ],
+    [
+     3065545.63,
+     0.19678
+    ],
+    [
+     3094920.74,
+     0.19176
+    ],
+    [
+     3127369.18,
+     0.18674
+    ],
+    [
+     3159330.33,
+     0.18172
+    ],
+    [
+     3194598.3,
+     0.1767
+    ],
+    [
+     3228717.62,
+     0.17168
+    ],
+    [
+     3263114.71,
+     0.16666
+    ],
+    [
+     3297065.01,
+     0.16164
+    ],
+    [
+     3329642.19,
+     0.15662
+    ],
+    [
+     3369069.51,
+     0.1516
+    ],
+    [
+     3407421.9,
+     0.14658
+    ],
+    [
+     3445439.4,
+     0.14156
+    ],
+    [
+     3485453.19,
+     0.13654
+    ],
+    [
+     3529386.23,
+     0.13152
+    ],
+    [
+     3568931.39,
+     0.1265
+    ],
+    [
+     3611850.99,
+     0.12148
+    ],
+    [
+     3662528.62,
+     0.11646
+    ],
+    [
+     3710307.32,
+     0.11144
+    ],
+    [
+     3765772.92,
+     0.10642
+    ],
+    [
+     3817942.25,
+     0.1014
+    ],
+    [
+     3871039.37,
+     0.09638
+    ],
+    [
+     3929781.07,
+     0.09136
+    ],
+    [
+     3988339.43,
+     0.08634
+    ],
+    [
+     4045328.73,
+     0.08132
+    ],
+    [
+     4109613.08,
+     0.0763
+    ],
+    [
+     4175615.59,
+     0.07128
+    ],
+    [
+     4243428.16,
+     0.06626
+    ],
+    [
+     4317096.08,
+     0.06124
+    ],
+    [
+     4406380.75,
+     0.05622
+    ],
+    [
+     4509252.64,
+     0.0512
+    ],
+    [
+     4618253.34,
+     0.04618
+    ],
+    [
+     4735573.22,
+     0.04116
+    ],
+    [
+     4865675.42,
+     0.03614
+    ],
+    [
+     5018876.79,
+     0.03112
+    ],
+    [
+     5166667.8,
+     0.0261
+    ],
+    [
+     5364725.28,
+     0.02108
+    ],
+    [
+     5622858.9,
+     0.01606
+    ],
+    [
+     5992578.09,
+     0.01104
+    ],
+    [
+     6553543.11,
+     0.00602
+    ],
+    [
+     7977922.01,
+     0.001
+    ]
+   ],
+   "histogram": {
+    "edges": [
+     0.0,
+     111616.78,
+     223233.56,
+     334850.34,
+     446467.12,
+     558083.9,
+     669700.68,
+     781317.47,
+     892934.25,
+     1004551.03,
+     1116167.81,
+     1227784.59,
+     1339401.37,
+     1451018.15,
+     1562634.93,
+     1674251.71,
+     1785868.49,
+     1897485.27,
+     2009102.05,
+     2120718.83,
+     2232335.62,
+     2343952.4,
+     2455569.18,
+     2567185.96,
+     2678802.74,
+     2790419.52,
+     2902036.3,
+     3013653.08,
+     3125269.86,
+     3236886.64,
+     3348503.42,
+     3460120.2,
+     3571736.98,
+     3683353.77,
+     3794970.55,
+     3906587.33,
+     4018204.11,
+     4129820.89,
+     4241437.67,
+     4353054.45,
+     4464671.23,
+     4576288.01,
+     4687904.79,
+     4799521.57,
+     4911138.35,
+     5022755.13,
+     5134371.92,
+     5245988.7,
+     5357605.48,
+     5469222.26,
+     5580839.04,
+     5692455.82,
+     5804072.6,
+     5915689.38,
+     6027306.16,
+     6138922.94,
+     6250539.72,
+     6362156.5,
+     6473773.28,
+     6585390.07,
+     6697006.85
+    ],
+    "counts": [
+     233,
+     419,
+     664,
+     974,
+     1169,
+     1486,
+     1596,
+     1889,
+     1787,
+     1930,
+     1939,
+     2035,
+     1973,
+     2019,
+     1896,
+     1925,
+     1851,
+     1843,
+     1703,
+     1656,
+     1442,
+     1432,
+     1339,
+     1277,
+     1125,
+     1108,
+     1010,
+     926,
+     820,
+     833,
+     719,
+     670,
+     594,
+     541,
+     494,
+     488,
+     454,
+     426,
+     357,
+     281,
+     258,
+     259,
+     239,
+     190,
+     189,
+     189,
+     150,
+     144,
+     118,
+     106,
+     90,
+     89,
+     63,
+     61,
+     57,
+     63,
+     46,
+     31,
+     47,
+     38
+    ]
+   }
+  },
+  {
+   "id": "mfa",
+   "label": "Phishing-resistant MFA",
+   "annual_cost": 120000,
+   "annual_loss": {
+    "mean": 729300.9469372471,
+    "median": 580729.48622287,
+    "p10": 119563.36716783153,
+    "p25": 290870.25549984846,
+    "p50": 580729.48622287,
+    "p75": 1025481.7298998053,
+    "p90": 1536631.5394000735,
+    "p95": 1892708.7148632926,
+    "p99": 2668335.9371531857,
+    "p_gt_0": 0.95676,
+    "p_gt_1m": 0.2606,
+    "p_gt_5m": 6e-05
+   },
+   "lef": {
+    "mean": 4.362090306314412,
+    "median": 4.0100186341580235,
+    "p90": 7.127181080799578
+   },
+   "event_count": {
+    "mean": 4.34334,
+    "median": 4.0,
+    "p90": 8.0
+   },
+   "lec": [
+    [
+     0.0,
+     0.95676
+    ],
+    [
+     37884.65,
+     0.9548
+    ],
+    [
+     51072.39,
+     0.94978
+    ],
+    [
+     60673.41,
+     0.94476
+    ],
+    [
+     68728.35,
+     0.93974
+    ],
+    [
+     75411.47,
+     0.93472
+    ],
+    [
+     81820.32,
+     0.9297
+    ],
+    [
+     88457.84,
+     0.92468
+    ],
+    [
+     95159.29,
+     0.91966
+    ],
+    [
+     101579.77,
+     0.91464
+    ],
+    [
+     107696.39,
+     0.90962
+    ],
+    [
+     114063.18,
+     0.9046
+    ],
+    [
+     120253.68,
+     0.89958
+    ],
+    [
+     126618.52,
+     0.89456
+    ],
+    [
+     132889.95,
+     0.88954
+    ],
+    [
+     138918.52,
+     0.88452
+    ],
+    [
+     144374.13,
+     0.8795
+    ],
+    [
+     150619.56,
+     0.87448
+    ],
+    [
+     156464.31,
+     0.86946
+    ],
+    [
+     161999.03,
+     0.86444
+    ],
+    [
+     167655.96,
+     0.85942
+    ],
+    [
+     173530.23,
+     0.8544
+    ],
+    [
+     178850.04,
+     0.84938
+    ],
+    [
+     184644.59,
+     0.84436
+    ],
+    [
+     190731.87,
+     0.83934
+    ],
+    [
+     196062.36,
+     0.83432
+    ],
+    [
+     202229.22,
+     0.8293
+    ],
+    [
+     207616.94,
+     0.82428
+    ],
+    [
+     213072.0,
+     0.81926
+    ],
+    [
+     219302.91,
+     0.81424
+    ],
+    [
+     225214.91,
+     0.80922
+    ],
+    [
+     230343.74,
+     0.8042
+    ],
+    [
+     235571.36,
+     0.79918
+    ],
+    [
+     241136.51,
+     0.79416
+    ],
+    [
+     246892.86,
+     0.78914
+    ],
+    [
+     252729.93,
+     0.78412
+    ],
+    [
+     258814.14,
+     0.7791
+    ],
+    [
+     264413.21,
+     0.77408
+    ],
+    [
+     269759.27,
+     0.76906
+    ],
+    [
+     275310.38,
+     0.76404
+    ],
+    [
+     280753.63,
+     0.75902
+    ],
+    [
+     286695.67,
+     0.754
+    ],
+    [
+     292343.55,
+     0.74898
+    ],
+    [
+     298200.74,
+     0.74396
+    ],
+    [
+     303650.17,
+     0.73894
+    ],
+    [
+     309520.61,
+     0.73392
+    ],
+    [
+     314445.69,
+     0.7289
+    ],
+    [
+     319574.25,
+     0.72388
+    ],
+    [
+     324881.42,
+     0.71886
+    ],
+    [
+     330366.86,
+     0.71384
+    ],
+    [
+     335736.76,
+     0.70882
+    ],
+    [
+     340874.44,
+     0.7038
+    ],
+    [
+     345582.97,
+     0.69878
+    ],
+    [
+     350962.63,
+     0.69376
+    ],
+    [
+     356449.89,
+     0.68874
+    ],
+    [
+     361583.01,
+     0.68372
+    ],
+    [
+     366388.25,
+     0.6787
+    ],
+    [
+     371970.79,
+     0.67368
+    ],
+    [
+     377295.86,
+     0.66866
+    ],
+    [
+     383130.43,
+     0.66364
+    ],
+    [
+     388682.69,
+     0.65862
+    ],
+    [
+     394276.03,
+     0.6536
+    ],
+    [
+     399691.05,
+     0.64858
+    ],
+    [
+     405264.23,
+     0.64356
+    ],
+    [
+     411300.04,
+     0.63854
+    ],
+    [
+     417022.7,
+     0.63352
+    ],
+    [
+     423411.45,
+     0.6285
+    ],
+    [
+     429009.02,
+     0.62348
+    ],
+    [
+     435045.1,
+     0.61846
+    ],
+    [
+     441150.98,
+     0.61344
+    ],
+    [
+     446669.6,
+     0.60842
+    ],
+    [
+     452883.56,
+     0.6034
+    ],
+    [
+     458640.81,
+     0.59838
+    ],
+    [
+     464318.09,
+     0.59336
+    ],
+    [
+     469772.62,
+     0.58834
+    ],
+    [
+     475206.63,
+     0.58332
+    ],
+    [
+     481375.22,
+     0.5783
+    ],
+    [
+     487236.32,
+     0.57328
+    ],
+    [
+     493609.98,
+     0.56826
+    ],
+    [
+     498875.4,
+     0.56324
+    ],
+    [
+     505547.98,
+     0.55822
+    ],
+    [
+     511941.76,
+     0.5532
+    ],
+    [
+     518383.84,
+     0.54818
+    ],
+    [
+     524662.06,
+     0.54316
+    ],
+    [
+     531454.41,
+     0.53814
+    ],
+    [
+     537390.98,
+     0.53312
+    ],
+    [
+     543914.66,
+     0.5281
+    ],
+    [
+     550151.22,
+     0.52308
+    ],
+    [
+     555914.25,
+     0.51806
+    ],
+    [
+     563150.47,
+     0.51304
+    ],
+    [
+     570120.14,
+     0.50802
+    ],
+    [
+     576837.97,
+     0.503
+    ],
+    [
+     583962.41,
+     0.49798
+    ],
+    [
+     590480.17,
+     0.49296
+    ],
+    [
+     597329.34,
+     0.48794
+    ],
+    [
+     605248.82,
+     0.48292
+    ],
+    [
+     612509.13,
+     0.4779
+    ],
+    [
+     619953.27,
+     0.47288
+    ],
+    [
+     627387.9,
+     0.46786
+    ],
+    [
+     634378.46,
+     0.46284
+    ],
+    [
+     641362.98,
+     0.45782
+    ],
+    [
+     648327.96,
+     0.4528
+    ],
+    [
+     655517.17,
+     0.44778
+    ],
+    [
+     663257.05,
+     0.44276
+    ],
+    [
+     670460.53,
+     0.43774
+    ],
+    [
+     678168.81,
+     0.43272
+    ],
+    [
+     686309.7,
+     0.4277
+    ],
+    [
+     694778.27,
+     0.42268
+    ],
+    [
+     702252.61,
+     0.41766
+    ],
+    [
+     709506.97,
+     0.41264
+    ],
+    [
+     717737.94,
+     0.40762
+    ],
+    [
+     725959.49,
+     0.4026
+    ],
+    [
+     734024.15,
+     0.39758
+    ],
+    [
+     742453.07,
+     0.39256
+    ],
+    [
+     751833.93,
+     0.38754
+    ],
+    [
+     760022.32,
+     0.38252
+    ],
+    [
+     768095.32,
+     0.3775
+    ],
+    [
+     776731.24,
+     0.37248
+    ],
+    [
+     785178.55,
+     0.36746
+    ],
+    [
+     794680.76,
+     0.36244
+    ],
+    [
+     804041.59,
+     0.35742
+    ],
+    [
+     812702.75,
+     0.3524
+    ],
+    [
+     821734.31,
+     0.34738
+    ],
+    [
+     830897.22,
+     0.34236
+    ],
+    [
+     840399.06,
+     0.33734
+    ],
+    [
+     850804.82,
+     0.33232
+    ],
+    [
+     859214.46,
+     0.3273
+    ],
+    [
+     868853.57,
+     0.32228
+    ],
+    [
+     878652.79,
+     0.31726
+    ],
+    [
+     888323.41,
+     0.31224
+    ],
+    [
+     898788.47,
+     0.30722
+    ],
+    [
+     909160.5,
+     0.3022
+    ],
+    [
+     919290.09,
+     0.29718
+    ],
+    [
+     930184.02,
+     0.29216
+    ],
+    [
+     940665.48,
+     0.28714
+    ],
+    [
+     950962.75,
+     0.28212
+    ],
+    [
+     962863.4,
+     0.2771
+    ],
+    [
+     973404.73,
+     0.27208
+    ],
+    [
+     984697.63,
+     0.26706
+    ],
+    [
+     996496.7,
+     0.26204
+    ],
+    [
+     1008761.23,
+     0.25702
+    ],
+    [
+     1020138.94,
+     0.252
+    ],
+    [
+     1032857.22,
+     0.24698
+    ],
+    [
+     1045461.85,
+     0.24196
+    ],
+    [
+     1057329.23,
+     0.23694
+    ],
+    [
+     1068853.11,
+     0.23192
+    ],
+    [
+     1082981.55,
+     0.2269
+    ],
+    [
+     1095687.96,
+     0.22188
+    ],
+    [
+     1107226.15,
+     0.21686
+    ],
+    [
+     1119726.07,
+     0.21184
+    ],
+    [
+     1133563.41,
+     0.20682
+    ],
+    [
+     1145748.79,
+     0.2018
+    ],
+    [
+     1161777.2,
+     0.19678
+    ],
+    [
+     1176512.81,
+     0.19176
+    ],
+    [
+     1188906.79,
+     0.18674
+    ],
+    [
+     1203960.03,
+     0.18172
+    ],
+    [
+     1221223.21,
+     0.1767
+    ],
+    [
+     1239375.84,
+     0.17168
+    ],
+    [
+     1257311.0,
+     0.16666
+    ],
+    [
+     1274001.24,
+     0.16164
+    ],
+    [
+     1291001.1,
+     0.15662
+    ],
+    [
+     1310950.26,
+     0.1516
+    ],
+    [
+     1330887.56,
+     0.14658
+    ],
+    [
+     1349937.94,
+     0.14156
+    ],
+    [
+     1370880.93,
+     0.13654
+    ],
+    [
+     1391814.44,
+     0.13152
+    ],
+    [
+     1412698.03,
+     0.1265
+    ],
+    [
+     1434525.36,
+     0.12148
+    ],
+    [
+     1456543.12,
+     0.11646
+    ],
+    [
+     1480682.14,
+     0.11144
+    ],
+    [
+     1504517.92,
+     0.10642
+    ],
+    [
+     1528748.64,
+     0.1014
+    ],
+    [
+     1555038.47,
+     0.09638
+    ],
+    [
+     1585830.6,
+     0.09136
+    ],
+    [
+     1616537.33,
+     0.08634
+    ],
+    [
+     1645674.83,
+     0.08132
+    ],
+    [
+     1680030.01,
+     0.0763
+    ],
+    [
+     1714139.05,
+     0.07128
+    ],
+    [
+     1752107.68,
+     0.06626
+    ],
+    [
+     1792570.26,
+     0.06124
+    ],
+    [
+     1834948.05,
+     0.05622
+    ],
+    [
+     1881105.17,
+     0.0512
+    ],
+    [
+     1931381.59,
+     0.04618
+    ],
+    [
+     1985675.17,
+     0.04116
+    ],
+    [
+     2048835.03,
+     0.03614
+    ],
+    [
+     2119939.8,
+     0.03112
+    ],
+    [
+     2209408.89,
+     0.0261
+    ],
+    [
+     2320922.63,
+     0.02108
+    ],
+    [
+     2440641.17,
+     0.01606
+    ],
+    [
+     2613917.86,
+     0.01104
+    ],
+    [
+     2907969.89,
+     0.00602
+    ],
+    [
+     3761639.93,
+     0.001
+    ]
+   ],
+   "histogram": {
+    "edges": [
+     0.0,
+     50086.53,
+     100173.06,
+     150259.59,
+     200346.11,
+     250432.64,
+     300519.17,
+     350605.7,
+     400692.23,
+     450778.76,
+     500865.28,
+     550951.81,
+     601038.34,
+     651124.87,
+     701211.4,
+     751297.93,
+     801384.46,
+     851470.98,
+     901557.51,
+     951644.04,
+     1001730.57,
+     1051817.1,
+     1101903.63,
+     1151990.15,
+     1202076.68,
+     1252163.21,
+     1302249.74,
+     1352336.27,
+     1402422.8,
+     1452509.32,
+     1502595.85,
+     1552682.38,
+     1602768.91,
+     1652855.44,
+     1702941.97,
+     1753028.5,
+     1803115.02,
+     1853201.55,
+     1903288.08,
+     1953374.61,
+     2003461.14,
+     2053547.67,
+     2103634.19,
+     2153720.72,
+     2203807.25,
+     2253893.78,
+     2303980.31,
+     2354066.84,
+     2404153.37,
+     2454239.89,
+     2504326.42,
+     2554412.95,
+     2604499.48,
+     2654586.01,
+     2704672.54,
+     2754759.06,
+     2804845.59,
+     2854932.12,
+     2905018.65,
+     2955105.18,
+     3005191.71
+    ],
+    "counts": [
+     2490,
+     1718,
+     2055,
+     2198,
+     2227,
+     2222,
+     2391,
+     2318,
+     2113,
+     2189,
+     1957,
+     1845,
+     1718,
+     1633,
+     1535,
+     1438,
+     1365,
+     1281,
+     1215,
+     1100,
+     1023,
+     1013,
+     982,
+     853,
+     706,
+     740,
+     632,
+     593,
+     586,
+     523,
+     496,
+     417,
+     407,
+     370,
+     343,
+     308,
+     282,
+     268,
+     239,
+     229,
+     196,
+     177,
+     155,
+     137,
+     122,
+     107,
+     107,
+     110,
+     97,
+     72,
+     68,
+     65,
+     50,
+     57,
+     52,
+     42,
+     43,
+     22,
+     20,
+     33
+    ]
+   },
+   "delta": {
+    "ale_reduction_mean": 1358809.3671340332,
+    "ale_reduction_p90": 2295288.429231948,
+    "return_on_control": 10.32341139278361
+   }
+  },
+  {
+   "id": "mfa_sandbox",
+   "label": "MFA + mail sandboxing",
+   "annual_cost": 210000,
+   "annual_loss": {
+    "mean": 436897.3929704663,
+    "median": 309349.91533478425,
+    "p10": 0.0,
+    "p25": 128464.81060923767,
+    "p50": 309349.91533478425,
+    "p75": 619218.9783488181,
+    "p90": 1021679.8689625934,
+    "p95": 1302098.0509973953,
+    "p99": 1914562.9240623512,
+    "p_gt_0": 0.87766,
+    "p_gt_1m": 0.10512,
+    "p_gt_5m": 0.0
+   },
+   "lef": {
+    "mean": 2.617254183788647,
+    "median": 2.406011180494814,
+    "p90": 4.276308648479746
+   },
+   "event_count": {
+    "mean": 2.60232,
+    "median": 2.0,
+    "p90": 5.0
+   },
+   "lec": [
+    [
+     0.0,
+     0.87766
+    ],
+    [
+     36510.3,
+     0.87448
+    ],
+    [
+     44503.39,
+     0.86946
+    ],
+    [
+     50492.06,
+     0.86444
+    ],
+    [
+     55077.72,
+     0.85942
+    ],
+    [
+     59018.9,
+     0.8544
+    ],
+    [
+     62755.31,
+     0.84938
+    ],
+    [
+     66545.87,
+     0.84436
+    ],
+    [
+     69894.88,
+     0.83934
+    ],
+    [
+     73319.3,
+     0.83432
+    ],
+    [
+     76563.44,
+     0.8293
+    ],
+    [
+     79932.9,
+     0.82428
+    ],
+    [
+     83126.0,
+     0.81926
+    ],
+    [
+     86423.79,
+     0.81424
+    ],
+    [
+     89306.18,
+     0.80922
+    ],
+    [
+     92696.86,
+     0.8042
+    ],
+    [
+     95912.74,
+     0.79918
+    ],
+    [
+     99272.91,
+     0.79416
+    ],
+    [
+     102267.1,
+     0.78914
+    ],
+    [
+     105540.26,
+     0.78412
+    ],
+    [
+     108783.01,
+     0.7791
+    ],
+    [
+     112238.09,
+     0.77408
+    ],
+    [
+     115692.65,
+     0.76906
+    ],
+    [
+     119035.17,
+     0.76404
+    ],
+    [
+     122395.66,
+     0.75902
+    ],
+    [
+     125795.53,
+     0.754
+    ],
+    [
+     129010.5,
+     0.74898
+    ],
+    [
+     132604.0,
+     0.74396
+    ],
+    [
+     135920.25,
+     0.73894
+    ],
+    [
+     139334.97,
+     0.73392
+    ],
+    [
+     142704.7,
+     0.7289
+    ],
+    [
+     146647.23,
+     0.72388
+    ],
+    [
+     150363.88,
+     0.71886
+    ],
+    [
+     153606.77,
+     0.71384
+    ],
+    [
+     157227.48,
+     0.70882
+    ],
+    [
+     160534.71,
+     0.7038
+    ],
+    [
+     163787.8,
+     0.69878
+    ],
+    [
+     167390.94,
+     0.69376
+    ],
+    [
+     171102.71,
+     0.68874
+    ],
+    [
+     174425.36,
+     0.68372
+    ],
+    [
+     177844.5,
+     0.6787
+    ],
+    [
+     181477.31,
+     0.67368
+    ],
+    [
+     184909.72,
+     0.66866
+    ],
+    [
+     188568.1,
+     0.66364
+    ],
+    [
+     191983.74,
+     0.65862
+    ],
+    [
+     195667.44,
+     0.6536
+    ],
+    [
+     198814.7,
+     0.64858
+    ],
+    [
+     202108.39,
+     0.64356
+    ],
+    [
+     205678.85,
+     0.63854
+    ],
+    [
+     209054.19,
+     0.63352
+    ],
+    [
+     212899.26,
+     0.6285
+    ],
+    [
+     216196.82,
+     0.62348
+    ],
+    [
+     219966.03,
+     0.61846
+    ],
+    [
+     223320.51,
+     0.61344
+    ],
+    [
+     227067.19,
+     0.60842
+    ],
+    [
+     230425.53,
+     0.6034
+    ],
+    [
+     233952.57,
+     0.59838
+    ],
+    [
+     237286.74,
+     0.59336
+    ],
+    [
+     240727.82,
+     0.58834
+    ],
+    [
+     244531.12,
+     0.58332
+    ],
+    [
+     248104.28,
+     0.5783
+    ],
+    [
+     251716.58,
+     0.57328
+    ],
+    [
+     255419.86,
+     0.56826
+    ],
+    [
+     258890.99,
+     0.56324
+    ],
+    [
+     263055.28,
+     0.55822
+    ],
+    [
+     266954.77,
+     0.5532
+    ],
+    [
+     270512.88,
+     0.54818
+    ],
+    [
+     274709.99,
+     0.54316
+    ],
+    [
+     278603.58,
+     0.53814
+    ],
+    [
+     282898.19,
+     0.53312
+    ],
+    [
+     286692.52,
+     0.5281
+    ],
+    [
+     290820.4,
+     0.52308
+    ],
+    [
+     294654.19,
+     0.51806
+    ],
+    [
+     298861.53,
+     0.51304
+    ],
+    [
+     302899.41,
+     0.50802
+    ],
+    [
+     306879.5,
+     0.503
+    ],
+    [
+     311331.7,
+     0.49798
+    ],
+    [
+     315867.94,
+     0.49296
+    ],
+    [
+     320303.05,
+     0.48794
+    ],
+    [
+     324723.54,
+     0.48292
+    ],
+    [
+     329425.06,
+     0.4779
+    ],
+    [
+     334192.25,
+     0.47288
+    ],
+    [
+     338967.71,
+     0.46786
+    ],
+    [
+     343808.46,
+     0.46284
+    ],
+    [
+     349153.54,
+     0.45782
+    ],
+    [
+     354147.76,
+     0.4528
+    ],
+    [
+     358900.07,
+     0.44778
+    ],
+    [
+     363938.24,
+     0.44276
+    ],
+    [
+     369277.91,
+     0.43774
+    ],
+    [
+     374313.75,
+     0.43272
+    ],
+    [
+     379309.1,
+     0.4277
+    ],
+    [
+     384897.63,
+     0.42268
+    ],
+    [
+     389488.41,
+     0.41766
+    ],
+    [
+     394954.55,
+     0.41264
+    ],
+    [
+     400143.68,
+     0.40762
+    ],
+    [
+     405453.9,
+     0.4026
+    ],
+    [
+     410611.76,
+     0.39758
+    ],
+    [
+     415692.99,
+     0.39256
+    ],
+    [
+     421823.74,
+     0.38754
+    ],
+    [
+     427862.61,
+     0.38252
+    ],
+    [
+     434247.84,
+     0.3775
+    ],
+    [
+     440161.79,
+     0.37248
+    ],
+    [
+     446528.45,
+     0.36746
+    ],
+    [
+     452892.97,
+     0.36244
+    ],
+    [
+     459774.76,
+     0.35742
+    ],
+    [
+     465513.35,
+     0.3524
+    ],
+    [
+     472026.73,
+     0.34738
+    ],
+    [
+     477868.83,
+     0.34236
+    ],
+    [
+     485071.84,
+     0.33734
+    ],
+    [
+     491646.63,
+     0.33232
+    ],
+    [
+     498334.61,
+     0.3273
+    ],
+    [
+     504897.43,
+     0.32228
+    ],
+    [
+     511844.17,
+     0.31726
+    ],
+    [
+     518788.79,
+     0.31224
+    ],
+    [
+     525895.59,
+     0.30722
+    ],
+    [
+     533498.05,
+     0.3022
+    ],
+    [
+     541411.17,
+     0.29718
+    ],
+    [
+     548609.93,
+     0.29216
+    ],
+    [
+     556930.19,
+     0.28714
+    ],
+    [
+     565341.88,
+     0.28212
+    ],
+    [
+     574478.88,
+     0.2771
+    ],
+    [
+     582394.75,
+     0.27208
+    ],
+    [
+     591293.87,
+     0.26706
+    ],
+    [
+     599026.47,
+     0.26204
+    ],
+    [
+     607160.11,
+     0.25702
+    ],
+    [
+     615876.82,
+     0.252
+    ],
+    [
+     624237.62,
+     0.24698
+    ],
+    [
+     633910.35,
+     0.24196
+    ],
+    [
+     643597.61,
+     0.23694
+    ],
+    [
+     651727.42,
+     0.23192
+    ],
+    [
+     659981.48,
+     0.2269
+    ],
+    [
+     670427.94,
+     0.22188
+    ],
+    [
+     681234.55,
+     0.21686
+    ],
+    [
+     692079.77,
+     0.21184
+    ],
+    [
+     702399.92,
+     0.20682
+    ],
+    [
+     713109.37,
+     0.2018
+    ],
+    [
+     724052.66,
+     0.19678
+    ],
+    [
+     735647.21,
+     0.19176
+    ],
+    [
+     748143.72,
+     0.18674
+    ],
+    [
+     760041.65,
+     0.18172
+    ],
+    [
+     772762.48,
+     0.1767
+    ],
+    [
+     785931.47,
+     0.17168
+    ],
+    [
+     799447.87,
+     0.16666
+    ],
+    [
+     812783.27,
+     0.16164
+    ],
+    [
+     828888.43,
+     0.15662
+    ],
+    [
+     844326.1,
+     0.1516
+    ],
+    [
+     858113.77,
+     0.14658
+    ],
+    [
+     872291.44,
+     0.14156
+    ],
+    [
+     889907.84,
+     0.13654
+    ],
+    [
+     906243.29,
+     0.13152
+    ],
+    [
+     922529.15,
+     0.1265
+    ],
+    [
+     940096.84,
+     0.12148
+    ],
+    [
+     956853.83,
+     0.11646
+    ],
+    [
+     975312.29,
+     0.11144
+    ],
+    [
+     995744.5,
+     0.10642
+    ],
+    [
+     1016350.46,
+     0.1014
+    ],
+    [
+     1038614.62,
+     0.09638
+    ],
+    [
+     1060637.02,
+     0.09136
+    ],
+    [
+     1085129.78,
+     0.08634
+    ],
+    [
+     1110200.82,
+     0.08132
+    ],
+    [
+     1133052.56,
+     0.0763
+    ],
+    [
+     1158777.33,
+     0.07128
+    ],
+    [
+     1188343.39,
+     0.06626
+    ],
+    [
+     1219383.47,
+     0.06124
+    ],
+    [
+     1250658.51,
+     0.05622
+    ],
+    [
+     1293653.28,
+     0.0512
+    ],
+    [
+     1333974.95,
+     0.04618
+    ],
+    [
+     1376572.2,
+     0.04116
+    ],
+    [
+     1435957.89,
+     0.03614
+    ],
+    [
+     1492897.28,
+     0.03112
+    ],
+    [
+     1558139.77,
+     0.0261
+    ],
+    [
+     1638796.57,
+     0.02108
+    ],
+    [
+     1740616.69,
+     0.01606
+    ],
+    [
+     1886842.74,
+     0.01104
+    ],
+    [
+     2098763.47,
+     0.00602
+    ],
+    [
+     2811823.77,
+     0.001
+    ]
+   ],
+   "histogram": {
+    "edges": [
+     0.0,
+     36116.35,
+     72232.69,
+     108349.04,
+     144465.39,
+     180581.74,
+     216698.08,
+     252814.43,
+     288930.78,
+     325047.12,
+     361163.47,
+     397279.82,
+     433396.17,
+     469512.51,
+     505628.86,
+     541745.21,
+     577861.55,
+     613977.9,
+     650094.25,
+     686210.6,
+     722326.94,
+     758443.29,
+     794559.64,
+     830675.98,
+     866792.33,
+     902908.68,
+     939025.03,
+     975141.37,
+     1011257.72,
+     1047374.07,
+     1083490.41,
+     1119606.76,
+     1155723.11,
+     1191839.46,
+     1227955.8,
+     1264072.15,
+     1300188.5,
+     1336304.84,
+     1372421.19,
+     1408537.54,
+     1444653.89,
+     1480770.23,
+     1516886.58,
+     1553002.93,
+     1589119.27,
+     1625235.62,
+     1661351.97,
+     1697468.32,
+     1733584.66,
+     1769701.01,
+     1805817.36,
+     1841933.7,
+     1878050.05,
+     1914166.4,
+     1950282.75,
+     1986399.09,
+     2022515.44,
+     2058631.79,
+     2094748.13,
+     2130864.48,
+     2166980.83
+    ],
+    "counts": [
+     6271,
+     1925,
+     2807,
+     2666,
+     2589,
+     2593,
+     2565,
+     2321,
+     2134,
+     1843,
+     1777,
+     1600,
+     1457,
+     1368,
+     1238,
+     1088,
+     1099,
+     1005,
+     921,
+     859,
+     757,
+     674,
+     639,
+     636,
+     532,
+     550,
+     512,
+     445,
+     415,
+     378,
+     373,
+     370,
+     300,
+     287,
+     282,
+     211,
+     224,
+     203,
+     170,
+     153,
+     158,
+     139,
+     144,
+     125,
+     109,
+     97,
+     90,
+     85,
+     70,
+     64,
+     68,
+     55,
+     58,
+     50,
+     43,
+     44,
+     29,
+     32,
+     32,
+     21
+    ]
+   },
+   "delta": {
+    "ale_reduction_mean": 1651212.921100814,
+    "ale_reduction_p90": 2810240.0996694285,
+    "return_on_control": 6.862918671908638
+   }
+  }
+ ],
+ "quality": {
+  "score": 0.634453847706849,
+  "grade": "C"
+ },
+ "collect_next": [
+  {
+   "path": "vulnerability.probability",
+   "label": "Share of contacts that become a compromised account",
+   "tier": "benchmark",
+   "priority": 0.2703660802995727,
+   "system": "Phishing simulation platform",
+   "owner_role": "Security awareness lead",
+   "ask": "Click-to-compromise rate from the last four simulation campaigns",
+   "connectors": [
+    "Slack",
+    "Jira",
+    "Microsoft 365"
+   ]
+  },
+  {
+   "path": "primary_loss.replacement",
+   "label": "Fraudulent transfer not recovered",
+   "tier": "agent_assumption",
+   "priority": 0.04949604770999008,
+   "system": "Finance ERP / treasury",
+   "owner_role": "Controller",
+   "ask": "Wire-fraud attempts, amounts and recoveries over 24 months",
+   "connectors": [
+    "Slack",
+    "Jira",
+    "Microsoft 365"
+   ]
+  },
+  {
+   "path": "secondary_loss.slef",
+   "label": "Share of events with secondary effects",
+   "tier": "agent_assumption",
+   "priority": 0.03655631296642835,
+   "system": "Incident tracker",
+   "owner_role": "Incident response lead",
+   "ask": "Share of account-takeover incidents that needed customer or regulator notification",
+   "connectors": [
+    "Slack",
+    "Jira",
+    "Microsoft 365"
+   ]
+  }
+ ],
+ "scenario": {
+  "title": "Credential phishing leads to business email compromise",
+  "statement": "An external criminal group phishes employee credentials, takes over a finance mailbox and redirects outgoing payments.",
+  "threat_actor": "Organised cybercrime (external, financially motivated)",
+  "asset": "Microsoft 365 mailboxes of finance and executive staff",
+  "method": "Credential phishing, MFA fatigue, mailbox rules that hide replies",
+  "loss_event": "A compromised mailbox is used to send or alter a payment instruction, or to exfiltrate customer data",
+  "route": "yolo",
+  "org": "Northwind Analytics (fictional sample company, 800 employees, B2B SaaS)"
+ },
+ "manifest": {
+  "run_id": "credential-phishing-bec",
+  "version": 1,
+  "n": 50000,
+  "seed": 20261109,
+  "package_version": "0.1.0",
+  "numpy": "2.3.3",
+  "inputs_sha256": "3f9a1c0e...b27d",
+  "generated_utc": "2026-11-09T15:00:00Z",
+  "pert": "Beta-PERT, gamma = 4"
+ }
+}</script>
+<script>
+(function(){
+'use strict';
+var D=JSON.parse(document.getElementById('rq-data').textContent);
+var V={};D.variants.forEach(function(v){V[v.id]=v;});
+var IDS=['baseline','mfa','mfa_sandbox'];
+var G={W:640,ML:58,MT:14,PW:568,PH:316,X0:Math.log10(30000),X1:Math.log10(10000000)};
+function money(v){if(v>=1e6)return '$'+(v/1e6).toFixed(2)+'M';if(v>=1000)return '$'+Math.round(v/1000)+'k';return '$'+Math.round(v);}
+function pct(p){var x=p*100;if(x>=10)return Math.round(x)+'%';if(x>=0.1)return x.toFixed(1)+'%';if(x===0)return '0%';return '<0.1%';}
+function interp(lec,x){
+  if(x<=lec[0][0])return lec[0][1];
+  if(x>lec[lec.length-1][0])return null;
+  for(var i=1;i<lec.length;i++){if(x<=lec[i][0]){var a=lec[i-1],b=lec[i];return a[1]+(b[1]-a[1])*(x-a[0])/(b[0]-a[0]);}}
+  return null;
+}
+function xs(x){return G.ML+(Math.log10(x)-G.X0)/(G.X1-G.X0)*G.PW;}
+function xinv(px){return Math.pow(10,G.X0+(px-G.ML)/G.PW*(G.X1-G.X0));}
+function ys(p){return G.MT+(1-p)*G.PH;}
+function parseAmount(s){
+  var m=String(s).replace(/[\s,$]/g,'').match(/^([0-9]*\.?[0-9]+)([kmb]?)$/i);
+  if(!m)return null;
+  var n=parseFloat(m[1]),u=m[2].toLowerCase();
+  return n*(u==='k'?1e3:u==='m'?1e6:u==='b'?1e9:1);
+}
+function put(id,x,p){var g=document.getElementById(id);if(g)g.setAttribute('transform','translate('+x.toFixed(1)+' '+ys(p==null?0:p).toFixed(1)+')');}
+
+/* threshold */
+var inp=document.getElementById('thr-input'),msg=document.getElementById('thr-msg'),cap=document.getElementById('thr-cap');
+function setThreshold(x){
+  var px=xs(Math.min(Math.max(x,30000),10000000));
+  var line=document.getElementById('mk-line');
+  line.setAttribute('x1',px.toFixed(1));line.setAttribute('x2',px.toFixed(1));
+  var lab=document.getElementById('mk-label');
+  lab.textContent=money(x);
+  var right=px>G.W*0.72;
+  lab.setAttribute('x',(right?px-6:px+6).toFixed(1));lab.setAttribute('text-anchor',right?'end':'start');
+  IDS.forEach(function(id){
+    var p=interp(V[id].lec,x);
+    put('mk-'+id,px,p);
+    var el=document.querySelector('#thr-'+id+' .thr-val');
+    if(el)el.textContent=p==null?'<0.1%':pct(p);
+  });
+  if(cap)cap.textContent='Chance annual loss exceeds '+money(x);
+}
+if(inp){
+  inp.addEventListener('input',function(){
+    var v=parseAmount(inp.value);
+    if(v===null||v<=0){msg.textContent='Enter an amount such as 1.5M, 750k or 2000000.';return;}
+    if(v>10000000){msg.textContent='Above $10M every variant is under 0.1%.';}
+    else if(v<30000){msg.textContent='Chart starts at $30k; figures are still interpolated.';}
+    else msg.textContent='';
+    setThreshold(v);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.qchip'),function(b){
+    b.addEventListener('click',function(){inp.value=b.getAttribute('data-amt');inp.dispatchEvent(new Event('input'));});
+  });
+}
+
+/* hover and keyboard readout on the curve */
+var svg=document.getElementById('lec-svg'),hov=document.getElementById('lec-hover'),ro=document.getElementById('lec-readout');
+var roDefault=ro?ro.textContent:'';
+function showAt(x){
+  var px=xs(x);
+  var l=document.getElementById('hv-line');l.setAttribute('x1',px);l.setAttribute('x2',px);
+  hov.hidden=false;
+  var parts=[];
+  IDS.forEach(function(id){
+    var p=interp(V[id].lec,x);
+    put('hv-'+id,px,p);
+    parts.push(V[id].label+' '+(p==null?'<0.1%':pct(p)));
+  });
+  ro.textContent='At '+money(x)+', chance of exceeding: '+parts.join(' \u00b7 ');
+}
+function hide(){hov.hidden=true;ro.textContent=roDefault;}
+if(svg){
+  var hit=document.getElementById('lec-hit');
+  function fromEvent(e){var r=svg.getBoundingClientRect();var sx=(e.clientX-r.left)/r.width*G.W;return xinv(Math.min(Math.max(sx,G.ML),G.ML+G.PW));}
+  hit.addEventListener('pointermove',function(e){showAt(fromEvent(e));});
+  hit.addEventListener('pointerleave',hide);
+  var kx=0.5;
+  svg.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+      kx=Math.min(1,Math.max(0,kx+(e.key==='ArrowRight'?1:-1)/60));
+      showAt(Math.pow(10,G.X0+kx*(G.X1-G.X0)));e.preventDefault();
+    } else if(e.key==='Escape'){hide();}
+  });
+  svg.addEventListener('blur',hide);
+}
+
+/* histogram variant toggle + readout */
+var figs=Array.prototype.slice.call(document.querySelectorAll('.hfig'));
+var segs=Array.prototype.slice.call(document.querySelectorAll('.seg-b'));
+var hro=document.getElementById('hist-readout'),hroDefault=hro?hro.textContent:'';
+function pick(id){
+  figs.forEach(function(f){f.hidden=f.getAttribute('data-v')!==id;});
+  segs.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-v')===id?'true':'false');});
+  if(hro)hro.textContent=hroDefault;
+}
+if(segs.length){
+  segs.forEach(function(b){b.addEventListener('click',function(){pick(b.getAttribute('data-v'));});});
+  pick('baseline');
+}
+figs.forEach(function(f){
+  f.addEventListener('pointerover',function(e){
+    var t=e.target;if(!t.classList||!t.classList.contains('bar')||!hro)return;
+    hro.textContent=money(+t.getAttribute('data-lo'))+' to '+money(+t.getAttribute('data-hi'))+': '+(t.getAttribute('data-s')*100).toFixed(1)+'% of simulated years';
+  });
+  f.addEventListener('pointerleave',function(){if(hro)hro.textContent=hroDefault;});
+});
+
+/* scroll spy */
+var links=Array.prototype.slice.call(document.querySelectorAll('.snav a'));
+var secs=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+if('IntersectionObserver' in window){
+  var spy=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting){
+        links.forEach(function(a){
+          var on=a.getAttribute('href')==='#'+en.target.id;
+          if(on){a.setAttribute('aria-current','true');
+            var ul=a.parentNode.parentNode;
+            if(ul.scrollWidth>ul.clientWidth)ul.scrollTo({left:a.offsetLeft-ul.clientWidth/2+a.offsetWidth/2,behavior:'smooth'});}
+          else a.removeAttribute('aria-current');
+        });
+      }
+    });
+  },{rootMargin:'-35% 0px -60% 0px'});
+  secs.forEach(function(s){if(s)spy.observe(s);});
+  var rv=new IntersectionObserver(function(es){
+    es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');rv.unobserve(en.target);}});
+  },{threshold:0.08,rootMargin:'0px 0px -6% 0px'});
+  Array.prototype.forEach.call(document.querySelectorAll('.reveal'),function(el){rv.observe(el);});
+} else {
+  Array.prototype.forEach.call(document.querySelectorAll('.reveal'),function(el){el.classList.add('in');});
+}
+
+/* print: expand appendix, show every histogram */
+var ap=document.querySelector('details.app'),wasOpen=false;
+window.addEventListener('beforeprint',function(){wasOpen=ap.open;ap.open=true;});
+window.addEventListener('afterprint',function(){ap.open=wasOpen;});
+})();
+</script>
+</body>
+</html>

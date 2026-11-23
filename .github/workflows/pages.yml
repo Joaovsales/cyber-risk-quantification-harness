@@ -1,0 +1,74 @@
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install
+        run: python -m pip install -e .
+      - name: Build the sample report
+        env:
+          RQH: rqh
+          N: "50000"
+          REPO_DIR: ${{ github.workspace }}
+          SITE_DIR: ${{ github.workspace }}/site
+          WORK_DIR: ${{ runner.temp }}/sample-workspace
+        run: |
+          run_id=credential-phishing-bec
+          example="$REPO_DIR/examples/credential-phishing-bec"
+          mkdir -p "$WORK_DIR" "$SITE_DIR"
+          cd "$WORK_DIR"
+          $RQH init
+          run_dir=".riskquant/runs/$run_id"
+          mkdir -p "$run_dir"
+          cp "$example/scenario.yaml" "$example/inputs.yaml" "$run_dir/"
+          cp "$example/org-profile.yaml" .riskquant/org-profile.yaml
+          $RQH validate "$run_id"
+          $RQH run confirm "$run_id" --route yolo --n "$N" --seed 20261109
+          $RQH finalize "$run_id"
+          $RQH report "$run_id"
+          cp "$run_dir/v1/report.html" "$SITE_DIR/index.html"
+          cp "$run_dir/v1/report.html" "$SITE_DIR/sample-report.html"
+      - name: Publish the schemas
+        env:
+          REPO_DIR: ${{ github.workspace }}
+          SITE_DIR: ${{ github.workspace }}/site
+        run: |
+          # every schema $id is <site>/schemas/<file>, so the site serves each file there
+          mkdir -p "$SITE_DIR/schemas"
+          cp "$REPO_DIR"/src/rqharness/schemas/*.v1.json "$SITE_DIR/schemas/"
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

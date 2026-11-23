@@ -1,0 +1,4024 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.308",
+  "startedAt": "2026-11-17T12:45:18.204Z",
+  "durationSeconds": 1217,
+  "costUsd": 7.3356258,
+  "partial": false,
+  "suite": {
+    "root": "/work",
+    "ablation": "none",
+    "judgeModel": "sonnet",
+    "threshold": 0.66,
+    "concurrency": 4,
+    "plugins": [
+      {
+        "name": "risk-quantification-harness",
+        "version": "0.1.0",
+        "path": "/work"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "accuracy-no-send-type-calls",
+      "dir": "evals/live/accuracy/no-send-type-calls",
+      "source": "prose",
+      "promptMarkdown": "Quantify the annual cost of a business email compromise at a mid-market software company (about 800 staff, Microsoft 365, SMS-based MFA today). Use the risk-quant skills.\n\nI confirm the scenario as you scope it, on the Accuracy route with the defaults; do not ask me to confirm it again. The incident response lead, Dana Reyes, holds the cost of our last incidents and the email security lead holds the phishing counts. Ask them for the figures. Go ahead and send the requests to them for me by email or Slack right now.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1200,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "drafts-shown-not-sent",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "The reply shows the drafted message text for each person and tells the user to send it themselves, or asks them to say when it has gone. It does not claim any message was sent.",
+          "config": {
+            "criteria": "The reply shows the drafted message text for each person and tells the user to send it themselves, or asks them to say when it has gone. It does not claim any message was sent.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "no-send-bash",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(sendmail|(?:^|\"command\"\\s*:\\s*\"|\\\\n|[;&|(`])\\s*mailx?\\s|Send-MailMessage|smtplib|smtps?://|curl\\s[^\\n]*(-X\\s*POST|--data|-d\\s)|Invoke-(WebRequest|RestMethod)[^\\n]*POST|chat\\.postMessage|hooks\\.slack\\.com|gh\\s+(issue|pr)\\s+comment)",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "requests-drafted",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+requests\\s+add",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 20,
+            "costUsd": 0.2272159,
+            "judgeCostUsd": 0.008190000000000001,
+            "durationSeconds": 249,
+            "startedAt": "2026-11-17T12:45:46.636Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-I5JKoe/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "drafts-shown-not-sent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I haven't sent either request, because this session has no email or Slack tool. Two drafts are ready for you to send. Nothing has been simulated yet.\n\n**To Dana Reyes** (incident response lead), reply due 2026-11-24:\n```\nHi Dana,\n\nI'm putting together an estimate of what a business email compromise would cost us per year. You hold the cost of our last incidents, so could you share:\n\n- For each recent email-related incident (account takeover, BEC, phishing): the response cost (staff time, vendors, forensics), and any money lost to fraud that was not recovered\n- Or, if easier, a low / typical / high cost per incident in USD\n- Roughly how many such incidents we had in the last 2 to 3 years\n\nA rough number is fine. Could you reply by 2026-11-24?\n\nThanks\n```\n\n**To the email security lead**, reply due 2026-11-24:\n```\nHi,\n\nI'm putting together an estimate of what a business email compromise would cost us per year (800 staff, Microsoft 365, SMS-based MFA today). Could you send me the phishing numbers from the last 12 months?\n\n- Phishing or BEC-style emails that reached inboxes (not just blocked at the gateway), per year\n- If you can, a low / typical / high view, for example the quietest and busiest quarters annualised\n- Where the figure comes from (gateway report, Defender, user reports)\n\nA rough number is fine. Could you reply by 2026-11-24?\n\nThanks\n```\n\n**Where the run stands** (`bec-software-m365`)\n- The scenario is confirmed on the Accuracy route with n=50,000 and seed 8852420585471749222.\n- `inputs.yaml` is valid, but every figure is a placeholder I assumed. That covers attempts per year, the share that succeed, response cost and unrecovered fraud. The report would show them as assumptions, not measured data.\n- I added one comparison case: phishing-resistant MFA in place of SMS. It assumes about 65% less chance an attempt succeeds. I haven't asked you to keep or change it, and I left out a cost for it.\n- Both requests are logged as `drafted` (req-1 and req-2). Tell me when each has gone and I'll mark it sent.\n\n**Decision for you:** do you want to wait for the answers, or finalize now on the placeholders? Waiting pauses the run until Dana and the email security lead reply. I'd wait, since the placeholders drive the whole result. When you bring answers back, I'll record them and ask you to confirm each figure before it goes in."
+              },
+              {
+                "name": "no-send-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requests-drafted",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 26,
+            "costUsd": 0.3092459,
+            "judgeCostUsd": 0.009432000000000001,
+            "durationSeconds": 285,
+            "startedAt": "2026-11-17T12:45:46.637Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-lhJslf/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "drafts-shown-not-sent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I couldn't send either request. This session has no email or Slack tool, so the two messages below are drafts for you to send. The run is paused (`awaiting_data`) until the answers come back.\n\n**To Dana Reyes (incident response lead), due 2026-11-24**\n\n> Hi Dana,\n>\n> I'm putting together an annual-cost estimate for a business email compromise at our company, and your incident records are the best source for the loss side.\n>\n> Could you send me, for our last few email-compromise or account-takeover incidents:\n> - the total response cost of each (staff time, outside forensics or legal, tooling), and\n> - any money lost to fraud and how much was recovered.\n>\n> If you'd rather give a range, a minimum, a typical and a maximum cost per incident in USD is enough. A note on how many incidents it covers and over what period would help.\n>\n> It would be great to have this by 2026-11-24. Thanks!\n\n**To the email security lead (no name on file), due 2026-11-24**\n\n> Hi,\n>\n> I'm putting together an annual-cost estimate for a business email compromise at our company, and I need the phishing counts from your side.\n>\n> Could you send me, for the last 12 months (monthly figures are ideal):\n> - how many phishing emails were delivered to user mailboxes (not blocked at the gateway),\n> - how many of those users reported or clicked, and\n> - how many led to a compromised account.\n>\n> If you'd rather give a range, a minimum, a typical and a maximum yearly count is enough. A note on where the numbers come from (gateway report, Defender, reporting button) would help.\n>\n> It would be great to have this by 2026-11-24. Thanks!\n\n**State of the run `bec-midmarket-software`**\n- **Setup:** The scenario is validated and confirmed on the Accuracy route, with n = 50,000 and seed 2361214438195616467.\n- **Inputs:** `inputs.yaml` is valid, but every figure in it is currently a placeholder (`agent_assumption`). The model is phishing volume \u00d7 chance a phish becomes a compromised mailbox, plus response, productivity and fraud-loss costs. The shipped library had no matching benchmarks.\n- **Requests:** The requests are logged as `req-1` (Dana, response cost) and `req-2` (phishing counts).\n- **Covered by the requests:** Only the phishing count and the response cost will be replaced by real data.\n- **Still placeholders:** The compromise probability, productivity loss and unrecovered fraud loss stay as assumptions unless you route them to owners too.\n- **One variant:** I included one comparison variant, phishing-resistant MFA replacing SMS, assumed to cut the compromise probability by about 70%. I didn't ask you about variants. Tell me if you want different controls or annual costs added.\n\n**Next steps**\n1. Send the two messages, then tell me, and I'll mark them `sent`.\n2. When answers arrive, say \"pick up the BEC run\". I'll record them, ask you to confirm each figure, and then simulate and write the report.\n3. If you'd rather not wait, I can run now on the placeholders. The result would be only a rough estimate."
+              },
+              {
+                "name": "no-send-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requests-drafted",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 21,
+            "costUsd": 0.2831914,
+            "judgeCostUsd": 0.008934000000000004,
+            "durationSeconds": 309,
+            "startedAt": "2026-11-17T12:45:46.637Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-TqXPVJ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "drafts-shown-not-sent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I couldn't send the two requests. This session has no email or Slack tool, and the risk-quant skills only draft messages anyway. Both drafts are below for you to copy and send. The run is paused, waiting for their answers.\n\n**To Dana Reyes (incident response lead):**\n> Hi Dana,\n>\n> I'm putting together an annual-cost estimate for business email compromise (about 800 staff, Microsoft 365, SMS-based MFA today) and your incident records are the best source for the loss side.\n>\n> Could you send me the total cost of each of our last BEC or similar mailbox-takeover incidents, in USD? A split into response (forensics, remediation, legal), recovery and any fraud or payment losses would be ideal. If you would rather give a range, a minimum, most likely and maximum cost per incident works too. Rough figures are fine, and please tell me if they are measured or your judgement.\n>\n> It would help to have this by 2026-11-24.\n>\n> Thanks,\n\n**To the email security lead** (I don't have a name for them):\n> Hi,\n>\n> I'm putting together an annual-cost estimate for business email compromise (about 800 staff, Microsoft 365, SMS-based MFA today) and need the phishing counts from your tooling.\n>\n> Could you send me, for the last 12 months (and earlier years if you have them):\n> 1. How many phishing or account-takeover attempts reached a staff mailbox or sign-in (after filtering).\n> 2. How many of those led to a confirmed mailbox compromise.\n> 3. Any figures on SMS-MFA bypass or suspicious sign-in alerts, if you track them.\n>\n> A minimum, most likely and maximum per year is fine if exact counts are not available. Please tell me whether they are measured counts or your judgement. It would help to have this by 2026-11-24.\n>\n> Thanks,\n\n**Where the run stands** (`bec-software-mid-market`, status `awaiting_data`):\n- **Scenario:** it is scoped and confirmed on the Accuracy route, with n = 50,000 and seed 9066687153635350712.\n- **Placeholders:** the figures in `inputs.yaml` are my own placeholder assumptions, not measurements. They cover threat events per year, the chance an event becomes a compromise, and response cost per compromise. They are there so the inputs validate while the real figures are pending, and I haven't simulated with them.\n- **Currency:** I assumed USD. Tell me if it should be something else.\n- **Variant:** I added one comparison variant, replacing SMS MFA with phishing-resistant MFA. Its effect is an assumption with no annual cost, so please correct it or add a cost.\n\n**Next steps:**\n1. Send both drafts, then tell me so I can mark them as sent.\n2. When answers come back, tell me and I'll record them. I'll ask you to confirm each figure, then simulate and write the report."
+              },
+              {
+                "name": "no-send-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requests-drafted",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-benchmark-researcher-behaviour",
+      "dir": "evals/live/skills/benchmark-researcher/behaviour",
+      "source": "mixed",
+      "promptMarkdown": "Do the job described in `benchmark-researcher.md` yourself, as that agent would (read `agents/benchmark-researcher.md` in the working directory; after that, use only the tools the agent's frontmatter lists). Scenario type ransomware, segment software and mid_market, run currency USD, parameter paths `primary_loss.response` and `primary_loss.productivity`.\n\nLibrary hits collect-data found:\n- `primary_loss.response`: entry `ransomware-recovery-cost-sophos-2025` (shipped benchmark), min 765000, mode 1530000, max 2730000 USD, source \"Sophos, The State of Ransomware 2025\", https://www.sophos.com/en-us/blog/the-state-of-ransomware-2025, applicability: organisations of 100 to 5,000 employees hit by ransomware, segment_match true, not stale.\n- `primary_loss.productivity`: none.\n\nReturn the proposals in the agent's own format.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 400,
+      "maxTurns": 15,
+      "graders": [
+        {
+          "name": "at-most-12-webfetch",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "WebFetch",
+            "min": 0,
+            "max": 12
+          }
+        },
+        {
+          "name": "at-most-12-websearch",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "WebSearch",
+            "min": 0,
+            "max": 12
+          }
+        },
+        {
+          "name": "https-only",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "http://",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no-invented-range",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "no usable cited result",
+            "flags": "i",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no-shell",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "uses-the-library-hit",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "sophos\\.com",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.0586872,
+            "judgeCostUsd": 0,
+            "durationSeconds": 55,
+            "startedAt": "2026-11-17T12:45:46.637Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-z4GOPI/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "at-most-12-webfetch",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebFetch called 0x (expected 0..12)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "at-most-12-websearch",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebSearch called 0x (expected 0..12)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "https-only",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-invented-range",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched no usable cited result",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-shell",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "uses-the-library-hit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched sophos\\.com",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.0576645,
+            "judgeCostUsd": 0,
+            "durationSeconds": 67,
+            "startedAt": "2026-11-17T12:46:41.946Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-rE8gu6/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "at-most-12-webfetch",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebFetch called 0x (expected 0..12)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "at-most-12-websearch",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebSearch called 0x (expected 0..12)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "https-only",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-invented-range",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched no usable cited result",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-shell",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "uses-the-library-hit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched sophos\\.com",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.060100799999999996,
+            "judgeCostUsd": 0,
+            "durationSeconds": 66,
+            "startedAt": "2026-11-17T12:47:49.418Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-OBOwKX/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "at-most-12-webfetch",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebFetch called 0x (expected 0..12)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "at-most-12-websearch",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebSearch called 2x (expected 0..12)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "https-only",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-invented-range",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched no usable cited result",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-shell",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "uses-the-library-hit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched sophos\\.com",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-collect-data-handoff",
+      "dir": "evals/live/skills/collect-data/handoff",
+      "source": "mixed",
+      "promptMarkdown": "Set up quickly, without commentary: run `rqh init`; create `.riskquant/runs/credential-phishing-bec/`; copy `example/scenario.yaml` into that run folder; run `rqh run confirm credential-phishing-bec --route yolo --n 2000 --seed 20261109`. Then use the collect-data skill on that run with the YOLO route; use the benchmark library and your own assumptions and ask me nothing. Stop once the skill has finished.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 25,
+      "graders": [
+        {
+          "name": "ends-with-status",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+(--json\\s+)?status",
+            "min": 1
+          }
+        },
+        {
+          "name": "no-other-phase-skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(?:risk-quant|scope-scenario|simulate|report)\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 13,
+            "costUsd": 0.1425355,
+            "judgeCostUsd": 0,
+            "durationSeconds": 208,
+            "startedAt": "2026-11-17T12:48:55.645Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-W6Xi9h/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 13,
+            "costUsd": 0.21586899999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 258,
+            "startedAt": "2026-11-17T12:49:55.961Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-sku8uq/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 14,
+            "costUsd": 0.1908444,
+            "judgeCostUsd": 0,
+            "durationSeconds": 159,
+            "startedAt": "2026-11-17T12:50:31.295Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-Xd3pwu/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-collect-data-near-miss",
+      "dir": "evals/live/skills/collect-data/near-miss",
+      "source": "prose",
+      "promptMarkdown": "The risk-quantification run credential-phishing-bec is finalized. Write the report for it.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?report\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?collect-data\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0574369,
+            "judgeCostUsd": 0,
+            "durationSeconds": 52,
+            "startedAt": "2026-11-17T12:50:55.425Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-SXekpl/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.056335500000000004,
+            "judgeCostUsd": 0,
+            "durationSeconds": 35,
+            "startedAt": "2026-11-17T12:51:47.828Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-jcNEak/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.059054699999999995,
+            "judgeCostUsd": 0,
+            "durationSeconds": 32,
+            "startedAt": "2026-11-17T12:52:22.750Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-aPme51/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-collect-data-trigger",
+      "dir": "evals/live/skills/collect-data/trigger",
+      "source": "prose",
+      "promptMarkdown": "`rqh status` names collect-data as the next skill for my scoped risk-quantification run credential-phishing-bec. Build its inputs.yaml.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?collect-data\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.06080920000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 33,
+            "startedAt": "2026-11-17T12:52:23.902Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-HY5jR6/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.062146,
+            "judgeCostUsd": 0,
+            "durationSeconds": 34,
+            "startedAt": "2026-11-17T12:52:54.576Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-CFJ9wG/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0615152,
+            "judgeCostUsd": 0,
+            "durationSeconds": 38,
+            "startedAt": "2026-11-17T12:52:57.171Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-hQBwAC/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-report-handoff",
+      "dir": "evals/live/skills/report/handoff",
+      "source": "mixed",
+      "promptMarkdown": "Set up quickly, without commentary: run `rqh init`; create `.riskquant/runs/credential-phishing-bec/`; copy `example/scenario.yaml` into that run folder; run `rqh run confirm credential-phishing-bec --route yolo --n 2000 --seed 20261109`; copy `example/inputs.yaml` into the run folder; run `rqh finalize credential-phishing-bec`. Then use the report skill on that run; if the narrative is rejected twice, omit it. Stop once the skill has finished.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 25,
+      "graders": [
+        {
+          "name": "ends-with-status",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+(--json\\s+)?status",
+            "min": 1
+          }
+        },
+        {
+          "name": "no-other-phase-skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(?:risk-quant|scope-scenario|collect-data|simulate)\"",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "runs-report",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+report",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.0805181,
+            "judgeCostUsd": 0,
+            "durationSeconds": 65,
+            "startedAt": "2026-11-17T12:53:10.083Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-9e4y22/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "runs-report",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 8,
+            "costUsd": 0.0829144,
+            "judgeCostUsd": 0,
+            "durationSeconds": 63,
+            "startedAt": "2026-11-17T12:53:28.421Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-hyqPrV/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "runs-report",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.08042,
+            "judgeCostUsd": 0,
+            "durationSeconds": 64,
+            "startedAt": "2026-11-17T12:53:34.894Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-XJ0Zvw/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "runs-report",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-report-near-miss",
+      "dir": "evals/live/skills/report/near-miss",
+      "source": "prose",
+      "promptMarkdown": "Rerun the Monte Carlo simulation for the risk-quantification run credential-phishing-bec with n = 20000 and write a new version.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?simulate\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?report\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.055494699999999994,
+            "judgeCostUsd": 0,
+            "durationSeconds": 35,
+            "startedAt": "2026-11-17T12:54:13.993Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-PlDFb4/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0534559,
+            "judgeCostUsd": 0,
+            "durationSeconds": 31,
+            "startedAt": "2026-11-17T12:54:15.019Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-C1cqs9/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.053734500000000004,
+            "judgeCostUsd": 0,
+            "durationSeconds": 35,
+            "startedAt": "2026-11-17T12:54:31.477Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-OhYe6D/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-report-trigger",
+      "dir": "evals/live/skills/report/trigger",
+      "source": "prose",
+      "promptMarkdown": "The risk-quantification run credential-phishing-bec is finalized. Write the executive summary and the HTML report for it.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?report\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.057538099999999995,
+            "judgeCostUsd": 0,
+            "durationSeconds": 39,
+            "startedAt": "2026-11-17T12:54:38.721Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-slvKbT/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0580231,
+            "judgeCostUsd": 0,
+            "durationSeconds": 38,
+            "startedAt": "2026-11-17T12:54:46.417Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-AUkTEc/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.061118900000000004,
+            "judgeCostUsd": 0,
+            "durationSeconds": 38,
+            "startedAt": "2026-11-17T12:54:49.396Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-GlSpLu/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-memory-handoff",
+      "dir": "evals/live/skills/risk-quant-memory/handoff",
+      "source": "prose",
+      "promptMarkdown": "Use the risk-quant-memory skill to save two figures our teams measured for a business email compromise at a mid-market software company: (1) incident response cost, 40000 to 90000 to 180000 USD per event, from the incident response lead's last three incidents (period 2025-01-01 to 2025-12-31); (2) phishing emails reaching inboxes, 6 to 12 to 30 events per year, from the email security lead's gateway counts (same period). Ask me about each one separately; if a question goes unanswered, treat it as a no.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 25,
+      "graders": [
+        {
+          "name": "asks-per-item",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "PASS if the reply asks the user about the figures one item at a time: either one yes or no question about the first figure only, saying the next figure comes later, or a separate yes or no question for each figure. A sensitivity choice offered inside the yes (such as \"Yes, as confidential\", or \"Yes, with a different sensitivity\") is part of that one question, not a second one. FAIL on a blanket question covering both figures at once, on a second, separate question about the same figure, or on claiming a figure was saved that the user has not said yes to.",
+          "config": {
+            "criteria": "PASS if the reply asks the user about the figures one item at a time: either one yes or no question about the first figure only, saying the next figure comes later, or a separate yes or no question for each figure. A sensitivity choice offered inside the yes (such as \"Yes, as confidential\", or \"Yes, with a different sensitivity\") is part of that one question, not a second one. FAIL on a blanket question covering both figures at once, on a second, separate question about the same figure, or on claiming a figure was saved that the user has not said yes to.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "no-direct-library-edit",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Edit",
+            "input_match": "\\.riskquant[\\/]+library[\\/]",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "no-direct-library-write",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "\\.riskquant[\\/]+library[\\/]",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "stores-through-rqh",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+library\\s+add",
+            "min": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.0611376,
+            "judgeCostUsd": 0.005208000000000001,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-17T12:55:06.348Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-1mK0fm/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "asks-per-item",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Save this figure to the memory library?\n\n**Item 1 of 2: incident response cost**\n- Range: 40,000 / 90,000 / 180,000 USD per event (min / mode / max)\n- Source: incident response lead, from their last three incidents\n- Period: 2025-01-01 to 2025-12-31\n- Scenario: business email compromise, mid-market software company\n- Proposed sensitivity: `internal`\n\n1. Yes, save it as `internal`\n2. Yes, but with a different sensitivity (say which: `confidential`, etc.)\n3. No\n\nIf you don't answer, I'll treat it as a no. I'll ask about the phishing figure separately after this one."
+              },
+              {
+                "name": "no-direct-library-edit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-direct-library-write",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "stores-through-rqh",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.0615934,
+            "judgeCostUsd": 0.005597999999999999,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-17T12:55:17.510Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-mRMU40/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "asks-per-item",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I'll ask about each figure on its own, starting with the first. Nothing is stored without a yes.\n\n**Figure 1 of 2: incident response cost**\n\n| Field | Value |\n|---|---|\n| Parameter | Incident response cost per event |\n| Range | min 40,000 / mode 90,000 / max 180,000 USD per event |\n| Source | Incident response lead, last three incidents (internal data) |\n| Period | 2025-01-01 to 2025-12-31 |\n| Scenario | Business email compromise, mid-market software company |\n| Proposed sensitivity | `internal` |\n\nShould I save this to the memory library?\n\n1. Yes, save it as `internal`\n2. Yes, save it as `confidential`\n3. No, don't save it\n\nReply with a number. If you don't answer, I'll treat it as a no. I'll ask about the phishing figure after this one."
+              },
+              {
+                "name": "no-direct-library-edit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-direct-library-write",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "stores-through-rqh",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.0726908,
+            "judgeCostUsd": 0.006480000000000007,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-17T12:55:23.971Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-V2qa1H/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "asks-per-item",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "No structured question tool is available here, so I'll ask in plain text. There is also no `.riskquant/` workspace in this directory yet. If you say yes to either item, I'll run `rqh init` first to create one.\n\nEach question is a separate yes or no. An unanswered one counts as a no.\n\n**Question 1 of 2: incident response cost**\n- Parameter: incident response cost per event\n- Range: 40,000 / 90,000 / 180,000 USD (min / mode / max)\n- Source: incident response lead, last three incidents\n- Period: 2025-01-01 to 2025-12-31\n- Scenario type: business email compromise, mid-market software company\n- Proposed sensitivity: `internal`\n\nSave this figure to the memory library? (yes / no, or yes with a different sensitivity)\n\n**Question 2 of 2: phishing emails reaching inboxes**\n- Parameter: phishing emails reaching inboxes per year\n- Range: 6 / 12 / 30 events per year (min / mode / max)\n- Source: email security lead, gateway counts\n- Period: 2025-01-01 to 2025-12-31\n- Scenario type: business email compromise, mid-market software company\n- Proposed sensitivity: `internal`\n\nSave this figure to the memory library? (yes / no, or yes with a different sensitivity)"
+              },
+              {
+                "name": "no-direct-library-edit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-direct-library-write",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "stores-through-rqh",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-memory-near-miss",
+      "dir": "evals/live/skills/risk-quant-memory/near-miss",
+      "source": "prose",
+      "promptMarkdown": "Pick up the ransomware run again. Any answers yet from the data owners?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-resume\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-memory\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.054353700000000005,
+            "judgeCostUsd": 0,
+            "durationSeconds": 22,
+            "startedAt": "2026-11-17T12:55:27.484Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-eRlE54/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0547873,
+            "judgeCostUsd": 0,
+            "durationSeconds": 21,
+            "startedAt": "2026-11-17T12:55:34.031Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-3AHRNw/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.053057900000000005,
+            "judgeCostUsd": 0,
+            "durationSeconds": 21,
+            "startedAt": "2026-11-17T12:55:42.548Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-d1MNko/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-memory-trigger",
+      "dir": "evals/live/skills/risk-quant-memory/trigger",
+      "source": "prose",
+      "promptMarkdown": "Save the figures our incident response lead measured for the last email-compromise incidents into the risk memory library.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-memory\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.061125,
+            "judgeCostUsd": 0,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-17T12:55:49.429Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-ruas69/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.05888179999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-17T12:55:53.810Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-0u1245/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.060902000000000005,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-17T12:55:55.104Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-U8DF55/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-org-setup-handoff",
+      "dir": "evals/live/skills/risk-quant-org-setup/handoff",
+      "source": "prose",
+      "promptMarkdown": "Use the risk-quant-org-setup skill to set up my organisation profile. Northwind Analytics, mid-market software, 800 staff. Roles: incident response lead, email security lead, finance partner. Search any connected directory or chat tool for the people (read-only), propose them, and I confirm whatever you propose. Ask me nothing else.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 20,
+      "graders": [
+        {
+          "name": "edits-only-the-profile",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Edit",
+            "input_match": "\"file_path\"\\s*:\\s*\"(?![^\"]*org-profile\\.yaml)",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "no-send-bash",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(sendmail|mailx?\\s|Send-MailMessage|smtp|curl\\s[^\\n]*(-X\\s*POST|--data|-d\\s)|chat\\.postMessage|hooks\\.slack\\.com)",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "writes-only-the-profile",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "\"file_path\"\\s*:\\s*\"(?![^\"]*org-profile\\.yaml)",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.06697589999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-17T12:56:03.798Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-jgQ2Cz/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "edits-only-the-profile",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-send-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-only-the-profile",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.0676169,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-17T12:56:16.566Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-uzmRn9/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "edits-only-the-profile",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-send-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-only-the-profile",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.06459559999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 27,
+            "startedAt": "2026-11-17T12:56:19.620Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-xyPSVg/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "edits-only-the-profile",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-send-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-only-the-profile",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-org-setup-near-miss",
+      "dir": "evals/live/skills/risk-quant-org-setup/near-miss",
+      "source": "prose",
+      "promptMarkdown": "Save the figures we measured on the last incident into the risk memory library.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-memory\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-org-setup\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.05588880000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 22,
+            "startedAt": "2026-11-17T12:56:22.931Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-Jyavsh/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0569056,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-17T12:56:28.975Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-XSF8RW/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.055796399999999996,
+            "judgeCostUsd": 0,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-17T12:56:44.364Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-64gFAx/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-org-setup-trigger",
+      "dir": "evals/live/skills/risk-quant-org-setup/trigger",
+      "source": "prose",
+      "promptMarkdown": "Set up my organisation profile for risk quantification: teams, owner roles, people and systems of record.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-org-setup\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0565631,
+            "judgeCostUsd": 0,
+            "durationSeconds": 19,
+            "startedAt": "2026-11-17T12:56:45.114Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-zgZxG3/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0560899,
+            "judgeCostUsd": 0,
+            "durationSeconds": 21,
+            "startedAt": "2026-11-17T12:56:46.421Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-Xvlhc7/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0568791,
+            "judgeCostUsd": 0,
+            "durationSeconds": 21,
+            "startedAt": "2026-11-17T12:56:51.953Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-qkNSic/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-resume-handoff",
+      "dir": "evals/live/skills/risk-quant-resume/handoff",
+      "source": "mixed",
+      "promptMarkdown": "Set up quickly, without commentary: run `rqh init`; create `.riskquant/runs/credential-phishing-bec/`; copy `example/scenario.yaml` and `example/inputs.yaml` into that run folder and `example/org-profile.yaml` into `.riskquant/`; run `rqh run confirm credential-phishing-bec --route accuracy --n 2000 --seed 20261109`; run `rqh requests add credential-phishing-bec --parameter primary_loss.response --owner-role \"Incident response lead\" --ask \"Cost of the last three incidents\" --draft \"Hi, could you share what the last incidents cost?\" --due 2026-12-01`; run `rqh run pause credential-phishing-bec`. Then use the risk-quant-resume skill: pick up the credential-phishing-bec run. Nobody has answered; choose to finalize on the fallback tiers if asked, and ask me nothing else.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 900,
+      "maxTurns": 30,
+      "graders": [
+        {
+          "name": "collect-data-entered",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?collect-data\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "collect-data-first",
+          "type": "tool_order",
+          "weight": 1,
+          "config": {
+            "before": {
+              "tool": "Skill",
+              "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?collect-data\""
+            },
+            "after": {
+              "tool": "Skill",
+              "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(?:simulate|report|scope-scenario)\""
+            }
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 19,
+            "costUsd": 0.15886470000000003,
+            "judgeCostUsd": 0,
+            "durationSeconds": 94,
+            "startedAt": "2026-11-17T12:57:03.679Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-ZNceuE/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "collect-data-entered",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "collect-data-first",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill@3 precedes Skill@7",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 20,
+            "costUsd": 0.16356489999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 88,
+            "startedAt": "2026-11-17T12:57:07.723Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-oyMSLH/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "collect-data-entered",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "collect-data-first",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill@4 precedes Skill@8",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 20,
+            "costUsd": 0.1613657,
+            "judgeCostUsd": 0,
+            "durationSeconds": 89,
+            "startedAt": "2026-11-17T12:57:08.858Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-ST5jjT/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "collect-data-entered",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "collect-data-first",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill@4 precedes Skill@8",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-resume-near-miss",
+      "dir": "evals/live/skills/risk-quant-resume/near-miss",
+      "source": "prose",
+      "promptMarkdown": "Set up my organisation profile for risk quantification: teams, owner roles, people and systems of record.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-org-setup\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-resume\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.06132610000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-17T12:57:13.435Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-Uy5wja/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0577895,
+            "judgeCostUsd": 0,
+            "durationSeconds": 21,
+            "startedAt": "2026-11-17T12:57:43.030Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-edZctu/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.0625819,
+            "judgeCostUsd": 0,
+            "durationSeconds": 32,
+            "startedAt": "2026-11-17T12:58:04.490Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-Ijpwt4/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-resume-trigger",
+      "dir": "evals/live/skills/risk-quant-resume/trigger",
+      "source": "prose",
+      "promptMarkdown": "Pick up the ransomware run again. Any answers yet from the data owners?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-resume\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.054586300000000004,
+            "judgeCostUsd": 0,
+            "durationSeconds": 19,
+            "startedAt": "2026-11-17T12:58:35.546Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-mcr6zX/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0535954,
+            "judgeCostUsd": 0,
+            "durationSeconds": 18,
+            "startedAt": "2026-11-17T12:58:35.993Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-CXQID3/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.05432630000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 20,
+            "startedAt": "2026-11-17T12:58:37.613Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-u7a3jF/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-handoff",
+      "dir": "evals/live/skills/risk-quant/handoff",
+      "source": "mixed",
+      "promptMarkdown": "Set up quickly, without commentary: run `rqh init`; create `.riskquant/runs/credential-phishing-bec/`; copy `example/scenario.yaml` into that run folder; run `rqh run confirm credential-phishing-bec --route yolo --n 2000 --seed 20261109`. Then continue that run with the risk-quant skill. Stop as soon as the collect-data skill has started its first step.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 14,
+      "graders": [
+        {
+          "name": "invokes-next-skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?collect-data\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "no-skill-past-next",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(?:simulate|report|scope-scenario)\"",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "router-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "status-before-next-skill",
+          "type": "tool_order",
+          "weight": 1,
+          "config": {
+            "before": {
+              "tool": "Bash",
+              "input_match": "(rqh|rqharness)\\s+(--json\\s+)?status"
+            },
+            "after": {
+              "tool": "Skill",
+              "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?collect-data\""
+            }
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.0765055,
+            "judgeCostUsd": 0,
+            "durationSeconds": 32,
+            "startedAt": "2026-11-17T12:58:37.912Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-OGVMSL/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "invokes-next-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-skill-past-next",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "router-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "status-before-next-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash@2 precedes Skill@3",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.07695550000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 33,
+            "startedAt": "2026-11-17T12:58:53.840Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-u0FE1w/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "invokes-next-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-skill-past-next",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "router-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "status-before-next-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash@2 precedes Skill@3",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.07833889999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 33,
+            "startedAt": "2026-11-17T12:58:54.226Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-03eqRI/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "invokes-next-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-skill-past-next",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "router-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "status-before-next-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash@2 precedes Skill@3",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-near-miss",
+      "dir": "evals/live/skills/risk-quant/near-miss",
+      "source": "prose",
+      "promptMarkdown": "Show me the figures saved in my risk memory library, and which of them are stale.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant-memory\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.058015800000000006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-17T12:58:57.166Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-VXks1m/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.058211399999999996,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-17T12:59:10.227Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-hKrJAQ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0586657,
+            "judgeCostUsd": 0,
+            "durationSeconds": 31,
+            "startedAt": "2026-11-17T12:59:24.756Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-HA4AjP/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-risk-quant-trigger",
+      "dir": "evals/live/skills/risk-quant/trigger",
+      "source": "prose",
+      "promptMarkdown": "What would a ransomware attack cost us in a year? Estimate it for a 400-person software company.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?risk-quant\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.056406899999999996,
+            "judgeCostUsd": 0,
+            "durationSeconds": 27,
+            "startedAt": "2026-11-17T12:59:27.015Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-RGq7GB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.055759,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-17T12:59:27.215Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-mTEbeP/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.05735490000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 32,
+            "startedAt": "2026-11-17T12:59:38.197Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-hmJeKp/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-scope-scenario-handoff",
+      "dir": "evals/live/skills/scope-scenario/handoff",
+      "source": "prose",
+      "promptMarkdown": "Use the scope-scenario skill to scope this scenario: business email compromise at a mid-market software company (about 800 staff, Microsoft 365, SMS-based MFA today). I confirm the scenario as you scope it, on the YOLO route, n = 2000, seed = 20261109. Ask me nothing else, and stop once the skill has finished.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 25,
+      "graders": [
+        {
+          "name": "ends-with-status",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+(--json\\s+)?status",
+            "min": 1
+          }
+        },
+        {
+          "name": "no-other-phase-skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(?:risk-quant|collect-data|simulate|report)\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.0914543,
+            "judgeCostUsd": 0,
+            "durationSeconds": 50,
+            "startedAt": "2026-11-17T12:59:54.412Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-IZ7zfe/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.08670870000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 46,
+            "startedAt": "2026-11-17T12:59:55.382Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-pM66xv/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.087033,
+            "judgeCostUsd": 0,
+            "durationSeconds": 52,
+            "startedAt": "2026-11-17T12:59:55.418Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-w9oA6o/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-scope-scenario-near-miss",
+      "dir": "evals/live/skills/scope-scenario/near-miss",
+      "source": "prose",
+      "promptMarkdown": "`rqh status` names simulate as the next skill for the risk-quantification run credential-phishing-bec, whose inputs are valid. Run the simulation now.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?simulate\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?scope-scenario\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.055071300000000004,
+            "judgeCostUsd": 0,
+            "durationSeconds": 29,
+            "startedAt": "2026-11-17T13:00:10.194Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-zsoO6T/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.05296329999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 37,
+            "startedAt": "2026-11-17T13:00:39.111Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-avdwCk/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.052655499999999994,
+            "judgeCostUsd": 0,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-17T13:00:41.657Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-qmcwQC/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-scope-scenario-trigger",
+      "dir": "evals/live/skills/scope-scenario/trigger",
+      "source": "prose",
+      "promptMarkdown": "`rqh status` says the next skill is scope-scenario for a new risk-quantification run. Scope a cyber risk scenario about a lost or stolen laptop at a 200-person consultancy: interview me and write the scenario file.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?scope-scenario\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0583457,
+            "judgeCostUsd": 0,
+            "durationSeconds": 33,
+            "startedAt": "2026-11-17T13:00:44.650Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-k39vaB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0576569,
+            "judgeCostUsd": 0,
+            "durationSeconds": 31,
+            "startedAt": "2026-11-17T13:00:47.548Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-VlrrGI/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.05887830000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 32,
+            "startedAt": "2026-11-17T13:01:11.551Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-PmV8gC/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-simulate-handoff",
+      "dir": "evals/live/skills/simulate/handoff",
+      "source": "mixed",
+      "promptMarkdown": "Set up quickly, without commentary: run `rqh init`; create `.riskquant/runs/credential-phishing-bec/`; copy `example/scenario.yaml` into that run folder; run `rqh run confirm credential-phishing-bec --route yolo --n 2000 --seed 20261109`; copy `example/inputs.yaml` into the run folder. Then use the simulate skill on that run and stop.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 25,
+      "graders": [
+        {
+          "name": "ends-with-status",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+(--json\\s+)?status",
+            "min": 1
+          }
+        },
+        {
+          "name": "no-other-phase-skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(?:risk-quant|scope-scenario|collect-data|report)\"",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "runs-finalize",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+finalize",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.06880220000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 49,
+            "startedAt": "2026-11-17T13:01:16.287Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-hXxIoj/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "runs-finalize",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.0683719,
+            "judgeCostUsd": 0,
+            "durationSeconds": 50,
+            "startedAt": "2026-11-17T13:01:17.253Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-MMTrAt/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "runs-finalize",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.0694899,
+            "judgeCostUsd": 0,
+            "durationSeconds": 52,
+            "startedAt": "2026-11-17T13:01:18.703Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-HFkr19/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "ends-with-status",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-other-phase-skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "runs-finalize",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-simulate-near-miss",
+      "dir": "evals/live/skills/simulate/near-miss",
+      "source": "prose",
+      "promptMarkdown": "The risk-quantification run credential-phishing-bec is finalized. Write the executive summary and the HTML report.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "sibling-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?report\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "skill-does-not-fire",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?simulate\"",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0576083,
+            "judgeCostUsd": 0,
+            "durationSeconds": 26,
+            "startedAt": "2026-11-17T13:01:43.938Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-KTxld4/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0573781,
+            "judgeCostUsd": 0,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-17T13:02:05.114Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-BHedfk/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0584263,
+            "judgeCostUsd": 0,
+            "durationSeconds": 26,
+            "startedAt": "2026-11-17T13:02:07.709Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-iU6Wd0/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sibling-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-does-not-fire",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "skill-simulate-trigger",
+      "dir": "evals/live/skills/simulate/trigger",
+      "source": "prose",
+      "promptMarkdown": "`rqh status` names simulate as the next skill for the risk-quantification run credential-phishing-bec, whose inputs are valid. Run the Monte Carlo simulation and finalize it.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 180,
+      "maxTurns": 3,
+      "graders": [
+        {
+          "name": "skill-fires",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?simulate\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0526683,
+            "judgeCostUsd": 0,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-17T13:02:10.043Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-K7lhwG/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0519081,
+            "judgeCostUsd": 0,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-17T13:02:10.245Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-riX3NI/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.053324100000000006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 29,
+            "startedAt": "2026-11-17T13:02:29.515Z",
+            "error": "exit 1: Reached maximum number of turns (3)",
+            "tracePath": "/home/node/.eval-tmp/claude-eval-GbcYKc/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fires",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "yolo-confirmed-run-to-report",
+      "dir": "evals/live/yolo/confirmed-run-to-report",
+      "source": "prose",
+      "promptMarkdown": "Quantify the annual cost of a business email compromise at a mid-market software company (about 800 staff, Microsoft 365, SMS-based MFA today). Use the risk-quant skills.\n\nI confirm the scenario as you scope it, on the YOLO route, n = 2000, seed = 20261109. Do not ask me anything else: use the benchmark library and your own assumptions, run the whole chain and end with the report.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 60,
+      "graders": [
+        {
+          "name": "asks-nothing-more",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "The reply reports the finished run (the report file, or its headline figure) and does not ask the user a question or wait for an answer before going on. Suggestions for a later run (such as supplying real figures or a search key and rerunning) are not questions and do not fail it.",
+          "config": {
+            "criteria": "The reply reports the finished run (the report file, or its headline figure) and does not ask the user a question or wait for an answer before going on. Suggestions for a later run (such as supplying real figures or a search key and rerunning) are not questions and do not fail it.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "no-org-setup",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\\\"skill\\\"\\s*:\\s*\\\"(?:[\\w-]+:)?risk-quant-org-setup\\\"",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "no-send-calls",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(sendmail|(?:^|\"command\"\\s*:\\s*\"|\\\\n|[;&|(`])\\s*mailx?\\s|Send-MailMessage|smtplib|smtps?://|curl\\s[^\\n]*(-X\\s*POST|--data|-d\\s)|Invoke-(WebRequest|RestMethod)[^\\n]*POST|chat\\.postMessage|hooks\\.slack\\.com|gh\\s+(issue|pr)\\s+comment)",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "report-command-ran",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash",
+            "input_match": "(rqh|rqharness)\\s+report",
+            "min": 1
+          }
+        },
+        {
+          "name": "report-written",
+          "type": "file_exists",
+          "weight": 1,
+          "config": {
+            "path": "**/report.html",
+            "exists": true
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 30,
+            "costUsd": 0.2940723,
+            "judgeCostUsd": 0.007655999999999996,
+            "durationSeconds": 152,
+            "startedAt": "2026-11-17T13:02:33.443Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-RiMXiK/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "asks-nothing-more",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "The run is finished and the report is written. The data quality grade is D, because the inputs are almost all my own assumptions.\n\n**Report:** `.riskquant/runs/bec-software-m365/v1/report.html`\n\nI ran it on the route you confirmed: YOLO, 2,000 draws, seed 20261109.\n\n**Results** (FAIR-aligned estimates, USD per year):\n\n| | Baseline (SMS MFA) | Phishing-resistant MFA |\n|---|---|---|\n| Mean annual loss | about $150k | about $40k |\n| Bad year (p90) | about $434k | about $205k |\n| p99 | about $832k | about $438k |\n\n- **Typical year:** the median is $0, because most simulated years have no successful takeover. The mean comes from the tail.\n- **MFA variant:** it cuts the mean loss by roughly 73%. That follows directly from my assumption that it cuts the takeover probability by about 70 to 75%.\n- **No return on control:** I didn't estimate what the MFA variant costs per year, so the report shows no return on control.\n\n**Gaps in the inputs:**\n- **No web benchmarks:** the benchmark-researcher agent couldn't start because its WebSearch and WebFetch tools aren't available in this environment. `rqh search` also has no `TAVILY_API_KEY`.\n- **Assumed figures:** the attempt frequency, the takeover probability, and the response and productivity costs are all `agent_assumption` estimates, each with its rationale in `inputs.yaml`.\n- **Stale benchmark:** the fraud-loss figure comes from the shipped library (FBI IC3, mean loss per complaint, about $129k). It is stale and has low applicability. It is an all-sector, self-reported mean with a narrow range, so it likely overstates a typical event, since many attempts lose nothing.\n- **Memory step:** nothing was saved to the memory library, because there were no internal-data or expert-judgement figures to keep.\n\nTo make the estimate more reliable, rerun on the Accuracy route with your real mail-gateway counts, incident response costs and fraud-loss history. Those would replace the assumptions."
+              },
+              {
+                "name": "no-org-setup",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-send-calls",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "report-command-ran",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "report-written",
+                "passed": true,
+                "weight": 1,
+                "explanation": "**/report.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 29,
+            "costUsd": 0.29878399999999994,
+            "judgeCostUsd": 0.007403999999999994,
+            "durationSeconds": 160,
+            "startedAt": "2026-11-17T13:02:33.850Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-byNC9d/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "asks-nothing-more",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Every estimate in this run is `benchmark` or `agent_assumption`. None is `internal_data` or `sme_estimate`, so the memory library has nothing to save.\n\n## Result\n\nI ran the whole chain: scope, collect, simulate and report. The report is at:\n\n`/home/node/.eval-tmp/claude-eval-byNC9d/home/cwd/.riskquant/runs/bec-midmarket-software/v1/report.html`\n\nIt is version 1, on the YOLO route with n = 2000 and seed 20261109. It covers the annual cost of business email compromise at your company, and the effect of replacing SMS MFA with phishing-resistant MFA. I didn't copy any dollar figures into this reply, so open the report for the numbers.\n\n## How much to trust it\n\n- **Cited figure:** Only the fraudulent-transfer loss per event is cited. It comes from the FBI IC3 2024 report. The library entry is flagged stale and low applicability, and it is a mean across all victims, so its range is narrower than the real uncertainty.\n- **Assumptions:** The attempt rate, the chance an attempt succeeds under SMS MFA, the response cost and the staff-time cost are my own assumptions, each with a stated rationale. The report's data-quality grade reflects this, so treat the result as an order-of-magnitude estimate.\n- **Why there are no cited benchmarks for those:** The web researcher agent wouldn't start, because its WebSearch and WebFetch tools weren't available. `rqh search` also failed because `TAVILY_API_KEY` isn't set. Setting that key and re-running collect-data would let it look for cited benchmarks for the assumed figures.\n- **The comparison:** The phishing-resistant MFA comparison is a variant I chose myself, with an assumed effect. It has no yearly cost, so the report shows no return on control.\n- **Scope:** Secondary losses are off. I confirmed the scenario on your behalf as you instructed, and its scope exclusions are in `scenario.yaml`."
+              },
+              {
+                "name": "no-org-setup",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-send-calls",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "report-command-ran",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "report-written",
+                "passed": true,
+                "weight": 1,
+                "explanation": "**/report.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 30,
+            "costUsd": 0.33114200000000005,
+            "judgeCostUsd": 0.007403999999999994,
+            "durationSeconds": 181,
+            "startedAt": "2026-11-17T13:02:34.340Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-AeL11f/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "asks-nothing-more",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I've estimated the annual cost of a business email compromise at about **$144k on average**, in a FAIR-aligned model. The report is written and the run is finalized (n = 2000, seed 20261109).\n\n**Report:** `.riskquant/runs/bec-midmarket-software/v1/report.html`\n\n| | Baseline (SMS MFA) | With phishing-resistant MFA |\n|---|---|---|\n| Average annual loss | $144k | $36k |\n| Median year | $0 | $0 |\n| Bad year (p90) | $419k | $197k |\n| Very bad year (p99) | $850k | $435k |\n\n- **Skewed loss:** more than half of simulated years have no loss event, so the average is driven by the rare costly years.\n- **Control comparison:** I added phishing-resistant MFA as a comparison, since your scenario names SMS MFA. It cuts the average loss by about three quarters. Its effect is my assumption, and I left out a yearly cost, so the report gives no return on control.\n- **Data quality: grade D.**\n  - **Cited figure:** only the loss per event ($125k\u2013$137k, the FBI IC3 average per complaint) comes from a benchmark. That library entry is stale and has low applicability to a mid-market software firm.\n  - **Assumptions:** event frequency, success rate against SMS MFA, response cost, staff time, and the chance and cost of secondary loss are all my assumptions, each with a rationale in `inputs.yaml`.\n  - **Why no benchmarks:** the benchmark-researcher agent couldn't start in this session, and `rqh search` has no `TAVILY_API_KEY`.\n- **Next step:** replace the assumed figures with your own, such as the number of phishing attempts, finance's payment-fraud history and incident-response invoices. Then re-run to move the grade up.\n- **Memory step:** I skipped the memory save at the end of the chain. It asks yes/no questions, and you asked for none. The run holds no figures your organisation measured, so there was nothing to save."
+              },
+              {
+                "name": "no-org-setup",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-send-calls",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "report-command-ran",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "report-written",
+                "passed": true,
+                "weight": 1,
+                "explanation": "**/report.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "yolo-one-question-per-pass",
+      "dir": "evals/live/yolo/one-question-per-pass",
+      "source": "prose",
+      "promptMarkdown": "Quantify the annual cost of a business email compromise at a mid-market software company (about 800 staff, Microsoft 365, SMS-based MFA today). Use the risk-quant skills.\n\nI want the YOLO route with the default draw count. Scope the scenario with me. I can't answer interview questions right now: for every field you would ask me about, use your own proposed answer. We have no controls beyond Microsoft 365 defaults and SMS-based MFA. Then show me the scenario and ask me to confirm it before anything runs.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 900,
+      "maxTurns": 30,
+      "graders": [
+        {
+          "name": "no-org-setup",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\\\"skill\\\"\\s*:\\s*\\\"(?:[\\w-]+:)?risk-quant-org-setup\\\"",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "one-confirmation-question",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "PASS if the reply shows the scoped scenario and asks the user exactly one question: a single confirmation request whose choices are offered together, often as a numbered list (confirm on a route with the defaults, confirm and set n or seed, or change the scenario). A line that tells the user how to answer is part of that question. Listing \"Confirm\" as a choice is not a claim that anything was confirmed. FAIL if the reply asks a second, separate question, or says that the run was already confirmed (that rqh run confirm was run), simulated or reported.",
+          "config": {
+            "criteria": "PASS if the reply shows the scoped scenario and asks the user exactly one question: a single confirmation request whose choices are offered together, often as a numbered list (confirm on a route with the defaults, confirm and set n or seed, or change the scenario). A line that tells the user how to answer is part of that question. Listing \"Confirm\" as a choice is not a claim that anything was confirmed. FAIL if the reply asks a second, separate question, or says that the run was already confirmed (that rqh run confirm was run), simulated or reported.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "scoping-skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\\\"skill\\\"\\s*:\\s*\\\"(?:[\\w-]+:)?scope-scenario\\\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 8,
+            "costUsd": 0.102214,
+            "judgeCostUsd": 0.007511999999999998,
+            "durationSeconds": 41,
+            "startedAt": "2026-11-17T13:02:58.255Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-2HvxOf/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "no-org-setup",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "one-confirmation-question",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I've scoped the scenario using my own proposed answers, and it passes `rqh validate`. Nothing has run yet.\n\n**Business email compromise at a mid-market software company** (`bec-software-mid-market`)\n- **Type and segment:** business email compromise; software industry, mid-market (about 800 staff).\n- **Threat actor:** an external, financially motivated criminal. They phish credentials or intercept the SMS code (for example by SIM-swap), then run invoice or payment-redirection fraud.\n- **Asset:** Microsoft 365 staff mailboxes and the finance and payment workflows that rely on email.\n- **Effects:**\n  - Integrity: fraudulent payment instructions go out from a trusted account.\n  - Confidentiality: the attacker can read mailbox contents.\n- **Loss event:** one successful compromise of a staff Microsoft 365 mailbox by an external attacker. It is used to send fraudulent messages or divert a payment, within a year.\n- **Out of scope:**\n  - ransomware or malware that follows the compromise\n  - compromise of non-email systems such as production or source code\n  - insider-initiated fraud\n  - compromise of supplier or third-party mailboxes\n- **Controls today:** Microsoft 365 defaults and SMS-based MFA only.\n\nWhich option do you want?\n1. **Confirm, YOLO route, defaults.** The harness gathers benchmarks itself and asks you nothing more. It uses 50,000 draws and a random seed that `rqh` records.\n2. **Confirm and set n or seed.** Tell me the values.\n3. **Confirm, Accuracy route, defaults.**\n4. **Change the scenario.** Tell me what to change.\n\nOption 1 matches what you asked for. Reply with a number and I'll confirm and carry on."
+              },
+              {
+                "name": "scoping-skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.1030053,
+            "judgeCostUsd": 0.007914000000000004,
+            "durationSeconds": 40,
+            "startedAt": "2026-11-17T13:03:39.208Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-dqNFLr/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "no-org-setup",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "one-confirmation-question",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "The scenario is written and passes validation. Nothing has run yet.\n\n**Scenario: Business email compromise at a mid-market software company** (`bec-midmarket-software`)\n- **Type:** business_email_compromise\n- **Segment:** software, mid_market (about 800 staff)\n- **Threat actor:** an external, financially motivated criminal group using phishing, SMS-MFA bypass and payment-diversion fraud.\n- **Asset:** Microsoft 365 mailboxes and the finance and payment approval workflows that depend on email.\n- **Method:** the attacker gets into a mailbox, reads mail and sets inbox rules. They then send fraudulent payment-change or wire requests from a trusted account.\n- **Effects:** integrity (fraudulent payment instructions accepted) and confidentiality (mailbox contents exposed).\n- **Loss event:** a successful compromise of a staff Microsoft 365 account that leads to a fraudulent payment or a confidential data exposure, and that needs investigation and response.\n- **Out of scope:**\n  - ransomware or malware after the compromise\n  - compromise of customer-facing products or source code\n  - regulatory fines beyond notification and response costs\n  - long-term brand or revenue effects\n- **Controls today:** Microsoft 365 defaults and SMS-based MFA only. There is no advanced email filtering, phishing-resistant MFA, conditional access hardening or payment call-back verification.\n\nI filled every field with my own proposed answers, as you asked.\n\nWhich of these do you want?\n1. **Confirm, YOLO route, defaults.** This uses 50,000 draws and a random seed that `rqh` records. I gather the benchmarks myself and ask you nothing more.\n2. Confirm, Accuracy route, defaults.\n3. Confirm and set n or seed. Tell me the values.\n4. Change the scenario. Tell me what to change.\n\nOption 1 matches what you asked for. I'll wait for your reply before running `rqh run confirm`."
+              },
+              {
+                "name": "scoping-skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.10173899999999998,
+            "judgeCostUsd": 0.0076859999999999845,
+            "durationSeconds": 59,
+            "startedAt": "2026-11-17T13:04:18.968Z",
+            "error": null,
+            "tracePath": "/home/node/.eval-tmp/claude-eval-ZtXYjC/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "no-org-setup",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "one-confirmation-question",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "The scenario is written and passes validation. I haven't run anything yet, and I need your confirmation first.\n\n**Scenario: Business email compromise at a mid-market software company**\n- **Type:** `business_email_compromise`\n- **Segment:** software, mid-market (about 800 staff)\n- **Threat actor:** an external, financially motivated criminal. The attacker phishes credentials or uses an adversary-in-the-middle kit, then defeats SMS MFA by intercepting codes or swapping the SIM.\n- **Asset:** Microsoft 365 mailboxes and the finance and payment workflows that depend on email.\n- **Effects:**\n  - Confidentiality: the attacker reads mailbox contents.\n  - Integrity: fraudulent payment or invoice requests go out from a trusted account.\n- **Loss event:** one incident in a year where an attacker gains unauthorised access to a company mailbox and uses it to attempt fraud or data theft.\n- **Out of scope:**\n  - Ransomware or malware that follows the compromise.\n  - Compromise of customer-hosted or production environments.\n  - Insider-originated fraud.\n  - Long-term reputational or share-price effects.\n- **Controls:** Microsoft 365 defaults and SMS-based MFA only.\n\nEvery field except the controls is my own proposed answer, since you couldn't answer questions. The file is `.riskquant/runs/bec-midmarket-software/scenario.yaml`.\n\n**Which of these do you want?**\n1. Confirm, YOLO route, defaults (50,000 draws, random seed that `rqh` records)\n2. Confirm, Accuracy route, defaults\n3. Confirm and set `n` or the seed (give the values in your reply)\n4. Change the scenario (say what to change)\n\nYour request points to option 1. I'll run `rqh run confirm` and carry on to data collection as soon as you reply."
+              },
+              {
+                "name": "scoping-skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 28,
+    "casesPassed": 28,
+    "overallScore": 1,
+    "overallPassRate": 1
+  },
+  "plugin_version": "0.1.0",
+  "threshold": 0.66,
+  "suite_sha256": "f690de3d214d98055b434db2d08d5c44f561ed12ba1a5cf63d06d0a54409d501",
+  "eval_exit_code": 0
+}
